@@ -16,6 +16,10 @@
   <summary>Commentaires sur la lecture</summary>
    <p>u-edf est optimal en global MAIS pas fair.</p>
    <p>Deux types de généralisation EDF, un horizontal, un vertical. Il faut bien lire les exemples. Ils montrent des comportements très différents.</p>
-   <p></p>
+   <p>Démonstrations d'optimalité, lemmes, etc.</p>
+   <p>Accessoirement, comparaison de performances. RUN a l'air plutôt efficace à première vue.</p>
 </details>
+
+4. [Multiprocessor scheduling by reduction to uniprocessor: an original optimal approach](https://github.com/subsib/Scheduling/blob/master/refs/RUN-ExtVers.pdf)
+
 
