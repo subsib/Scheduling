@@ -11,4 +11,11 @@
     * [ARINC 653](https://fr.wikipedia.org/wiki/ARINC_653):
     * [AUTOSAR](https://fr.wikipedia.org/wiki/AUTOSAR)
     * On apprend que malgré le fait qu'ils soient très souvent utilisés, ce ne sont pas les plus efficaces.
-3. 
+3. [U-EDF: An Unfair but Optimal Multiprocessor Scheduling Algorithm for Sporadic Tasks](https://github.com/subsib/Scheduling/blob/master/refs/U-EDF-ECRTS2012.pdf)
+<details>
+  <summary>Commentaires sur la lecture</summary>
+   <p>u-edf est optimal en global MAIS pas fair.</p>
+   <p>Deux types de généralisation EDF, un horizontal, un vertical. Il faut bien lire les exemples. Ils montrent des comportements très différents.</p>
+   <p></p>
+</details>
+
