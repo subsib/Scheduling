@@ -20,6 +20,15 @@
    <p>Accessoirement, comparaison de performances. RUN a l'air plutôt efficace à première vue.</p>
 </details>
 
-4. [Multiprocessor scheduling by reduction to uniprocessor: an original optimal approach](https://github.com/subsib/Scheduling/blob/master/refs/RUN-ExtVers.pdf)
+4. [Multiprocessor scheduling by reduction to uniprocessor(RUN): an original optimal approach](https://github.com/subsib/Scheduling/blob/master/refs/RUN-ExtVers.pdf)
+<details>
+<summary>Commentaires sur la lecture</summary>
+  <p>RUN : Reduction to UNiprocessor</p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+</details>
 
-
+### Note : comprendre ce qu'est le DUAL et PACK
