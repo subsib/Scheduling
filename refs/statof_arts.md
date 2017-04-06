@@ -31,4 +31,12 @@
   <p></p>
 </details>
 
+5. [Recap on RUN](http://www.math.unipd.it/~tullio/RTS/2016/RUN_Impl.pdf)
+<details>
+<summary>Présentation de RUN rapide</summary>
+<p>Semi-partitionnée</p>
+<p>Optimal (pour une sous-classe : implicit-deadline-periodic independant tasks)</p>
+</details>
+
+
 ### Note : comprendre ce qu'est le DUAL et PACK
