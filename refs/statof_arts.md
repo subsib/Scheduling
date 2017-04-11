@@ -1,3 +1,5 @@
+# Résumé recherche sur l'état de l'art
+
 1. Lecture d'un premier papier "de base" sur le scheduling multiproc : 
 [A New Configurable and Parallel Embedded Real-time Micro-Kernel for Multi-core platforms](./refs/ospert15-p25.pdf) 
 <details>
