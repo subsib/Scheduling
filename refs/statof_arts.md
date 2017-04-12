@@ -26,9 +26,15 @@
 <details>
 <summary>Commentaires sur la lecture</summary>
   <p>RUN : Reduction to UNiprocessor</p>
-  <p></p>
-  <p></p>
-  <p></p>
+  <p>m >= 1 procs identiques + rate indeitiques, global scheduling = 1 seul dispatcher,
+  (rien de nouveau avec realease time (r) et deadline (d)), 
+  Les tâches ne sont pas "périodiques" mais on pose qu'elles sont "fixed rate", 
+  le "rate" est la fraction de temps d'utilisation par un proc (ça revient pas un peu au même ?)
+  Du coup, forcément, le rate <= 1, sinon ça rentre pas sur un proc.
+  </p>
+  <p>À retenir : rho est le taux, un job va nécessiter <b>rho(d-r)</b> execution time.</p>
+  <h3>Dual</h3>
+  <p> </p>
   <p></p>
   <p></p>
 </details>
