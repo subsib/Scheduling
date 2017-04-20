@@ -7,6 +7,7 @@
    <p>Explique l'implémentation de HIPPEROS. Plusieurs éléments restent flous pour moi, notamment l'usage d'un coeur maître et de coeurs esclaves. Le coeur maître envoie des systèmes à scheduler aux slaves ?! Pas sûre de voir comment ça marche.</p>
    <p>   Inter-Process Communication : IPC</p>
    <p> Il me semble important aussi de comprendre comment fonctionne cet OS pour implémenter un scheduler dessus... </p>
+   <p>(cette question m'a été confirmée par J. Goossens, ça semble important, donc. Noter compte-rendu après réunion chez HIPPEROS.</p>
 </details>
 
 2. Le papier 2 renvoie à deux standards:
@@ -29,7 +30,7 @@
     RUN : Reduction to UNiprocessor
   </p>
   <p>
-    m >= 1 procs identiques + rate indeitiques, global scheduling = 1 seul dispatcher,
+    m >= 1 procs identiques + rate identiques, global scheduling = 1 seul dispatcher,
     (rien de nouveau avec realease time (r) et deadline (d)), 
     Les tâches ne sont pas "périodiques" mais on pose qu'elles sont "fixed rate", 
     le "rate" est la fraction de temps d'utilisation par un proc (ça revient pas un peu au même ?)
@@ -78,7 +79,11 @@
     pas, on n'a pas d'optimalité pour scheduler les serveurs. Du coup, EDF, du coup, preuve EDF.
   </p>
   <p>
-    
+    L'intérêt majeur de RUN est de réduire le nb de préemptions. Comme habituellement, on pose que le temps de 
+    préemption est négligeable, on ne les compte pas mais en pratique, c'est faux.
+    RUN réduit ça, ça a l'air de s'en ressentir sur le résultat.
+
+    Mais attention à un détail d'importance : on considère une certaine classe de tâches.
   </p>
   <p>
     
