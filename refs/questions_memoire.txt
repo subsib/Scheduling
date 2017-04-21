@@ -1,0 +1,11 @@
+Questions :
+-----------
+
+
+1. Comment sélectionner une classe de scheduler pour qu'elle soit... "réaliste", 
+savoir ce qui est le plus "réaliste" quoi.
+2. Comment avoir une idée de ce qu'on pourrait attendre en fonction de l'OS ? Qu'est-ce que ça influence ?
+3. Comment fonctionne particulièrement HIPERROS ? C'est quoi ces histoires de 
+"coeur maître et de coeurs esclaves. Le coeur maître envoie des systèmes à scheduler aux slaves ?!"
+"Inter-Process Communication : IPC "
+
