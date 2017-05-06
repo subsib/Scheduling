@@ -103,6 +103,7 @@
 <p>Optimal (pour une sous-classe : implicit-deadline-periodic independant tasks)</p>
 </details>
 
-TODO : ajouter les références téléchargées
-
-### Note : comprendre ce qu'est le DUAL et PACK
+6. [QPS](https://github.com/subsib/Scheduling/blob/master/refs/QPS14.pdf)
+<details>
+<summary>Présentation du successeur de RUN</summary>
+</details>
