@@ -150,7 +150,7 @@ réduction de consommation énergétique ou en efficacité.\\
 
 Il en résulte un décalage entre les connaissances théoriques et pratiques 
 de ces ordonnanceurs. De ce point de vue, une implémentation sur un \textbf{RTOS}
-tel qu'\textbf{HIPPEROS} %TODO add ref
+tel qu'\textbf{HIPPEROS}\cite{HIPPEROS}
 se rapprocherait d'un futur usage industriel et pourrait donc 
 faire grandir la connaissance pratique. Cette implémentation 
 pourrait amener plusieurs résultats intéressants : \\
@@ -163,36 +163,67 @@ pourrait amener plusieurs résultats intéressants : \\
 \end{itemize}
 
 \section{Contexte et objectifs}
+\subsection{Ordonnanceurs globaux}
+Depuis la preuve qu'aucun ordonnanceur global optimal n'existe pour toutes les classes 
+de tâches,
+[Hong and Leung \cite{hongandleung}, 1988] plusieurs candidats 
+ordonnanceurs avec des propriétés différentes ont été proposés. 
+Toutefois, ils sont encore assez peu utilisés actuellement dans l'industrie.\\
 
-Depuis la preuve qu'aucun ordonnanceur optimal global n'existe,
-[Hong and Leung \cite{hongandleung}, 1988]
-on sait qu'on ne peut pas trouver la perle rare. La réalité du terrain 
-est donc globalement d'implémenter des ordonnanceurs partitionnés, 
-qui donnent de moins bons résultats mais sont plus simples. 
-Ceux-ci étant basés sur des ordonnanceur mono-processeur, 
-on perd l'avantage d'avoir plusieurs processeurs qui tournent en parallèle.
-Or, actuellement, même sur des petits systèmes embarqués, la technoologie 
-multiproc se retrouve. 
+On peut cependant imaginer que la situation évolue dans les prochaines années. 
+En effet, les systèmes embarqués vont également nécessiter de la puissance de calcul et
+de l'efficacité. Les contraintes de partage de ressources se posent différemment 
+dans le cas parallélisé, avec des contraintes d'accès à ces dernières, 
+donc plus de complexité mais celle-ci pourrait en contrepartie apporter 
+bien plus de performance.
 
-Il y a donc plusieurs problèmes avec ça :\\
+%TODO pourquoi pas GPU ???
+
+Le fait que l'industrie n'implémente pas à ce jour de solutions plus performantes 
+pour les systèmes embarqués pose plusieurs problèmes :
 \begin{enumerate}
-	\item On n'utilise pas pleinement les capacités donc on sous-performe.
-	\item Par conséquent, on utilise bien plus d'énergie que nécessaire, dans un monde où chacun devrait 
-	avoir conscience des problèmes liés à la consommation d'énergie : global
-	\item certains devices sont petits et sont particulièrement sensibles à la consommation, 
-	devraient donc tout mettre en \oe{}uvre pour qu'on ait le moins de manips possibles 
-	à faire dessus...
+	\item Le matériel n'est pas exploité de façon optimale.
+	\item Par conséquent, on utilise bien plus d'énergie que nécessaire. 
+	À l'heure actuelle, dans un monde où l'on cherche à consommer le moins possible, 
+	cela pose question. Mais au delà, cela signifie également plus de maintenance 
+	sur ces appareils parfois sans source de renouvellement d'énergie.
+	\item Certains systèmes embarqués nécessitent une très basse consommation car 
+	ils sont difficiles d'accès ou non faciles à recharger.
 \end{enumerate}
 
-Ajouter qu'on travaille ici avec un OS particulier : HIPPEROS.
+Toutes ces raisons poussent à s'intéresser à une implémentation réelle et réaliste 
+d'ordonnanceur connu dans la littérature, mais moins dans la réalité.
 
-%Dans le chapitre \ref{chap2}
-%Blabla
+\subsection{HIPPEROS}
+\textbf{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
+est un \textbf{RTOS} développé depuis plusieurs années par une spinoff de l'ULB.
+Il bénéficie des connaissances apportées par le monde de la recherche dans 
+le domaine des systèmes critiques avec multic\oe{}urs. Une de ses particularités 
+est sa modularité, qui permet d'adapter ses possibilités en fonction du système 
+lors de la compilation de l'OS, ainsi peut-on différencier deux installations 
+en fonction des particularités.
+
+\textbf{HIPPEROS} est un candidat idéal pour l'implémentation d'un ordonnanceur 
+global, mais une partie du travail consistera à tirer parti de ses particularités. 
+Par exemple, ce système d'exploitation gère les c\oe{}urs en leur attribuant des 
+niveaux différents. L'un est considéré comme "maître" et les autres comme "esclaves". 
+Ceci peut apporter un comportement particulier, ce auquel il convient d'apporter 
+l'attention nécessaire. En résumé, une nouvelle implémentation sur un OS différent 
+peut elle-aussi apporter à la connaissance générale des détails importants.
+
+
 \section{Problématique}
+L'ordonnanceur idéal, c'est à dire optimal pour toute classe de tâche n'existant pas, 
+une partie du problème est donc de sélectionner l'un de ceux-ci parmi la liste 
+d'ordonnanceurs connus (ne serait-ce que littérairement) afin que cela apporte 
+à la connaissance générale, tant théorique que pratique.
 
-Comme il n'y a pas d'ordonnanceur parfait, on doit en choisir un parmi la longue liste .
-Chacun possède des avantages et inconvénients différents, sur des classes de tâches 
-particulières.
+Par ailleurs, pour certains des ordonnanceurs qui seront présentés dans l'état de l'art, 
+certains ont déjà bénéficié d'une implémentation sur un \textbf{RTOS}. 
+Il peut être également intéressant d'étudier la différence d'implémentation 
+sur des OS différents, ainsi que les résultats obtenus. 
+En effet, il est tout à fait possible que 
+
 
 D'autre part, ils sont décrits dans la littérature de façon parfaitement théorique. Certains ont bénéficié d'une implémentation en \textbf{linux rt}. %TODO add ref
 Mais alors, sur un autre ordonnanceur peut se poser le problème de la reproductibilité. 
@@ -202,8 +233,15 @@ Certains ordonnanceurs font des hypothèses fortes et le comportement réel pourra
 Comment choisir celui à implémenter, particulièrement sur \textbf{HIPPEROS} ?
 
 
-\section{Notations}
-blablabla
+\section{Glossaire}
+RTOS : 
+%TODO https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27exploitation_temps_r%C3%A9el
+
+Ordonnanceur : 
+
+Sporadique :
+
+etc. :
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -218,7 +256,7 @@ blablabla
 %%%%%%%%%%%%%%%%%
 \chapter{État de l'art}
 
-\section{Famille des ?...}
+\section{}
 
 \section{Famille des ?...}
 
