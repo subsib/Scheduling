@@ -12,16 +12,20 @@
 \fancyhf{}
 \rhead[\leftmark]{thepage}
 %%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{natbib}
+
 \usepackage[latin1]{inputenc}
 \usepackage[francais]{babel}
 \usepackage{url}
 \usepackage{graphicx}
-
+\usepackage{hyperref}
 
 \begin{document}
 %%%%%%%%%%%%%%%%
 %\frontmatter
 \begin{titlepage}
+
+
 \begin{center}
 \textbf{UNIVERSIT\'E LIBRE DE BRUXELLES}\\
 \textbf{Faculté des Sciences}\\
@@ -34,12 +38,24 @@
 
 {\Huge \par}
 \begin{center}{\LARGE Arabella Brayer}\end{center}{\Huge \par}
+
 \vfill{}
-\includegraphics{"img/sceauquadri"}
+
+\begin{figure}[h]
+	\begin{center}
+	\includegraphics[width=3cm]{img/sceauquadri}
+	\label{fig:sceauquadri}
+	\end{center}
+\end{figure}
 \vfill{}
-\begin{flushright}{\large \textbf{Promoteur : Joël Goossens}}\hfill{}{\large Thesis submitted for the}\\
-{\large Prof. Prénom Nom}\hfill{}{\large Master's degree}\\
-\hfill{}{\large in Computer Science}\end{flushright}{\large\par}
+
+
+
+\begin{flushright}{\large \textbf{Promoteur : Joël Goossens}}\hfill{}{\large Travail préliminaire au mémoire}\\
+{
+%	 \large Prof. Prénom Nom
+ }\hfill{}{\large Master 1}\\
+\hfill{}{\large Science de l'informatique}\end{flushright}{\large\par}
 \vfill{}\vfill{}\enlargethispage{3cm}
 \textbf{Academic year 2016~-~2017}
 \end{center}
@@ -53,19 +69,15 @@
 \vspace*{\fill}}
 {\vspace*{\fill}\par\pagebreak}
 
-\begin{vcenterpage}
-\begin{flushright}
-    \large\em\null\vskip1in 
-    si vous en sentez l'envie, \\
-   vous pouvez prévoir\\
-   une dédicace ici \vfill
-  \end{flushright}
-\end{vcenterpage}
+\newpage
 \thispagestyle{empty}
 \vspace*{5cm}
 
 \begin{quotation}
-\noindent ``\emph{Vous pouvez aussi inclure une ou plusieurs citations générales en rapport avec votre sujet.}''
+\noindent ``\emph{
+	%TODO choose a quotation
+	Vous pouvez aussi inclure une ou plusieurs citations générales en rapport avec votre sujet.
+}''
 \begin{flushright}\textbf{l'auteur (vrai ou supposé), date}\end{flushright}
 \end{quotation}
 
@@ -75,109 +87,151 @@
 \noindent ``\emph{Il existe des compilations de telles citations.}''
 \begin{flushright}\textbf{autre auteur, date}\end{flushright}
 \end{quotation}
-\chapter*{Remerciements}
-\thispagestyle{empty} 
+%\chapter*{Remerciements}
+%\thispagestyle{empty} 
 
-\noindent Je tiens à remercier ... 
+%\noindent Je tiens à remercier ... 
 
-\medskip
-sans oublier les plus importants, exercice parfois délicat
+%\medskip
+%sans oublier les plus importants, exercice parfois délicat
 \thispagestyle{empty} 
 \setcounter{page}{0}
 \tableofcontents
 %\mainmatter 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTRODUCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% chapitre introduction
+
+% TODO trouver meilleur nom qu'introduction, l'introduction est une partie de cette première partie.
 \chapter{Introduction}
 \setcounter{page}{1}
 \begin{quotation}
-\noindent ``\emph{certains aiment insérer une ou des citations particulières, en rapport avec le chapitre.}''
-\begin{flushright}\textbf{auteur, date}\end{flushright}
+	\noindent ``\emph{certains aiment insérer une ou des citations particulières, en rapport avec le chapitre.}''
+	\begin{flushright}\textbf{auteur, date}\end{flushright}
 \end{quotation}
 
 \vspace*{0.5cm}
 
-\section{Contexte et objectifs du mémoire}
-Blabla
+\section{Présentation générale du sujet}
+%Blabla
+%
+%Pour une introduction rapide mais quand même bien détaillée de \LaTeX et \LaTeX2e, vous pouvez consulter, outre les bouquins classiques \cite{lamp,mittel}, le site \cite{oetik}.
+%
+%Vous aurez peut-être besoin d'utiliser d'autres packages que ceux mentionnés au début du fichier! Pour écrire des algorithmes, consultez par exemple le site \cite{fiorio}.
 
-Pour une introduction rapide mais quand même bien détaillée de \LaTeX et \LaTeX2e, vous pouvez consulter, outre les bouquins classiques \cite{lamp,mittel}, le site \cite{oetik}.
+Depuis des décennies, le développement matériel et logiciel des équipements 
+informatisés a bénéficié d'une croissance extrêmement importante, illustrée par 
+la \href{http://ieeexplore.ieee.org/document/7878957/citations}{loi de Moore}.
+En effet, durant les 40 dernières années, ce sont principalement les progrès
+technologiques qui ont permis d'améliorer les vitesses d'exécution, 
+grâce à la miniaturisation des composants, par exemple. 
 
-Vous aurez peut-être besoin d'utiliser d'autres packages que ceux mentionnés au début du fichier! Pour écrire des algorithmes, consultez par exemple le site \cite{fiorio}.
+Cela fait cependant plusieurs années que la croissance n'est plus 
+simplement due à des améliorations physiques des composants en tant que tels. 
+En effet, la multiplication des processeurs dans les ordinateurs a permis
+de paralléliser et c'est ainsi que la quasi stagnation des 
+technologies a pu être contournée pour continuer la progression.\\
+% TODO add ref du cours de micro
 
-\section{Quelques sections bien choisies}
-Blabla
+Le monde des systèmes embarqués en temps réel n'a pourtant pas autant profité 
+des mêmes avancées. 
+Si la littérature autour des ordonnanceurs en temps réels illustre abondamment l'intérêt de l'intégration de cette parallélisation, 
+les faits montrent plutôt que les industries continuent d'implémenter des solutions mono-processeur. 
 
-Blabla
-\section{Structure du mémoire}
-Dans le chapitre \ref{chap2}
-Blabla
+Ceci peut s'expliquer en partie par le fait qu'il soit 
+compliqué de gérer le partage des ressources, et que cette complexité 
+n'apporte pas suffisamment d'avantages à l'heure qu'il est en terme de 
+réduction de consommation énergétique ou en efficacité.\\
 
-\section{Contributions du mémoire}
-\noindent
-La liste suivante présente nos principales contributions :
-\vspace{1cm}
+Il en résulte un décalage entre les connaissances théoriques et pratiques 
+de ces ordonnanceurs. De ce point de vue, une implémentation sur un \textbf{RTOS}
+tel qu'\textbf{HIPPEROS} %TODO add ref
+se rapprocherait d'un futur usage industriel et pourrait donc 
+faire grandir la connaissance pratique. Cette implémentation 
+pourrait amener plusieurs résultats intéressants : \\
+\begin{itemize}
+	\item Une comparaison entre des résultats théoriques et l'effet de leur mise 
+	en \oe{}uvre
+	\item L'origine de ces différences
+	\item Vérifier les avantages, inconvénients ou obstacles à la 
+	commercialisation de telles solutions.
+\end{itemize}
+
+\section{Contexte et objectifs}
+
+Depuis la preuve qu'aucun ordonnanceur optimal global n'existe,
+[Hong and Leung \cite{hongandleung}, 1988]
+on sait qu'on ne peut pas trouver la perle rare. La réalité du terrain 
+est donc globalement d'implémenter des ordonnanceurs partitionnés, 
+qui donnent de moins bons résultats mais sont plus simples. 
+Ceux-ci étant basés sur des ordonnanceur mono-processeur, 
+on perd l'avantage d'avoir plusieurs processeurs qui tournent en parallèle.
+Or, actuellement, même sur des petits systèmes embarqués, la technoologie 
+multiproc se retrouve. 
+
+Il y a donc plusieurs problèmes avec ça :\\
 \begin{enumerate}
-    \item j'espère qu'il y en aura beaucoup~(Chapitres~\ref{chap2} et untels).
-    \item et encore~(Section~\ref{sec-untel}).
-    \item et encore~(Sections untel, untel et untel).
+	\item On n'utilise pas pleinement les capacités donc on sous-performe.
+	\item Par conséquent, on utilise bien plus d'énergie que nécessaire, dans un monde où chacun devrait 
+	avoir conscience des problèmes liés à la consommation d'énergie : global
+	\item certains devices sont petits et sont particulièrement sensibles à la consommation, 
+	devraient donc tout mettre en \oe{}uvre pour qu'on ait le moins de manips possibles 
+	à faire dessus...
 \end{enumerate}
 
-\clearpage
+Ajouter qu'on travaille ici avec un OS particulier : HIPPEROS.
+
+%Dans le chapitre \ref{chap2}
+%Blabla
+\section{Problématique}
+
+Comme il n'y a pas d'ordonnanceur parfait, on doit en choisir un parmi la longue liste .
+Chacun possède des avantages et inconvénients différents, sur des classes de tâches 
+particulières.
+
+D'autre part, ils sont décrits dans la littérature de façon parfaitement théorique. Certains ont bénéficié d'une implémentation en \textbf{linux rt}. %TODO add ref
+Mais alors, sur un autre ordonnanceur peut se poser le problème de la reproductibilité. 
+Certains ordonnanceurs font des hypothèses fortes et le comportement réel pourrait 
+être fort différent de celui décrit dans la littérature.
+
+Comment choisir celui à implémenter, particulièrement sur \textbf{HIPPEROS} ?
+
+
 \section{Notations}
+blablabla
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% ETAT DE L'ART %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 %
-Il peut être intéressant de rassembler ici les principales notations, leur signification intuitive, et la page où c'est défini plus en détail ou une référence bibliographique si cela s'impose.
-%%%%%%%%%%%%%%%%
-\part{Si du moins votre travail est divisé en parties}
-%%%%%%%%%%%%%%%%
-\chapter{Chapitre premier}
-En utilisant bien les références bibliographiques~\cite{ref1,ref3}.
-\section{Section première}
-Lorsqu'une notion importante est définie dans un gros document, il peut être utile de prévoir son introduction dans un index\index{notion importante}; cela permettra au lecteur, lors d'un usage de la notion dans le texte, de retrouver rapidement cette définition s'il l'a oubliée!
-\subsection{Sous-section}
-Cela permet d'obtenir un texte plus structuré
-\paragraph{Titre de paragraphe}
-On peut aussi avoir des subsubsections, mais il vaut en général mieux éviter de descendre trop bas avec des numérotations du type 3.2.1.5.
+%
+%%%%%%%%%%%%%%%%%
+%\part{Si du moins votre travail est divisé en parties}
+%%%%%%%%%%%%%%%%%
+\chapter{État de l'art}
 
-De même, il faut bien choisir la façon de numéroter les définitions, lemmes, propositions et théorèmes pour pouvoir bien s'y retrouver sans que ça soit trop lourd! Pour cela, on peut demander aux compteurs correspondants de fonctionner au niveau global, au niveau des sections, ... et on peut grouper les compteurs pour, par exemple, éviter d'avoir un théorème 1 qui suit une proposition 15.
-\section{Section deuxième}
-\section{...}Blabla~\cite{ref2}.
-\chapter{Chapitre deuxième}
-\label{chap2}
-\section{...}Blabla~\cite{ref4}.
-\section{...}
-\label{sec-untel}
-%%%%%%%%%%%%%%%%
-\part{Si du moins votre travail est divisé en parties}
-%%%%%%%%%%%%%%%%
-\chapter{Suivant}
+\section{Famille des ?...}
 
-\section{...}
-\section{...}
-\chapter{...}
+\section{Famille des ?...}
 
-\section{...}
-\section{...}
-\chapter{Conclusions}
-A rédiger avec soin\index{soin}, car ce sera parfois le seul chapitre lu, ou c'est à partir de lui que vous convaincrez un lecteur potentiel de poursuivre en feuilletant, ou en dévorant, tout!
-%%%%%%%%%%%%%%%%
-\appendix
-\chapter{Si cela se révèle utile}
+\section{Famille des ?...}
 
-\section{...}
-\chapter{Rapport du stage de recherche ou en entreprise}
-Si du moins cela n'est pas apparu comme un chapitre à part entière, et si ce n'est pas l'objet d'un document séparé
-\section{Cadre du stage}
-Blabla
-\section{Chronologie du stage}
-Blabla
-\section{Bilan du stage}
-Blabla
-%\backmatter
-\printindex % il faudra utiliser l'utilitaire makeindex pour générer le fichier adéquat
+
+\section{Conclusion}
+% tableau ? Support pour développer argumentation ?
+
+\section{Références}
 \bibliographystyle{plain}
-\bibliography{biblio} %si on utilise bibtex (il y a beaucoup plus de possibilités qu'indiquées dans ce fichier)
-%on peut bien sûr gérer la bibliographie soi-même
-%on peut aussi prévoir une webographie séparée
-%%%%%%%%%%%%%%%%
+\bibliography{biblio}
+
 \end{document}
 
 
