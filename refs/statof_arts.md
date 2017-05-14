@@ -106,3 +106,15 @@
 TODO : ajouter les références téléchargées
 
 ### Note : comprendre ce qu'est le DUAL et PACK
+
+
+6. [DP-Fair, An optimal boundary fair scheduling algorithm for multiprocessor real-time systems](https://github.com/subsib/Scheduling/blob/master/refs/dp_fair.pdf)
+
+<details>
+<summary> Présentation de DP-Fair</summary>
+<p> Apparemment, bien connu, bien fourni dans la littérature.</p>
+<p>Periodic real-time tasks with quantum-based computation requirements and implicit deadlines</p>
+<p> Historiquement logique, suite de recherches sur le sujet des fair scheduler (Pfair)</p>
+<p>Ref vers plein de propositions, genre EKF --> à voir.</p>
+<p></p>
+</details>

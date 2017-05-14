@@ -9,3 +9,35 @@ savoir ce qui est le plus "réaliste" quoi.
 "coeur maître et de coeurs esclaves. Le coeur maître envoie des systèmes à scheduler aux slaves ?!"
 "Inter-Process Communication : IPC "
 
+
+classe : le plus large 
+sporadic, deadline contraintes
+On oublie sporadic, en fait...
+
+
+RUN, différentiel algo théorique et résultat obtenu.
+Celui-ci ou un autre...
+
+linux rt distribue le scheduling, symétrie
+HIPPEROS, c'est plutôt asym.
+
+P-Fair, non. U_EDF, 
+DP fair, pas mal.
+
+deadline = period
+Pas de dépendance avec calculs offline. Partie outil + preprocessing intéressante
+
+devrait ajouter de l'info dans les structures qui représentent les tâches.
+
+Y a un successeur à RUN. QPD, RPQ ?!! chercher. QPR ?
+Garde optimalité, sporadic.
+
+Peu de contraintes niveau choix ordonnanceur. 
+
+Première tâche : modèle de tâche, voir nb de papiers qui le cite, etc.
+Regarder implémentations existantes.
+
+nb articles + implementations.
+Qui a "utilisé".
+
+Algo non optimal, mais qui diminue nb préemptions ou migrations.
