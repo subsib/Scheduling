@@ -118,11 +118,8 @@
 \vspace*{0.5cm}
 
 \section{Présentation générale du sujet}
-%Blabla
-%
-%Pour une introduction rapide mais quand même bien détaillée de \LaTeX et \LaTeX2e, vous pouvez consulter, outre les bouquins classiques \cite{lamp,mittel}, le site \cite{oetik}.
-%
-%Vous aurez peut-être besoin d'utiliser d'autres packages que ceux mentionnés au début du fichier! Pour écrire des algorithmes, consultez par exemple le site \cite{fiorio}.
+%TODO il FAUT parler des objectifs en terme de réduction de consommation.
+%TODO c'est MON dada. 
 
 Depuis des décennies, le développement matériel et logiciel des équipements 
 informatisés a bénéficié d'une croissance extrêmement importante, illustrée par 
@@ -235,9 +232,10 @@ La question cruciale de cette première partie de travail
 consiste donc à faire un tour d'horizon de la littérature afin de pouvoir 
 sélectionner un ordonnanceur pertinent à implémenter sur le \textbf{RTOS} \textbf{HIPPEROS}.
 
-\section{Définitions et vocabulaire important}
-\begin{itemize}
-	\item\textbf{[RTOS}] : (Real Time Operating System) Système d'Exploitation Temps Réel.
+\section{Vocabulaire général sur les systèmes temps réel}
+
+\subsection{RTOS}
+(Real Time Operating System) Système d'Exploitation Temps Réel.\\
 	Un système d'exploitation Temps Réel est implémenté dans des systèmes à temps réel. 
 	Il s'agit globalement de systèmes embarqués critiques, comme il en existe à ce jour 
 	énormément (dans les avions, comme systèmes de contrôles, dans les voitures, etc.).
@@ -253,43 +251,77 @@ sélectionner un ordonnanceur pertinent à implémenter sur le \textbf{RTOS} \textb
 	marché un système embarqué.\\
 	%TODO https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27exploitation_temps_r%C3%A9el
 	
-	\item[\textbf{Contraintes strictes, contraintes relatives}] : Dans le cas strict, 
-	le système doit impérativement respecter tous les temps limites. Aucun 
-	dépassement n'est toléré. Dans le cas des contraintes relatives, ce respect 
-	est moins impératif, et on pourra dépasser les délais occasionnellement. \\
+\subsection{Contraintes strictes, contraintes relatives} 
+Dans le cas strict, le système doit impérativement respecter tous les temps limites. Aucun dépassement n'est toléré. Dans le cas des contraintes relatives, ce respect 
+est moins impératif, et on pourra dépasser les délais occasionnellement. \\
 
-	\item[Tâche] : 
-	 
-	\item[Temps d'exécution ] : Le temps d'exécution d'une tâche correspond au 
-	temps requis afin d'exécuter entièrement une instance de cette tâche. 
-	C'est le temps processeur requis. Ce temps est relatif à une tâche, 
-	et pourrait varier pour diverses raisons. \\
+\subsection{Tâche (temps réel)}
+Une tâche correspond à une sorte de programme, c'est à dire une série d'instructions 
+qui doivent être exécutées par un processeur. Il y a plusieurs caractéristiques 
+et propriétés qui définissent une tâche, que nous allons définir ici : 
+\begin{itemize}
+	\item[\textbf{Release Time}] : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
+	\item[\textbf{Start, End}] : Le moment où la tâche commence effectivement à être exécutée, ou termine son exécution.
+	\item[\textbf{Response Time}] : Temps maximum nécessaire à la réalisation de la tâche 
+	entre le Release Time et End. %TODO vérif
+	\item[\textbf{Deadline, temps limite}] : Correspond au temps limite au delà duquel la tâche doit avoir été exécutée. Il existe deux types de deadlines : 
+	une absolue, et une relative. La deadline relative est une valeur fixe qui 
+	est une propriété de la tâche, elle dépend donc du release time.\\
+	La deadline absolue quant à elle est calculée avant l'exécution, et correspond 
+	à un temps $t$ absolu.%TODO explain better, relire cours ptete ?!
 	
-	\item[Approche pire cas ] : Afin de faciliter les calculs et l'abstraction du 
-	problème, l'on pose habituellement que le temps considéré d'exécution de 
+	\item[\textbf{Worst Case Execution Time}] Afin de faciliter les calculs et l'abstraction du problème, l'on pose habituellement que le temps considéré d'exécution de 
 	la tâche est le pire temps. Cela permet d'envisager le pire scénario, et ainsi 
 	de s'assurer que si celui-ci est possible, alors dans de meilleures conditions, 
 	la faisabilité est conservée. La notation utilisée dans le reste de ce document 
-	est \textbf{WCET} : \textbf{W}orst \textbf{C}ase \textbf{E}xecution \textbf{T}ime
+	est  \textbf{WCET} : \textbf{W}orst \textbf{C}ase \textbf{E}xecution \textbf{T}ime
 	
+	\item[\textbf{Laxité}] %TODO fill
+\end{itemize}
+ 
+\subsection{Job}	
 	
-	\item[\textbf{Ordonnanceur}] : Un ordonnanceur (Scheduler) est la partie logicielle de 
+\subsection{Ordonnanceur}
+Un ordonnanceur (Scheduler) est la partie logicielle de 
 	l'OS chargée d'orchestrer l'ordre d'exécution des tâches du système 
 	selon des priorités fixées à l'avance ou en temps réel. 
-	Dans un \textbf{RTOS}, ces priorités peuvent également être fixes ou dynamiques.\\
+	Dans un \textbf{RTOS}, ces priorités peuvent également être fixes ou dynamiques.
 	
-	\item[\textbf{préemption} ] : Un système est dit préemptif s'il a la capacité 
+Selon les cas, l'ordonnanceur peut avoir à gérer un seul processeur. Dans ce 
+document, on parlera d'ordonnanceur mono-processeur. Toutefois, de plus en 
+plus de systèmes possèdent plusieurs processeurs, et il existe deux grandes familles 
+d'ordonnanceurs associés à ces systèmes : les Partitionnés, ou les Globaux. \\
+\subsubsection{Ordonnanceur multi-processeur Partitionné}
+Dans ce cas de figure, un traitement hors ligne aura permis de diviser/partitionner 
+les tâches en des ensembles selon certaines propriétés. Par la suite, le traitement 
+est similaire à un ordonnanceur mono-processeur.
+
+\subsubsection{Ordonnanceur multi-processeur Global}
+Ici, le traitement "idéal" se fait en ligne entièrement, le système gère directement 
+plusieurs processeurs et un système de tâches. Ces ordonnanceurs sont par 
+conséquents plus complexes, et par ailleurs, comme il a été précisé plus haut dans 
+ce document, l'ordonnanceur global qui peut orchestrer n'importe quel ensemble de 
+tâche optimal n'existe pas.
+
+Dans la littérature, on décrit des ordonnanceurs dont une partie du travail se fait 
+hors ligne (RUN) %TODO add ref
+et on parle alors d'ordonnanceur "hybride".
+	
+\subsection{Préemption et hypothèse} 
+Un système est dit préemptif s'il a la capacité 
 	de mettre l'exécution d'un job en pause et d'exécuter un autre à la place. 
 	Une hypothèse pour simplifier la question théorique des ordonnanceur est 
 	très souvent faite dans la littérature : on considère le temps de 
 	préemption comme nul. Cette hypothèse est bien entendu fausse, et il faudra 
 	en tenir compte, particulièrement dans ce travail où l'on tente de faire 
 	le lien entre la théorie et la mise en pratique. 
-	
-\end{itemize}
 
 
 etc. :
+
+\subsection{Représentation graphique d'un système}
+%TODO fill with an example. Hope not to have to draw it in latex :/
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -308,7 +340,7 @@ La littérature sur le sujet des ordonnanceurs est assez vaste.
 Ceux-ci sont composés principalement de trois grandes familles :\\
 \begin{itemize}
 	\item Les mono-processeurs
-	\item Les multi-processeurs partitionnés
+	\item Les multi-processeurs Partitionnés
 	\item Les multiprocesseurs Globaux
 \end{itemize}
 Afin de respecter cette découpe assez naturelle, c'est de cette façon que nous 
