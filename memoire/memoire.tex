@@ -19,6 +19,8 @@
 \usepackage{url}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfgantt} %draw timechart
 
 \begin{document}
 %%%%%%%%%%%%%%%%
@@ -322,6 +324,13 @@ etc. :
 \subsection{Représentation graphique d'un système}
 %TODO fill with an example. Hope not to have to draw it in latex :/
 
+\begin{ganttchart}[vgrid, hgrid]{1}{15}
+	\ganttbar{Master 1}{7}{9}\\
+	\ganttbar{Master 2}{2}{4}\\
+	\ganttbar{Master 3}{5}{6}\\
+	\ganttbar{}{10}{10}\\
+	\ganttbar{Master 4}{11}{13}
+\end{ganttchart}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
