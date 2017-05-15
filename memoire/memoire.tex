@@ -228,18 +228,66 @@ En effet, il est tout à fait possible que
 D'autre part, ils sont décrits dans la littérature de façon parfaitement théorique. Certains ont bénéficié d'une implémentation en \textbf{linux rt}. %TODO add ref
 Mais alors, sur un autre ordonnanceur peut se poser le problème de la reproductibilité. 
 Certains ordonnanceurs font des hypothèses fortes et le comportement réel pourrait 
-être fort différent de celui décrit dans la littérature.
+être fort différent de celui décrit dans la littérature. 
+Ces sujets seront évoqués dans l'état de l'art. %TODO verif que c'est fait
 
-Comment choisir celui à implémenter, particulièrement sur \textbf{HIPPEROS} ?
+La question cruciale de cette première partie de travail 
+consiste donc à faire un tour d'horizon de la littérature afin de pouvoir 
+sélectionner un ordonnanceur pertinent à implémenter sur le \textbf{RTOS} \textbf{HIPPEROS}.
 
+\section{Définitions et vocabulaire important}
+\begin{itemize}
+	\item\textbf{[RTOS}] : (Real Time Operating System) Système d'Exploitation Temps Réel.
+	Un système d'exploitation Temps Réel est implémenté dans des systèmes à temps réel. 
+	Il s'agit globalement de systèmes embarqués critiques, comme il en existe à ce jour 
+	énormément (dans les avions, comme systèmes de contrôles, dans les voitures, etc.).
+	Les contraintes ne sont pas les mêmes que dans un OS (\textbf{O}perating \textbf{S}ystem, Système d'Exploitation) classique, particulièrement pour
+	l'ordonnanceur. 
+	En effet, celui-ci doit gérer un ensemble de tâches qui doivent 
+	(impérativement, ou pas) respecter des temps limites. 
+	Attention cependant à ne pas confondre le besoin de synchronisation avec le besoin de rapidité : 
+	tous les systèmes à temps réel n'ont pas forcément besoin de vitesse. 
+	
+	Il faut néanmoins s'assurer que tous les délais peuvent être respectés, et 
+	c'est là une partie très importante du travail avant de mettre sur le 
+	marché un système embarqué.\\
+	%TODO https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27exploitation_temps_r%C3%A9el
+	
+	\item[\textbf{Contraintes strictes, contraintes relatives}] : Dans le cas strict, 
+	le système doit impérativement respecter tous les temps limites. Aucun 
+	dépassement n'est toléré. Dans le cas des contraintes relatives, ce respect 
+	est moins impératif, et on pourra dépasser les délais occasionnellement. \\
 
-\section{Glossaire}
-RTOS : 
-%TODO https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27exploitation_temps_r%C3%A9el
+	\item[Tâche] : 
+	 
+	\item[Temps d'exécution ] : Le temps d'exécution d'une tâche correspond au 
+	temps requis afin d'exécuter entièrement une instance de cette tâche. 
+	C'est le temps processeur requis. Ce temps est relatif à une tâche, 
+	et pourrait varier pour diverses raisons. \\
+	
+	\item[Approche pire cas ] : Afin de faciliter les calculs et l'abstraction du 
+	problème, l'on pose habituellement que le temps considéré d'exécution de 
+	la tâche est le pire temps. Cela permet d'envisager le pire scénario, et ainsi 
+	de s'assurer que si celui-ci est possible, alors dans de meilleures conditions, 
+	la faisabilité est conservée. La notation utilisée dans le reste de ce document 
+	est \textbf{WCET} : \textbf{W}orst \textbf{C}ase \textbf{E}xecution \textbf{T}ime
+	
+	
+	\item[\textbf{Ordonnanceur}] : Un ordonnanceur (Scheduler) est la partie logicielle de 
+	l'OS chargée d'orchestrer l'ordre d'exécution des tâches du système 
+	selon des priorités fixées à l'avance ou en temps réel. 
+	Dans un \textbf{RTOS}, ces priorités peuvent également être fixes ou dynamiques.\\
+	
+	\item[\textbf{préemption} ] : Un système est dit préemptif s'il a la capacité 
+	de mettre l'exécution d'un job en pause et d'exécuter un autre à la place. 
+	Une hypothèse pour simplifier la question théorique des ordonnanceur est 
+	très souvent faite dans la littérature : on considère le temps de 
+	préemption comme nul. Cette hypothèse est bien entendu fausse, et il faudra 
+	en tenir compte, particulièrement dans ce travail où l'on tente de faire 
+	le lien entre la théorie et la mise en pratique. 
+	
+\end{itemize}
 
-Ordonnanceur : 
-
-Sporadique :
 
 etc. :
 
@@ -256,17 +304,35 @@ etc. :
 %%%%%%%%%%%%%%%%%
 \chapter{État de l'art}
 
-\section{}
+La littérature sur le sujet des ordonnanceurs est assez vaste. 
+Ceux-ci sont composés principalement de trois grandes familles :\\
+\begin{itemize}
+	\item Les mono-processeurs
+	\item Les multi-processeurs partitionnés
+	\item Les multiprocesseurs Globaux
+\end{itemize}
+Afin de respecter cette découpe assez naturelle, c'est de cette façon que nous 
+avons organisé la présentation de l'état de l'art, bien que 
+d'autres découpes auraient été possibles.
 
-\section{Famille des ?...}
+\section{Ordonnanceurs mono processeur}
+\subsection{Une famille plus "facile" à ordonnancer}
 
-\section{Famille des ?...}
+\subsection{Rate Monotonic}
 
+\subsection{Earliest Deadline First}
+
+
+\section{Famille des multi-processeurs partitionnés}
+\subsection{EDF}
+%TODO revoir cours de goossens
+
+\section{Famille des multi-processeurs globaux}
+\subsection{EDF-k}
 
 \section{Conclusion}
 % tableau ? Support pour développer argumentation ?
 
-\section{Références}
 \bibliographystyle{plain}
 \bibliography{biblio}
 
