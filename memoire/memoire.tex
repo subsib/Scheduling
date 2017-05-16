@@ -13,7 +13,7 @@
 \rhead[\leftmark]{thepage}
 %%%%%%%%%%%%%%%%%%%%%%%%
 %\usepackage{natbib}
-
+\usepackage[T1]{fontenc} % pour taper les lettres accentuées
 \usepackage[latin1]{inputenc}
 \usepackage[francais]{babel}
 \usepackage{url}
@@ -29,7 +29,7 @@
 
 
 \begin{center}
-\textbf{UNIVERSIT\'E LIBRE DE BRUXELLES}\\
+\textbf{UNIVERSITÉ LIBRE DE BRUXELLES}\\
 \textbf{Faculté des Sciences}\\
 \textbf{Département d'Informatique}
 \vfill{}\vfill{}
@@ -293,6 +293,10 @@ Selon les cas, l'ordonnanceur peut avoir à gérer un seul processeur. Dans ce
 document, on parlera d'ordonnanceur mono-processeur. Toutefois, de plus en 
 plus de systèmes possèdent plusieurs processeurs, et il existe deux grandes familles 
 d'ordonnanceurs associés à ces systèmes : les Partitionnés, ou les Globaux. \\
+
+\subsection{En ligne, hors ligne}
+%TODO blabla
+
 \subsubsection{Ordonnanceur multi-processeur Partitionné}
 Dans ce cas de figure, un traitement hors ligne aura permis de diviser/partitionner 
 les tâches en des ensembles selon certaines propriétés. Par la suite, le traitement 
@@ -357,16 +361,18 @@ avons organisé la présentation de l'état de l'art, bien que
 d'autres découpes auraient été possibles.
 
 \section{Ordonnanceurs mono processeur}
-\subsection{Une famille plus "facile" à ordonnancer}
 
 \subsection{Rate Monotonic}
+L'ordonnanceur Rate Monotonic [\cite{omarkermia}]
+
 
 \subsection{Earliest Deadline First}
-
+\cite{ndoye}
 
 \section{Famille des multi-processeurs partitionnés}
-\subsection{EDF}
+\subsection{k-EDF}
 %TODO revoir cours de goossens
+
 
 \section{Famille des multi-processeurs globaux}
 \subsection{EDF-k}
