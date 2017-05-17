@@ -259,7 +259,8 @@ est moins impératif, et on pourra dépasser les délais occasionnellement. \\
 
 \subsection{Tâche (temps réel)}
 Une tâche correspond à une sorte de programme, c'est à dire une série d'instructions 
-qui doivent être exécutées par un processeur. Il y a plusieurs caractéristiques 
+qui doivent être exécutées par un processeur. 
+Il y a plusieurs caractéristiques 
 et propriétés qui définissent une tâche, que nous allons définir ici : 
 \begin{itemize}
 	\item[\textbf{Release Time}] : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
@@ -284,27 +285,49 @@ et propriétés qui définissent une tâche, que nous allons définir ici :
 		$L_i = D_i - C_i$
 	\end{center}
 \vspace{0.5cm}
-	\item[\textbf{Contraintes sur les tâches}]
+	\item[\textbf{Tâches périodiques}]
+	Une tâche périodique est une tâche qui génère régulièrement des jobs.  
+Formellement, une tâche périodique est définie par un 4-uplet $(O, T, D, C)$ où 
+\begin{itemize}
+	\item[O] est l'"offset", c'est à dire le temps que met la tâche à générer un premier job.
+	\item[T] est la période, c'est à dire le temps qui sépare deux générations de job par la tâche. 
+	Comme le premier job est généré à l'instant $O$, alors $\forall i \in \{0, \infty \} t = O + i\times T$ 
+	où $t$ est le temps où la tâche est générée la $i$ème fois.
+	\item[D] est la deadline relative, c'est à dire le temps qui sépare au maximum la génération 
+	d'un job et sa réalisation.
+	\item[C] est le temps de réalisation. Dans les algorithmes, on utilise -- comme expliqué précédemment --
+	le \textbf{WCET}.
+\end{itemize}	
 	Dans le cas de tâches périodiques, on distingue trois cas différents : \\
 	\begin{enumerate}
-		\item si l'échéance est égale à la période $\forall \tau_i, D_i = T_i$ : tâche à échéance sur requête
-		\item si l'échéance est inférieure ou égale à la période $\forall \tau_i, D_i \leq T_i $ , on dit que la tâche est à échéance contrainte
+		\item si l'échéance est égale à la période $\forall \tau_i, D_i = T_i$ : tâche à \label{echeancesurrequete}échéance sur requête
+		\item si l'échéance est inférieure ou égale à la période $\forall \tau_i, D_i \leq T_i $ , on dit que la tâche est à \label{echeancecontrainte} échéance contrainte
 		\item s'il n'y a pas de contrainte particulière, la tâche est dite "à échéance arbitraire".
 	\end{enumerate}
 	Les solutions d'ordonnancement pour ces trois types de tâches diffèrent donc. 
 	Globalement, on peut ordonner ces trois types de tâches : \\
 	échéance sur requêtes $\subset$ échéance contrainte $\subset$ échéance arbitraire.
 	
+	\item[\textbf{Tâche sporadique}] : Une tâche est sporadique est une tâche qui génère de nouveaux jobs, 
+	comme dans le cas de la tâche périodique. 
+	La différence entre ces deux types est que la tâche sporadique 
+	génère deux jobs avec un intervalle de temps au moins égal à la durée correspondant à sa période, 
+	et pas exactement égal. 
+	
+	\item[\textbf{Tâche apériodique}] : Pour ce type de tâches, on ignore la régularité de 
+	l'arrivée de nouveaux jobs. Les propriétés du job ne sont connues que lorsqu'un job est 
+	généré dans le système.
 	
 \end{itemize}
 
-\subsection{Job}	
-	
+\subsection{Job}
+Un job est une instance d'une tâche. %TODO fill...
+
 \subsection{Ordonnanceur}
 Un ordonnanceur (Scheduler) est la partie logicielle de 
-	l'OS chargée d'orchestrer l'ordre d'exécution des tâches du système 
-	selon des priorités fixées à l'avance ou en temps réel. 
-	Dans un \textbf{RTOS}, ces priorités peuvent également être fixes ou dynamiques.
+l'OS chargée d'orchestrer l'ordre d'exécution des tâches du système 
+selon des priorités fixées à l'avance ou en temps réel. 
+Dans un \textbf{RTOS}, ces priorités peuvent également être fixes ou dynamiques.
 	
 Selon les cas, l'ordonnanceur peut avoir à gérer un seul processeur. Dans ce 
 document, on parlera d'ordonnanceur mono-processeur. Toutefois, de plus en 
@@ -392,7 +415,8 @@ Ceux-ci sont composés principalement de trois grandes familles :\\
 	\item Les multi-processeurs Partitionnés
 	\item Les multiprocesseurs Globaux
 \end{itemize}
-Les ordonnanceurs mon-processeurs étant plus simples à appréhender, nous commencerons par les présenter.
+Les ordonnanceurs mon-processeurs étant plus simples à appréhender, nous commencerons 
+par présenter cette famille.
 
 \section{Ordonnanceurs mono processeur}
 
@@ -408,7 +432,7 @@ Les auteurs énoncent même une condition suffisante de faisabilité pour un systèm
 \begin{center}
 	$\Sigma_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1)$
 \end{center}
-Notons également que pour $n \rightarrow \inf$, $\Sigma_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1) \rightarrow \ln(2) \approx 0.69$.
+Notons également que pour $n \rightarrow \infty$, $\Sigma_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1) \rightarrow \ln(2) \approx 0.69$.
 Une condition suffisante est donc que le facteur d'utilisation du système soit inférieur à 0.69. Dans ce cas, 
 le système est ordonnançable par RM.\\
 
@@ -420,15 +444,25 @@ définit la borne supérieure du Release Time :
 \begin{center}
 	$RT(t_i)^{q+1} = \Sigma_{j=1}^{i-1} \lceil \frac{RT(t_i)^q}{T(t_i)} \rceil \times C(t_j)) + C(t_i)$
 \end{center}
-Le système est ordonnançable si et seulement si $\forall i_{(1 \leq i \leq m}RT(t_i) \leq T_i$.
-On pourra résoudre récursivement cette équation afin de prouver sa faisabilité.
+Le système est ordonnançable si et seulement si $\forall i_{(1 \leq i \leq m)}RT(t_i) \leq T_i$.
+On pourra résoudre récursivement cette équation afin de prouver sa faisabilité.\\
 
-Malheureusement, RM ne conserve pas son optimalité dans le contexte non-préemptif. 
+RM n'est cependant optimal que pour cette classe de tâches. Dès que les propriétés changent, 
+il faudra se tourner vers un autre type d'ordonnanceur.
 
 
+\subsection{Deadline Monotonic}
+Deadline Monotonic (DM) est un ordonnanceur pour les systèmes à départ simultanés ($offset = 0$) et 
+à échéance contrainte\ref{echeancecontrainte}. Les priorités sont fixes, au niveau des tâches.
+Plus la deadline est petite, plus la priorité est élevée. On peut considérer que RM est 
+un cas particulier de DM, puisque pour RM, les tâches sont à échéance sur requête\ref{echeancesurrequete}
+
+\cite{LeungW82}
 
 \subsection{Earliest Deadline First}
 \cite{ndoye}
+\textbf{E}arliest \textbf{D}eadline \textbf{F}irst (EDF)
+
 
 \section{Famille des multi-processeurs partitionnés}
 
