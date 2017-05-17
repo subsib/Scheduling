@@ -265,7 +265,7 @@ et propriétés qui définissent une tâche, que nous allons définir ici :
 \begin{itemize}
 	\item[\textbf{Release Time}] : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
 	\item[\textbf{Start, End}] : Le moment où la tâche commence effectivement à être exécutée, ou termine son exécution.
-	\item[\textbf{\label{Response Time}}] : Temps maximum nécessaire à la réalisation de la tâche 
+	\item[\textbf{Response Time\label{Response Time}}] : Temps maximum nécessaire à la réalisation de la tâche 
 	entre le Release Time et End. %TODO vérif
 	\item[\textbf{Deadline, temps limite}] : Correspond au temps limite au delà duquel la tâche doit avoir été exécutée. Il existe deux types de deadlines : 
 	une absolue, et une relative. La deadline relative est une valeur fixe qui 
@@ -326,15 +326,25 @@ Un job est une instance d'une tâche. %TODO fill...
 \subsection{Ordonnanceur}
 Un ordonnanceur (Scheduler) est la partie logicielle de 
 l'OS chargée d'orchestrer l'ordre d'exécution des tâches du système 
-selon des priorités fixées à l'avance ou en temps réel. 
-Dans un \textbf{RTOS}, ces priorités peuvent également être fixes ou dynamiques.
+selon des priorités fixées à l'avance ou durant l'exécution. 
+On distingue trois types d'assignation de priorités des ordonnanceurs : \\
+\begin{enumerate}
+	\item Priorité fixée au niveau des tâches : Ce type d'ordonnanceur fixe la priorité 
+	avant l'exécution, et celle-ci dépend donc des attributs de la tâche. 
+	Deux exemples d'ordonnanceurs de ce type seront présentés plus loin : Rate Monotonic et 
+	Deadline Monotonic.
+	\item Priorité fixe au niveau des jobs : La priorité est fixée par l'ordonnanceur à l'arrivée du job 
+	dans l'exécution, et elle ne peut pas changer jusqu'à la réalisation du job. Un exemple sera présenté plus loin : Earliest Deadline First.
+	\item Priorité dynamique : L'ordonnanceur peut recalculer à tout moment de l'exécution 
+	la priorité du job avec un exemple connu, Least Laxity First %TODO add ref
+\end{enumerate}
 	
 Selon les cas, l'ordonnanceur peut avoir à gérer un seul processeur. Dans ce 
-document, on parlera d'ordonnanceur mono-processeur. Toutefois, de plus en 
+document, on parlera dans ce cas d'ordonnanceur mono-processeur. Toutefois, de plus en 
 plus de systèmes possèdent plusieurs processeurs, et il existe deux grandes familles 
 d'ordonnanceurs associés à ces systèmes : les Partitionnés, ou les Globaux. \\
 
-\subsection{En ligne, hors ligne}
+%\subsection{En ligne, hors ligne}
 %TODO blabla
 
 \subsubsection{Ordonnanceur multi-processeur Partitionné}
@@ -365,7 +375,7 @@ Un système est dit préemptif s'il a la capacité
 \subsection{Utilisation}
 Le facteur d'utilisation $U_i$ d'une tâche périodique $\tau_i$ est le rapport entre 
 son temps d'exécution et sa période. Par exemple, pour une tâche $\tau_i$ tel que 
-$WCET = 50 ms$ et $T = 30$, le processeur doit allouer $\frac{30}{50}$ du temps 
+$WCET = 50 ms$ et $T = 30 ms$, le processeur doit allouer $\frac{30}{50}$ du temps 
 total d'exécution à cette tâche.\\
 
 L'utilisation (ou le facteur d'utilisation) d'un système périodique est la proportion de temps 
@@ -380,7 +390,7 @@ l'ordonnanceur \textbf{Rate Monotonic} (présenté plus tard dans ce document).\\
 Soit $C_i$ le temps d'exécution d'une tâche $\tau_i$, et soit $T_i$ sa période, voici la définition de 
 l'utilisation pour un système de $m$ tâches :\\
 \begin{center}
-	$U_{tot} = \Sigma_{i = 1}^{m}(\frac{C_i}{T_i})$
+	$U_{tot} = \sum_{i = 1}^{m}(\frac{C_i}{T_i})$
 \end{center}
 
 
@@ -388,11 +398,11 @@ l'utilisation pour un système de $m$ tâches :\\
 %TODO fill with an example. Hope not to have to draw it in latex :/
 
 \begin{ganttchart}[vgrid, hgrid]{1}{15}
-	\ganttbar{Master 1}{7}{9}\\
-	\ganttbar{Master 2}{2}{4}\\
-	\ganttbar{Master 3}{5}{6}\\
-	\ganttbar{}{10}{10}\\
-	\ganttbar{Master 4}{11}{13}
+	\ganttbar{$\tau_1$}{7}{9}\\
+	\ganttbar{$\tau_2$}{2}{4}\\
+	\ganttbar{$\tau_3$}{5}{6}\\
+	\ganttbar{$\tau_4$}{10}{10}\\
+	\ganttbar{$\tau_5$}{11}{13}
 \end{ganttchart}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -430,11 +440,11 @@ Un des points fondamentaux de l'article est de prouver l'optimalité de RM dans l
 préemptives, périodiques (à échéance sur requête), indépendantes, simultanées.
 Les auteurs énoncent même une condition suffisante de faisabilité pour un système à $m$ tâches : \\
 \begin{center}
-	$\Sigma_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1)$
+	$\sum_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1)$
 \end{center}
-Notons également que pour $n \rightarrow \infty$, $\Sigma_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1) \rightarrow \ln(2) \approx 0.69$.
-Une condition suffisante est donc que le facteur d'utilisation du système soit inférieur à 0.69. Dans ce cas, 
-le système est ordonnançable par RM.\\
+Notons également que pour $n \rightarrow \infty$, $\sum_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1) \rightarrow \ln(2) \approx 0.69$.
+Une condition suffisante est donc que le facteur d'utilisation du système soit inférieur à 0.69. 
+Dans ce cas, le système est ordonnançable par RM.\\
 
 Des améliorations ont par la suite été apportées par Joseph et Pandya \cite{DBLP}.
 qui ont trouvé une condition nécessaire et suffisante. 
@@ -442,7 +452,7 @@ Ainsi, si $RT(t_i)$ est le Response Time (\ref{Response Time}) d'une tâche $t_i$
 alors si un ensemble de tâches périodiques est trié par ordre décroissant, l'équation suivante 
 définit la borne supérieure du Release Time :
 \begin{center}
-	$RT(t_i)^{q+1} = \Sigma_{j=1}^{i-1} \lceil \frac{RT(t_i)^q}{T(t_i)} \rceil \times C(t_j)) + C(t_i)$
+	$RT(t_i)^{q+1} = \sum_{j=1}^{i-1} \lceil \frac{RT(t_i)^q}{T(t_i)} \rceil \times C(t_j)) + C(t_i)$
 \end{center}
 Le système est ordonnançable si et seulement si $\forall i_{(1 \leq i \leq m)}RT(t_i) \leq T_i$.
 On pourra résoudre récursivement cette équation afin de prouver sa faisabilité.\\
@@ -453,23 +463,109 @@ il faudra se tourner vers un autre type d'ordonnanceur.
 
 \subsection{Deadline Monotonic}
 Deadline Monotonic (DM) est un ordonnanceur pour les systèmes à départ simultanés ($offset = 0$) et 
-à échéance contrainte\ref{echeancecontrainte}. Les priorités sont fixes, au niveau des tâches.
-Plus la deadline est petite, plus la priorité est élevée. On peut considérer que RM est 
-un cas particulier de DM, puisque pour RM, les tâches sont à échéance sur requête\ref{echeancesurrequete}
+à échéance contrainte\ref{echeancecontrainte}($D_i \leq T_i$). Il a été décrit par Leung et Whitehead 
+\cite{LeungW82}. Cet article aborde le point de vue mono-processeur et multi-processeur partitionné, 
+dont il sera question plus loin dans ce document.\\
 
-\cite{LeungW82}
+Avec cet ordonnanceur, les priorités sont fixes, au niveau des tâches.
+Plus la deadline est petite, plus la priorité est élevée. On peut considérer que RM est 
+un cas particulier de DM, puisque pour RM, les tâches sont à échéance sur requête \ref{echeancesurrequete}.
+Il n'existe pas de test de faisabilité basé sur l'utilisation du système. Pour vérifier celle-ci, 
+il faut avoir recours à l'équation décrite plus haut. 
+On peut la résoudre récursivement à l'aide de ce système : \\
+\begin{enumerate}
+	\item $W_0 = C_i $
+	\item $W_{k+1} = C_i + \sum_{j = 1}^{i-1}\lceil \frac{W_k}{T_j} \rceil \times C_j $
+\end{enumerate}
+
+
 
 \subsection{Earliest Deadline First}
 \cite{ndoye}
-\textbf{E}arliest \textbf{D}eadline \textbf{F}irst (EDF)
+\textbf{E}arliest \textbf{D}eadline \textbf{F}irst (EDF) est un ordonnanceur 
+qui a été introduit e 1973, à la même période que Rate Monotonic, également 
+par Lui et Layland \cite{liulayland}. C'est un ordonnanceur à départ différé ($Offset \neq 0$) 
+et à deadline arbitraire (pas de contrainte sur la deadline par rapport à la période), 
+qui fixe les priorités sur les jobs. L'assignation de la priorité se fait sur base de 
+la proximité de la deadline absolue : Plus cette deadline est proche et plus la priorité est élevée. 
+Une façon déterministe et arbitraire de régler les cas d'égalité doit être décidée.\\
 
+EDF est optimal pour toutes les tâches synchrones et asynchrones, avec et sans 
+contraintes sur les deadlines. 
+Cela signifie que si un système est ordonnançable, EDF peut l'ordonnancer.\\
+Cette propriété est importante, car les classes de tâches ordonnancées par EDF 
+sont plus larges que RM et DM, par conséquent, EDF peut ordonnancer également les 
+mêmes classes qu'RM et DM en conservant son optimalité. \\
 
-\section{Famille des multi-processeurs partitionnés}
+Les tests de faisabilités avec EDF dépendent de la classe de tâche considérée. 
+Pour un système synchrone et à échéance sur requête, 
+une condition nécessaire et suffisante de faisabilité est donc que l'utilisation soit inférieure 
+à 100\%, c'est à dire : \\
+\begin{center}
+	$\forall \tau_i \in \Gamma_m, \sum_{i=1}^{m}\frac{C_i}{T_i} \leq 1 $
+\end{center}
+
+Dans le cas d'un système synchrone à échéance arbitraire, on doit considérer un intervalle de 
+recherche $[0, L]$ avec $L$ qui peut se calculer de façon itérative en cherchant un point fixe 
+avec cette formule : \\
+\[
+\left \{
+\begin{array}{r l}
+W_0 &= \sum_{i = 1}^{m}C_i\\
+W_{k+1} & =\sum_{i = 1}^{m} \lceil \frac{W_k}{T_i} \rceil \times C_i
+\end{array}
+\right.
+\]
+
+Dans le cas des systèmes de tâches asynchrones, l'intervalle considéré est plus grand : 
+$[0, O_{max} + 2 \times P]$ avec $O_{max}$ l'offset maximum du système et 
+$P$ le plus petit commun multiple ($ppcm$) de toutes les périodes du système, soit : \\
+\begin{center}
+	$P = ppcm\{T_i | i \in \{1, ... m\}\}$
+\end{center}
+
+\section{Multi-processeurs partitionnés}
 
 %TODO revoir cours de goossens
 
+Dans la section précédente, plusieurs ordonnanceurs mono-processeurs ont été présentés. 
+C'est une simplification qui permet de comprendre comment fonctionne un ordonnanceur temps 
+réel, mais bien entendu, dans la réalité, beaucoup de systèmes fonctionnent avec plusieurs processeurs. 
+Dans ce cas, la complexité augmente, et les propriétés vues précédemment ne sont pas conservées. \\
+%TODO insert test faisabilité ssi multiproc
 
-\section{Famille des multi-processeurs globaux}
+La première idée, pour ordonnancer un système sur plusieurs processeurs, est de partitionner 
+l'ensemble de tâches en plusieurs systèmes de sorte de pouvoir appliquer les algorithmes 
+vus plus haut. Ceci permet d'appliquer les tests de faisabilité. \\
+
+Le problème du partitionnement (bin-packing) %TODO ref
+appartient à la classe de complexité $NP$, si bien qu'en pratique, 
+des heuristiques sont appliquées : 
+
+\section{Multi-processeurs globaux}
+Une autre façon d'ordonnancer plusieurs processeurs est de ne pas procéder à un partitionnement préalable, 
+et donc, de gérer tous les processeurs en même temps. 
+Les deux façons de procéder ne sont pas comparables. Pourquoi ?
+--> parler de il n'existe pas de scheduler non clairvoyant optimal.
+Résultat super important, cité avant.\\
+
+Donc il n'existe pas de test qui permette de savoir si on peut ordonnancer 
+un système sur partionned ou global.
+
+Ca signifie qu'il faut essayer de le faire... Simuler.
+
+Problèmeh : les deux façons de procéder sont incaparables. Pourquoi ? Issu du cours, montrer 
+un système schedulable en partionned et pas en global et vice et versa.
+
+Grande idée : il existe PAS de scheuler idéal.
+Du coup, il faut en chercher un qui a le plus grand système de tâche possible, ou du moins, 
+le plus intéressant. 
+
+Parmi ceux-ci, il y a : 
+
+% parler pb de partage des ressources
+
+
 \subsection{EDF-k}
 
 \section{Conclusion}
