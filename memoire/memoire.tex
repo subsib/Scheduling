@@ -110,7 +110,7 @@
 % chapitre introduction
 
 % TODO trouver meilleur nom qu'introduction, l'introduction est une partie de cette première partie.
-\chapter{Introduction}
+\chapter{Introduction}{}
 \setcounter{page}{1}
 \begin{quotation}
 	\noindent ``\emph{certains aiment insérer une ou des citations particulières, en rapport avec le chapitre.}''
@@ -264,7 +264,7 @@ et propriétés qui définissent une tâche, que nous allons définir ici :
 \begin{itemize}
 	\item[\textbf{Release Time}] : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
 	\item[\textbf{Start, End}] : Le moment où la tâche commence effectivement à être exécutée, ou termine son exécution.
-	\item[\textbf{Response Time}] : Temps maximum nécessaire à la réalisation de la tâche 
+	\item[\textbf{\label{Response Time}}] : Temps maximum nécessaire à la réalisation de la tâche 
 	entre le Release Time et End. %TODO vérif
 	\item[\textbf{Deadline, temps limite}] : Correspond au temps limite au delà duquel la tâche doit avoir été exécutée. Il existe deux types de deadlines : 
 	une absolue, et une relative. La deadline relative est une valeur fixe qui 
@@ -278,9 +278,26 @@ et propriétés qui définissent une tâche, que nous allons définir ici :
 	la faisabilité est conservée. La notation utilisée dans le reste de ce document 
 	est  \textbf{WCET} : \textbf{W}orst \textbf{C}ase \textbf{E}xecution \textbf{T}ime
 	
-	\item[\textbf{Laxité}] %TODO fill
+	\item[\textbf{Laxité}] La laxité d'une tâche est la durée entre sa réalisation et son échéance. 
+	Pour une tâche $\tau_i$, la laxité est :
+	\begin{center}
+		$L_i = D_i - C_i$
+	\end{center}
+\vspace{0.5cm}
+	\item[\textbf{Contraintes sur les tâches}]
+	Dans le cas de tâches périodiques, on distingue trois cas différents : \\
+	\begin{enumerate}
+		\item si l'échéance est égale à la période $\forall \tau_i, D_i = T_i$ : tâche à échéance sur requête
+		\item si l'échéance est inférieure ou égale à la période $\forall \tau_i, D_i \leq T_i $ , on dit que la tâche est à échéance contrainte
+		\item s'il n'y a pas de contrainte particulière, la tâche est dite "à échéance arbitraire".
+	\end{enumerate}
+	Les solutions d'ordonnancement pour ces trois types de tâches diffèrent donc. 
+	Globalement, on peut ordonner ces trois types de tâches : \\
+	échéance sur requêtes $\subset$ échéance contrainte $\subset$ échéance arbitraire.
+	
+	
 \end{itemize}
- 
+
 \subsection{Job}	
 	
 \subsection{Ordonnanceur}
@@ -322,8 +339,27 @@ Un système est dit préemptif s'il a la capacité
 	en tenir compte, particulièrement dans ce travail où l'on tente de faire 
 	le lien entre la théorie et la mise en pratique. 
 
+\subsection{Utilisation}
+Le facteur d'utilisation $U_i$ d'une tâche périodique $\tau_i$ est le rapport entre 
+son temps d'exécution et sa période. Par exemple, pour une tâche $\tau_i$ tel que 
+$WCET = 50 ms$ et $T = 30$, le processeur doit allouer $\frac{30}{50}$ du temps 
+total d'exécution à cette tâche.\\
 
-etc. :
+L'utilisation (ou le facteur d'utilisation) d'un système périodique est la proportion de temps 
+passée par le processeur à l'exécution de tâches d'un système donné. 
+Le calcul de l'utilisation permet dans certains cas et certaines conditions de donner une indication 
+à propos de la faisabilité du système par un certain ordonnanceur. 
+\\
+
+Liu et Layland \cite{liulayland} en donnent une définition formelle dans leur article décrivant 
+l'ordonnanceur \textbf{Rate Monotonic} (présenté plus tard dans ce document).\\ 
+
+Soit $C_i$ le temps d'exécution d'une tâche $\tau_i$, et soit $T_i$ sa période, voici la définition de 
+l'utilisation pour un système de $m$ tâches :\\
+\begin{center}
+	$U_{tot} = \Sigma_{i = 1}^{m}(\frac{C_i}{T_i})$
+\end{center}
+
 
 \subsection{Représentation graphique d'un système}
 %TODO fill with an example. Hope not to have to draw it in latex :/
@@ -356,21 +392,46 @@ Ceux-ci sont composés principalement de trois grandes familles :\\
 	\item Les multi-processeurs Partitionnés
 	\item Les multiprocesseurs Globaux
 \end{itemize}
-Afin de respecter cette découpe assez naturelle, c'est de cette façon que nous 
-avons organisé la présentation de l'état de l'art, bien que 
-d'autres découpes auraient été possibles.
+Les ordonnanceurs mon-processeurs étant plus simples à appréhender, nous commencerons par les présenter.
 
 \section{Ordonnanceurs mono processeur}
 
 \subsection{Rate Monotonic}
-L'ordonnanceur Rate Monotonic [\cite{omarkermia}]
+L'ordonnanceur \textbf{R}ate \textbf{M}onotonic (RM) est décrit la première fois par Liu et Layland \cite{liulayland} en 1973. C'est 
+donc un ordonnanceur classique, bien connu, ainsi que largement documenté [\cite{omarkermia}]. 
+On considère un ensemble de tâches périodiques et indépendantes.
+Les priorités sont statiques et attribuées en fonction de la durée de la période, ainsi 
+la tâche avec la période la plus faible sera de priorité plus élevée. 
+Un des points fondamentaux de l'article est de prouver l'optimalité de RM dans le cas de tâches 
+préemptives, périodiques (à échéance sur requête), indépendantes, simultanées.
+Les auteurs énoncent même une condition suffisante de faisabilité pour un système à $m$ tâches : \\
+\begin{center}
+	$\Sigma_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1)$
+\end{center}
+Notons également que pour $n \rightarrow \inf$, $\Sigma_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1) \rightarrow \ln(2) \approx 0.69$.
+Une condition suffisante est donc que le facteur d'utilisation du système soit inférieur à 0.69. Dans ce cas, 
+le système est ordonnançable par RM.\\
+
+Des améliorations ont par la suite été apportées par Joseph et Pandya \cite{DBLP}.
+qui ont trouvé une condition nécessaire et suffisante. 
+Ainsi, si $RT(t_i)$ est le Response Time (\ref{Response Time}) d'une tâche $t_i$, 
+alors si un ensemble de tâches périodiques est trié par ordre décroissant, l'équation suivante 
+définit la borne supérieure du Release Time :
+\begin{center}
+	$RT(t_i)^{q+1} = \Sigma_{j=1}^{i-1} \lceil \frac{RT(t_i)^q}{T(t_i)} \rceil \times C(t_j)) + C(t_i)$
+\end{center}
+Le système est ordonnançable si et seulement si $\forall i_{(1 \leq i \leq m}RT(t_i) \leq T_i$.
+On pourra résoudre récursivement cette équation afin de prouver sa faisabilité.
+
+Malheureusement, RM ne conserve pas son optimalité dans le contexte non-préemptif. 
+
 
 
 \subsection{Earliest Deadline First}
 \cite{ndoye}
 
 \section{Famille des multi-processeurs partitionnés}
-\subsection{k-EDF}
+
 %TODO revoir cours de goossens
 
 
