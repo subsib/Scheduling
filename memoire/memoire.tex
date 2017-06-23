@@ -1,3 +1,4 @@
+% !TeX spellcheck = fr
 %ceci est un canevas possible pour un mémoire en français; 
 %pour l'anglais (américain ou UK) c'est facile à adapter
 %il y a de nombreuses variantes possibles: consulter votre promoteur ou le président de jury en cas de doute sur l'opportunité de les utiliser!
@@ -145,7 +146,7 @@ les faits montrent plutôt que les industries continuent d'implémenter des soluti
 Ceci peut s'expliquer en partie par le fait qu'il soit 
 compliqué de gérer le partage des ressources, et que cette complexité 
 n'apporte pas suffisamment d'avantages à l'heure qu'il est en terme de 
-réduction de consommation énergétique ou en efficacité.\\
+réduction de consommation énergétique ou en amélioration de l'efficacité.\\
 
 Il en résulte un décalage entre les connaissances théoriques et pratiques 
 de ces ordonnanceurs. De ce point de vue, une implémentation sur un \textbf{RTOS}
@@ -162,6 +163,21 @@ pourrait amener plusieurs résultats intéressants : \\
 \end{itemize}
 
 \section{Contexte et objectifs}
+
+\subsection{Limites du parallélisme}
+Le parallélisme a montré ses limites, connues depuis longtemps dans la littérature scientifique. 
+Par exemple, la loi d'\href{https://en.wikipedia.org/wiki/Amdahl\%27s_law}{Amdahl} montre 
+l'accélération théorique que l'on peut atteindre en améliorant certains paramètres : 
+%TODO mettre une référence correcte
+\begin{itemize}
+    \item La portion de code exécutable en parallèle (tout un programme séquentiel ne peut pas forcément 
+    être parallélisable)
+    \item Le nombre de processeurs. 
+\end{itemize}
+On remarque alors que le nombre de processeurs n'influence la vitesse d'exécution que jusqu'à une certaine limite 
+
+
+
 \subsection{Ordonnanceurs globaux}
 Depuis la preuve qu'aucun ordonnanceur global optimal n'existe pour toutes les classes 
 de tâches,
