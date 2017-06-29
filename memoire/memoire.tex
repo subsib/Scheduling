@@ -1,9 +1,7 @@
-%ceci est un canevas possible pour un mémoire en français; 
-%pour l'anglais (américain ou UK) c'est facile à adapter
-%il y a de nombreuses variantes possibles: consulter votre promoteur ou le président de jury en cas de doute sur l'opportunité de les utiliser!
 \documentclass[11pt,a4paper,oneside]{report}
 \usepackage[hmargin={1.25in,1.25in},vmargin={1.25in,1.25in}]{geometry}
 %%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\parindent}{0cm}
 \makeindex
 \usepackage{textcomp}
 \usepackage{fancyhdr}
@@ -123,36 +121,44 @@
 %TODO il FAUT parler des objectifs en terme de réduction de consommation.
 %TODO c'est MON dada. 
 
-Depuis des décennies, le développement matériel et logiciel des équipements 
-informatisés a bénéficié d'une croissance extrêmement importante, illustrée par 
-la \href{http://ieeexplore.ieee.org/document/7878957/citations}{loi de Moore}.
-Durant les 40 dernières années, ce sont principalement les progrès
-technologiques qui ont permis d'améliorer les vitesses d'exécution, 
-entre autres grâce à la miniaturisation des composants.
+À l'heure actuelle, les appareils les plus vendus sont les systèmes embarqués.
+Parler des IoT.
+Le contexte de 
+vente et technologique est tel que ce sont des produits avec un potentiel énorme.
+Ce qui est étonnant est le décalage existant entre ce pour quoi on a les capacités 
+et ce qui existe en réalité : 
+dans la théorie, de grands développements existent, avec des schedulers super globaux
+efficaces. Dans la pratique, l'industrie boude ces solutions car trop complexes, 
+et préfère appliquer une unique solution à tous les systèmes : moins prise de tête.
+Mais on est en droit de se dire que ceci ne durera pas.
 
-Cela fait cependant plusieurs années que la croissance n'est plus 
-principalement due à des améliorations physiques des composants en tant que tels. 
+Dans l'intérêt de la science également, cette question est importante. 
+
+Cela fait plusieurs années que la croissance de l'efficacité des appareils n'est plus 
+principalement due à des améliorations physiques des composants. 
 En effet, la multiplication des processeurs dans les ordinateurs a permis
 de paralléliser et c'est ainsi que la quasi stagnation des 
 technologies a pu être contournée pour continuer la progression.\\
 % TODO add ref du cours de micro
 
-Le monde des systèmes embarqués en temps réel n'a pourtant pas autant profité 
-des mêmes avancées. 
+Le monde des systèmes embarqués en temps réel a bénéficié de ces améliorations également, 
+et dispose très souvent de processeurs multi-c?urs. Cependant, leur gestion n'est 
+à l'heure actuelle pas optimale, la plupart des systèmes sont simplement 
+gérés soit comme des systèmes mono-processeurs, soit partitionnés.
 Si la littérature autour des ordonnanceurs en temps réels illustre abondamment l'intérêt de l'intégration de cette parallélisation, 
 les faits montrent plutôt que les industries continuent d'implémenter des solutions mono-processeur. 
 
 Ceci peut s'expliquer en partie par le fait qu'il soit 
 compliqué de gérer le partage des ressources, et que cette complexité 
 n'apporte pas suffisamment d'avantages à l'heure qu'il est en terme de 
-réduction de consommation énergétique ou en efficacité.\\
+réduction de consommation énergétique ou simplement en efficacité.\\
 
 Il en résulte un décalage entre les connaissances théoriques et pratiques 
-de ces ordonnanceurs. De ce point de vue, une implémentation sur un \textbf{RTOS}
-tel qu'\textbf{HIPPEROS}\cite{HIPPEROS}
-se rapprocherait d'un futur usage industriel et pourrait donc 
-faire grandir la connaissance pratique. Cette implémentation 
-pourrait amener plusieurs résultats intéressants : \\
+de ces ordonnanceurs. 
+C'est dans ce contexte que s'inscrit ce travail d'implémentation d'un ordonnanceur en temps réel 
+global et multiprocesseur, dont un des objectifs est d'améliorer la connaissance pratique 
+d'ordonnanceurs multiprocesseurs globaux, d'en apercevoir les limites. 
+Cette implémentation pourrait amener plusieurs résultats intéressants : \\
 \begin{itemize}
 	\item Une comparaison entre des résultats théoriques et l'effet de leur mise 
 	en \oe{}uvre
@@ -163,6 +169,9 @@ pourrait amener plusieurs résultats intéressants : \\
 
 \section{Contexte et objectifs}
 \subsection{Ordonnanceurs globaux}
+
+
+
 Depuis la preuve qu'aucun ordonnanceur global optimal n'existe pour toutes les classes 
 de tâches,
 [Hong and Leung \cite{hongandleung}, 1988] plusieurs candidats 
