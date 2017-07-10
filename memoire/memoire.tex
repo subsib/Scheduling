@@ -19,7 +19,7 @@
 \usepackage{hyperref}
 \usepackage{tikz}
 \usepackage{pgfgantt} %draw timechart
-
+\newtheorem{mydef}{Définition}
 
 \begin{document}
 %%%%%%%%%%%%%%%%
@@ -70,24 +70,24 @@
 \vspace*{\fill}}
 {\vspace*{\fill}\par\pagebreak}
 
-\newpage
-\thispagestyle{empty}
-\vspace*{5cm}
+%\newpage
+%\thispagestyle{empty}
+%\vspace*{5cm}
 
-\begin{quotation}
-\noindent ``\emph{
-	%TODO choose a quotation
-	Vous pouvez aussi inclure une ou plusieurs citations générales en rapport avec votre sujet.
-}''
-\begin{flushright}\textbf{l'auteur (vrai ou supposé), date}\end{flushright}
-\end{quotation}
+%\begin{quotation}
+%\noindent ``\emph{
+%	%TODO choose a quotation
+%	Vous pouvez aussi inclure une ou plusieurs citations générales en rapport avec votre sujet.
+%}''
+%\begin{flushright}\textbf{l'auteur (vrai ou supposé), date}\end{flushright}
+%\end{quotation}
 
-\medskip
-
-\begin{quotation}
-\noindent ``\emph{Il existe des compilations de telles citations.}''
-\begin{flushright}\textbf{autre auteur, date}\end{flushright}
-\end{quotation}
+%\medskip
+%
+%\begin{quotation}
+%\noindent ``\emph{Il existe des compilations de telles citations.}''
+%\begin{flushright}\textbf{autre auteur, date}\end{flushright}
+%\end{quotation}
 %\chapter*{Remerciements}
 %\thispagestyle{empty} 
 
@@ -111,19 +111,16 @@
 % TODO trouver meilleur nom qu'introduction, l'introduction est une partie de cette première partie.
 \chapter{Introduction}{}
 \setcounter{page}{1}
-\begin{quotation}
-	\noindent ``\emph{certains aiment insérer une ou des citations particulières, en rapport avec le chapitre.}''
-	\begin{flushright}\textbf{auteur, date}\end{flushright}
-\end{quotation}
+%\begin{quotation}
+%	\noindent ``\emph{certains aiment insérer une ou des citations particulières, en rapport avec le chapitre.}''
+%	\begin{flushright}\textbf{auteur, date}\end{flushright}
+%\end{quotation}
 
 \vspace*{0.5cm}
 
 \section{Présentation générale du sujet}
 %TODO il FAUT parler des objectifs en terme de réduction de consommation.
 %TODO c'est MON dada. 
-
-\definition{Une définition se déclare de cette façon.}
-
 
 À l'heure actuelle, les appareils les plus vendus sont les systèmes embarqués.
 Parler des IoT.
@@ -173,40 +170,39 @@ Cette implémentation pourrait amener plusieurs résultats intéressants : \\
 
 \section{Contexte et objectifs}
 
-\subsection{Limites du parallélisme}
-Le parallélisme a montré ses limites, connues depuis longtemps dans la littérature scientifique. 
-Par exemple, la loi d'\href{https://en.wikipedia.org/wiki/Amdahl\%27s_law}{Amdahl} montre 
-l'accélération théorique que l'on peut atteindre en améliorant certains paramètres : 
-%TODO mettre une référence correcte
-\begin{itemize}
-    \item La portion de code exécutable en parallèle (tout un programme séquentiel ne peut pas forcément 
-    être parallélisable)
-    \item Le nombre de processeurs. 
-\end{itemize}
-On remarque alors que le nombre de processeurs n'influence la vitesse d'exécution que jusqu'à une certaine limite 
+%\subsection{Limites du parallélisme}
+%Le parallélisme a montré ses limites, connues depuis longtemps dans la littérature scientifique. 
+%Par exemple, la loi d'\href{https://en.wikipedia.org/wiki/Amdahl\%27s_law}{Amdahl} montre 
+%l'accélération théorique que l'on peut atteindre en améliorant certains paramètres : 
+%%TODO mettre une référence correcte
+%\begin{itemize}
+%    \item La portion de code exécutable en parallèle (tout un programme séquentiel ne peut pas forcément 
+%    être parallélisable)
+%    \item Le nombre de processeurs. 
+%\end{itemize}
+%On remarque alors que le nombre de processeurs n'influence la vitesse d'exécution que jusqu'à une certaine limite 
 
 
 
 \subsection{Ordonnanceurs globaux}
 
-
-
-Depuis la preuve qu'aucun ordonnanceur global optimal n'existe pour toutes les classes 
+Depuis la preuve qu'aucun ordonnanceur multiprocesseur optimal n'existe pour toutes les classes 
 de tâches,
-[Hong and Leung \cite{hongandleung}, 1988] plusieurs candidats 
+[Hong and Leung \cite{hong_-line_1988}, 1988] plusieurs candidats 
 ordonnanceurs avec des propriétés différentes ont été proposés. 
-Toutefois, ils sont encore assez peu utilisés actuellement dans l'industrie.\\
+Ils sont cependant assez peu utilisés actuellement dans l'industrie.\\
 
-On peut cependant imaginer que la situation évolue dans les prochaines années. 
+On peut raisonnablement imaginer que la situation évolue dans les prochaines années. 
 En effet, les systèmes embarqués vont également nécessiter de la puissance de calcul et
-de l'efficacité. Les contraintes de partage de ressources se posent différemment 
-dans le cas parallélisé, avec des contraintes d'accès à ces dernières, 
-donc plus de complexité mais celle-ci pourrait en contrepartie apporter 
+de l'efficacité. 
+Il est vrai que les contraintes de partage de ressources se posent différemment 
+dans le cas parallélisé, 
+avec plus de complexité mais cela pourrait en contrepartie apporter 
 bien plus de performance.
 
 %TODO pourquoi pas GPU ???
 
-Le fait que l'industrie n'implémente pas à ce jour de solutions plus performantes 
+Le fait que l'industrie n'implémente pas à ce jour de solutions plus "performantes" 
 pour les systèmes embarqués pose plusieurs problèmes :
 \begin{enumerate}
 	\item Le matériel n'est pas exploité de façon optimale.
@@ -241,22 +237,17 @@ peut elle-aussi apporter à la connaissance générale des détails importants.
 
 \section{Problématique}
 L'ordonnanceur idéal, c'est à dire optimal pour toute classe de tâche n'existant pas, 
-une partie du problème est donc de sélectionner l'un de ceux-ci parmi la liste 
+une partie du problème est donc de sélectionner l'un d'eux parmi une liste 
 d'ordonnanceurs connus (ne serait-ce que littérairement) afin que cela apporte 
-à la connaissance générale, tant théorique que pratique.
+à la connaissance générale, tant sur le plan théorique que pratique.
 
-Par ailleurs, pour certains des ordonnanceurs qui seront présentés dans l'état de l'art, 
-certains ont déjà bénéficié d'une implémentation sur un \textbf{RTOS}. 
-Il peut être également intéressant d'étudier la différence d'implémentation 
-sur des OS différents, ainsi que les résultats obtenus. 
-En effet, il est tout à fait possible que 
-
-
-D'autre part, ils sont décrits dans la littérature de façon parfaitement théorique. Certains ont bénéficié d'une implémentation en \textbf{linux rt}. %TODO add ref
-Mais alors, sur un autre ordonnanceur peut se poser le problème de la reproductibilité. 
-Certains ordonnanceurs font des hypothèses fortes et le comportement réel pourrait 
-être fort différent de celui décrit dans la littérature. 
-Ces sujets seront évoqués dans l'état de l'art. %TODO verif que c'est fait
+Par ailleurs, certains des ordonnanceurs présentés dans l'état de l'art 
+ ont déjà bénéficié d'une implémentation sur un \textbf{RTOS}, et une nouvelle 
+ implémentation sur un \textbf{OS} différent pourrait apporter un éclairage intéressant quant 
+ aux différences de comportements.
+Dans certaines présentations d'ordonnanceurs sont proposées des hypothèses à propos du comportement, 
+comme faire globalement plus de préemption, de migrations. 
+Le comportement observé dans des conditions différentes pourrait être vérifié, ou le contraire.
 
 La question cruciale de cette première partie de travail 
 consiste donc à faire un tour d'horizon de la littérature afin de pouvoir 
@@ -265,21 +256,24 @@ sélectionner un ordonnanceur pertinent à implémenter sur le \textbf{RTOS} \textb
 \section{Vocabulaire général sur les systèmes temps réel}
 
 \subsection{RTOS}
+\begin{mydef}
 (Real Time Operating System) Système d'Exploitation Temps Réel.\\
-	Un système d'exploitation Temps Réel est implémenté dans des systèmes à temps réel. 
-	Il s'agit globalement de systèmes embarqués critiques, comme il en existe à ce jour 
-	énormément (dans les avions, comme systèmes de contrôles, dans les voitures, etc.).
-	Les contraintes ne sont pas les mêmes que dans un OS (\textbf{O}perating \textbf{S}ystem, Système d'Exploitation) classique, particulièrement pour
-	l'ordonnanceur. 
-	En effet, celui-ci doit gérer un ensemble de tâches qui doivent 
-	(impérativement, ou pas) respecter des temps limites. 
-	Attention cependant à ne pas confondre le besoin de synchronisation avec le besoin de rapidité : 
-	tous les systèmes à temps réel n'ont pas forcément besoin de vitesse. 
-	
-	Il faut néanmoins s'assurer que tous les délais peuvent être respectés, et 
-	c'est là une partie très importante du travail avant de mettre sur le 
-	marché un système embarqué.\\
-	%TODO https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27exploitation_temps_r%C3%A9el
+Un système d'exploitation Temps Réel est implémenté dans des systèmes à temps réel. 
+Il s'agit globalement de systèmes embarqués critiques, comme il en existe à ce jour 
+énormément (dans les avions, comme systèmes de contrôles, dans les voitures, etc.).
+Les contraintes ne sont pas les mêmes que dans un OS (\textbf{O}perating \textbf{S}ystem, Système d'Exploitation) classique, particulièrement pour
+l'ordonnanceur. 
+En effet, celui-ci doit gérer un ensemble de tâches qui doivent 
+(impérativement, ou pas) respecter des temps limites. 
+Attention cependant à ne pas confondre le besoin de synchronisation avec le besoin de rapidité : 
+tous les systèmes à temps réel n'ont pas forcément besoin de vitesse. 
+
+Il faut néanmoins s'assurer que tous les délais peuvent être respectés, et 
+c'est là une partie très importante du travail avant de mettre sur le 
+marché un système embarqué.\\
+%TODO https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27exploitation_temps_r%C3%A9el
+
+\end{mydef}
 	
 \subsection{Contraintes strictes, contraintes relatives} 
 Dans le cas strict, le système doit impérativement respecter tous les temps limites. Aucun dépassement n'est toléré. Dans le cas des contraintes relatives, ce respect 
@@ -424,7 +418,7 @@ l'utilisation pour un système de $m$ tâches :\\
 
 \subsection{Représentation graphique d'un système}
 %TODO fill with an example. Hope not to have to draw it in latex :/
-
+% http://martin-kumm.de/wiki/doku.php?id=Projects:A_LaTeX_package_for_gantt_plots
 \begin{ganttchart}[vgrid, hgrid]{1}{15}
 	\ganttbar{$\tau_1$}{7}{9}\\
 	\ganttbar{$\tau_2$}{2}{4}\\
@@ -569,7 +563,25 @@ vus plus haut. Ceci permet d'appliquer les tests de faisabilité. \\
 
 Le problème du partitionnement (bin-packing) %TODO ref
 appartient à la classe de complexité $NP$, si bien qu'en pratique, 
-des heuristiques sont appliquées : 
+des heuristiques sont appliquées, comme par exemple :\\
+\begin{itemize}
+	\item First-fit 
+	\item Best-fit
+	\item Next-fit
+\end{itemize}
+
+Un des problèmes étant que ces solutions ne garantissent pas la solution optimale, puisque ce sont 
+des heuristiques. Un autre problème important étant que dans le processus partitionné, une tâche est 
+assignée à un processeur, mais ne pourra pas être assignée à plusieurs. Ainsi, si des solutions 
+existent qui consistent à migrer une tâche sur un autre processeur, elle ne pourra pas être trouvée 
+par un ordonnanceur partitionné. %TODO cite Static-Priority Periodic Scheduling on Multiprocessor Mark Moir
+Enfin, une autre limite est que ce processus ne permet pas à une tâche d'évoluer avec le temps. 
+Le mode doit être décidé avant l'exécution, et devra être fixé une fois pour toutes. 
+Cela peut convenir à un certain nombre de systèmes, mais ne peut pas être une solution générale.
+
+Par ailleurs, des études ont montré que les ordonnanceurs globaux basés sur \textbf{RM} et \textbf{DM} 
+tendaient à avoir une utilisation plus faible que les ordonnanceurs partitionnés. 
+%TODO citer  Baruah et al. [4, 5] ?!
 
 \section{Multi-processeurs globaux}
 Une autre façon d'ordonnancer plusieurs processeurs est de ne pas procéder à un partitionnement préalable, 
@@ -586,7 +598,7 @@ Ca signifie qu'il faut essayer de le faire... Simuler.
 Problèmeh : les deux façons de procéder sont incomparables. Pourquoi ? Issu du cours, montrer 
 un système schedulable en partionned et pas en global et vice et versa.
 
-Grande idée : il existe PAS de scheuler idéal.
+Grande idée : il existe PAS de scheduler idéal.
 Du coup, il faut en chercher un qui a le plus grand système de tâche possible, ou du moins, 
 le plus intéressant. 
 
@@ -600,8 +612,10 @@ Parmi ceux-ci, il y a :
 \section{Conclusion}
 % tableau ? Support pour développer argumentation ?
 
+Ici, je fais le résumé des algos dont on a parlé précédemment et je construis un tableau récapitulatif. 
+
 \bibliographystyle{plain}
-\bibliography{biblio}
+\bibliography{bibzotero}
 
 \end{document}
 
