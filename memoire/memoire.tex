@@ -111,51 +111,60 @@
 % TODO trouver meilleur nom qu'introduction, l'introduction est une partie de cette première partie.
 \chapter{Introduction}{}
 \setcounter{page}{1}
-%\begin{quotation}
-%	\noindent ``\emph{certains aiment insérer une ou des citations particulières, en rapport avec le chapitre.}''
-%	\begin{flushright}\textbf{auteur, date}\end{flushright}
-%\end{quotation}
 
-\vspace*{0.5cm}
 
 \section{Présentation générale du sujet}
 %TODO il FAUT parler des objectifs en terme de réduction de consommation.
 %TODO c'est MON dada. 
 
-À l'heure actuelle, les appareils les plus vendus sont les systèmes embarqués.
-Parler des IoT.
-Le contexte de 
-vente et technologique est tel que ce sont des produits avec un potentiel énorme.
-Ce qui est étonnant est le décalage existant entre ce pour quoi on a les capacités 
-et ce qui existe en réalité : 
-dans la théorie, de grands développements existent, avec des schedulers super globaux
-efficaces. Dans la pratique, l'industrie boude ces solutions car trop complexes, 
-et préfère appliquer une unique solution à tous les systèmes : moins prise de tête.
-Mais on est en droit de se dire que ceci ne durera pas.
+Dans le paysage quotidien des appareils informatiques, il existe toujours plus de systèmes embarqués. 
+Parmi eux, un nombre très important de systèmes temps réel qui nécessitent des 
+ordonnanceurs adaptés. Ce champ scientifique a été largement fourni durant les 
+vingt dernières années par de nombreuses publications scientifiques. \\
 
-Dans l'intérêt de la science également, cette question est importante. 
+Les systèmes embarqués n'ont pas toujours de grands besoins en efficacité, 
+ils doivent principalement être sûrs, et réactifs. 
+Toutefois, un système "non efficace" n'utilise pas ses ressources de façon optimale. 
+De nos jours où la gestion énergétique se doit d'être la plus économe possible, 
+où l'efficacité des appareils est de plus en plus exigée, il est envisageable que 
+la solution évolue du côté des industries.\\
 
-Cela fait plusieurs années que la croissance de l'efficacité des appareils n'est plus 
+Par ailleurs, cela fait plusieurs années que la croissance de l'efficacité des appareils n'est plus 
 principalement due à des améliorations physiques des composants. 
 En effet, la multiplication des processeurs dans les ordinateurs a permis
-de paralléliser et c'est ainsi que la quasi stagnation des 
-technologies a pu être contournée pour continuer la progression.\\
+de paralléliser les exécutions, et c'est ainsi que la quasi stagnation des 
+technologies a pu être contournée pour continuer la progression.
 % TODO add ref du cours de micro
 
-Le monde des systèmes embarqués en temps réel a bénéficié de ces améliorations également, 
-et dispose très souvent de processeurs multi-c?urs. Cependant, leur gestion n'est 
-à l'heure actuelle pas optimale, la plupart des systèmes sont simplement 
-gérés soit comme des systèmes mono-processeurs, soit partitionnés.
-Si la littérature autour des ordonnanceurs en temps réels illustre abondamment l'intérêt de l'intégration de cette parallélisation, 
-les faits montrent plutôt que les industries continuent d'implémenter des solutions mono-processeur. 
+Le monde des systèmes embarqués en temps réel a bénéficié de ces améliorations, 
+et dispose également de processeurs multi-c\oe{}urs. Cependant, leur gestion n'est 
+à l'heure actuelle pas optimale, la plupart des systèmes sont  
+gérés soit comme des systèmes mono-processeurs, soit avec des algorithmes partitionnés \cite{paolillo_new_nodate}. 
+Dans le premier cas, les ressources ne sont pas utilisées de façon optimales, 
+et dans le second, des implémentations et tests ont montré empiriquement 
+que les algorithmes globaux pouvaient présenter des avantages intéressants, comme 
+une meilleure répartition de l'utilisation des processeurs. 
+\\ %TODO vérif ça, c'est pas correct
 
-Ceci peut s'expliquer en partie par le fait qu'il soit 
-compliqué de gérer le partage des ressources, et que cette complexité 
-n'apporte pas suffisamment d'avantages à l'heure qu'il est en terme de 
-réduction de consommation énergétique ou en amélioration de l'efficacité.\\
+Le décalage entre la connaissance scientifique et les implémentations réelles 
+peut s'expliquer en partie par le fait qu'il soit compliqué de gérer le partage des ressources, 
+et que cette complexité n'apporte pas suffisamment d'avantages à l'heure qu'il est.\\
 
-Il en résulte un décalage entre les connaissances théoriques et pratiques 
-de ces ordonnanceurs. 
+Le fait que l'industrie n'implémente pas à ce jour de solutions plus "performantes" 
+pour les systèmes embarqués pose plusieurs problèmes :
+\begin{enumerate}
+	\item Le matériel n'est pas exploité de façon optimale.
+	\item Par conséquent, on utilise bien plus d'énergie que nécessaire. 
+	À l'heure actuelle, dans un monde où l'on cherche à consommer le moins possible, 
+	cela pose question. Mais au delà, cela signifie également plus de maintenance 
+	sur ces appareils parfois sans source de renouvellement d'énergie.
+	\item Certains systèmes embarqués nécessitent une très basse consommation car 
+	ils sont difficiles d'accès ou non faciles à recharger.
+\end{enumerate}
+
+Toutes ces raisons poussent à s'intéresser à une implémentation réelle et réaliste 
+d'ordonnanceur connu dans la littérature, mais moins dans la réalité.
+
 C'est dans ce contexte que s'inscrit ce travail d'implémentation d'un ordonnanceur en temps réel 
 global et multiprocesseur, dont un des objectifs est d'améliorer la connaissance pratique 
 d'ordonnanceurs multiprocesseurs globaux, d'en apercevoir les limites. 
@@ -183,39 +192,38 @@ Cette implémentation pourrait amener plusieurs résultats intéressants : \\
 %On remarque alors que le nombre de processeurs n'influence la vitesse d'exécution que jusqu'à une certaine limite 
 
 
-
 \subsection{Ordonnanceurs globaux}
+Comme il sera expliqué plus tard dans ce document, il existe deux grandes familles d'ordonnanceurs 
+multiprocesseur :\\
+\begin{itemize}
+	\item Les ordonnanceurs partitionnés
+	\item Les ordonnanceurs globaux
+\end{itemize}
+Si parmi ces deux familles d'ordonnanceurs, les systèmes mono-processeurs, voire 
+partitionnés ont le plus de succès auprès de l'industrie, 
+ce n'est pas la famille la plus efficace pour tout type de classe de tâches. 
+Les algorithmes globaux répartissent habituellement mieux l'utilisation des processeurs, 
+les migrations sont possibles et donc les temps de réalisation sont généralement moins grands.
+\\ % TODO add ref ?... J'ai une conf, mais pas un papier scientifique...
+% http://retis.sssup.it/~giorgio/slides/cbsd/mc3-global-2p.pdf
 
-Depuis la preuve qu'aucun ordonnanceur multiprocesseur optimal n'existe pour toutes les classes 
-de tâches,
-[Hong and Leung \cite{hong_-line_1988}, 1988] plusieurs candidats 
-ordonnanceurs avec des propriétés différentes ont été proposés. 
-Ils sont cependant assez peu utilisés actuellement dans l'industrie.\\
 
-On peut raisonnablement imaginer que la situation évolue dans les prochaines années. 
-En effet, les systèmes embarqués vont également nécessiter de la puissance de calcul et
-de l'efficacité. 
-Il est vrai que les contraintes de partage de ressources se posent différemment 
-dans le cas parallélisé, 
-avec plus de complexité mais cela pourrait en contrepartie apporter 
-bien plus de performance.
+En 1988, Hong and Leung \cite{hong_-line_1988} publient un article dans lequel est 
+démontré que : \\
+\textit{"For every m > 1, no optimal on-line scheduler can exist for task systems with two or more distinct deadlines"} : 
+\textit{Il n'existe pas d'ordonnanceur multiprocesseur en ligne optimal pour un système de tâches 
+avec plusieurs échéances distinctes}, donc un système de tâches dites "sporadiques".
 
-%TODO pourquoi pas GPU ???
+Or, les systèmes embarqués doivent très souvent exécuter des systèmes de tâches sporadiques, 
+cela tient de leur nature : la plupart d'entre eux attendent en effet de recevoir des 
+signaux, qui arrivent de façon indéterminée.
 
-Le fait que l'industrie n'implémente pas à ce jour de solutions plus "performantes" 
-pour les systèmes embarqués pose plusieurs problèmes :
-\begin{enumerate}
-	\item Le matériel n'est pas exploité de façon optimale.
-	\item Par conséquent, on utilise bien plus d'énergie que nécessaire. 
-	À l'heure actuelle, dans un monde où l'on cherche à consommer le moins possible, 
-	cela pose question. Mais au delà, cela signifie également plus de maintenance 
-	sur ces appareils parfois sans source de renouvellement d'énergie.
-	\item Certains systèmes embarqués nécessitent une très basse consommation car 
-	ils sont difficiles d'accès ou non faciles à recharger.
-\end{enumerate}
+Toutefois, des publications ultérieures viennent compléter cette preuve, et démontrent 
+que des ordonnanceurs globaux optimaux existent, mais nécessitent de la clairvoyance.
+%TODO add ref gossens
 
-Toutes ces raisons poussent à s'intéresser à une implémentation réelle et réaliste 
-d'ordonnanceur connu dans la littérature, mais moins dans la réalité.
+
+
 
 \subsection{HIPPEROS}
 \textbf{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
@@ -238,7 +246,7 @@ peut elle-aussi apporter à la connaissance générale des détails importants.
 \section{Problématique}
 L'ordonnanceur idéal, c'est à dire optimal pour toute classe de tâche n'existant pas, 
 une partie du problème est donc de sélectionner l'un d'eux parmi une liste 
-d'ordonnanceurs connus (ne serait-ce que littérairement) afin que cela apporte 
+d'ordonnanceurs connus (ne serait-ce que dans la littérature) afin que cela apporte 
 à la connaissance générale, tant sur le plan théorique que pratique.
 
 Par ailleurs, certains des ordonnanceurs présentés dans l'état de l'art 
@@ -604,10 +612,11 @@ le plus intéressant.
 
 Parmi ceux-ci, il y a : 
 
-% parler pb de partage des ressources
-
-
 \subsection{EDF-k}
+\subsection{DP-WRAP}
+\subsection{RUN}
+\subsection{U-EDF}
+
 
 \section{Conclusion}
 % tableau ? Support pour développer argumentation ?
