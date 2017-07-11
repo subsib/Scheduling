@@ -21,6 +21,8 @@
 \usepackage{tikz}
 \usepackage{pgfgantt} %draw timechart
 \newtheorem{mydef}{Définition}
+\newtheorem{mytheorem}{Théorème}
+\newtheorem{mylemme}{Lemme}
 
 \begin{document}
 %%%%%%%%%%%%%%%%
@@ -560,7 +562,7 @@ $P$ le plus petit commun multiple ($ppcm$) de toutes les périodes du système, 
 \section{Multi-processeurs partitionnés}
 
 %TODO revoir cours de goossens
-
+\subsection{RM, DM et bin-packing}
 Dans la partie précédente, nous avons présenté certains algorithmes mono-processeur, 
 ainsi que quelques conditions d'ordonnançabilité.
 De nos jours, une grande partie des architectures employées dans un système embarqué 
@@ -592,33 +594,128 @@ des heuristiques sont appliquées, comme par exemple :\\
 	\item Next-fit
 \end{itemize}
 
-%TODO insert test faisabilité ssi multiproc
-%TODO insert ref vers non conservation faisabilité multiproc
-
 Plusieurs algorithmes de ce type ont été présentés dans la littérature scientifique, 
-dès les années 80 comme par exemple 
+dans les années 80 comme par exemple \cite{dhall_real-time_1978} Dhall et Liu en 1978. 
+Dans leur article, ils notamment des fourchettes d'utilisations 
+permettant d'ordonnancer pour le cas multi-processeur utilisant \textit{RM} :
+\begin{mytheorem}
+\textit{"if a set of m tasks is scheduled according to the rate-monotonic scheduling algorithm, then the minimum achievable utilization factor is $m\times(2^{\frac{1}{m}} - 1)$".}
+\end{mytheorem}
+(Si un ensemble de $m$ tâches est planifié selon l'algorithme \textit{Rate-Monotonic}, 
+alors le facteur d'utilisation minimum réalisable est $m\times(2^{\frac{1}{m}} - 1)$). \\
+Ils ajoutent :\\
+\textit{Note that according to theorem 1, as $m$ approches infinity, 
+	the minimum achievable utilization approaches $ln(2)$}
+(En déduction, si $m$ tend vers l'infini, alors l'utilisation minimale possible approche $ln(2)$.) \\
+
+Dans cet article, ils décrivent également :\\
+\begin{itemize}
+	\item[RMNFS] : \textit{Rate Monotonic Next-Fit Scheduler}
+	\item[RMFFS] : \textit{Rate Monotonic First-Fit Scheduler}
+\end{itemize}
+\vspace{1em}
+qui finalement, sont des algorithmes basés sur RM dont le système de tâche est 
+réparti selon les algorithmes heuristiques de \textit{bin-packing} \textit{Next-Fit} et \textit{First-Fit}.
+
+Par la suite, quantité d'algorithmes basés sur \textit{RM} et \textit{DM} avec 
+heuristique de bin-packing sont proposés et leurs performances analysées. 
+Un historique complet est proposé dans le travail de thèse de Ndoye \cite{ndoye_ordonnancement_2014}. 
+Les recherches tendent à trouver des conditions de faisabilité.
+
+Ce pan des ordonnanceurs est donc très bien connu à ce jour, très bien documenté. 
+Dans ces conditions, il n'est pas étonnant de voir que ces solutions sont encore largement 
+répandues dans l'industrie à ce jour, les algorithmes \textit{RM} et \textit{DM} 
+étant assez simples à implémenter, des conditions de faisabilité étant connus, 
+des heuristiques ainsi que leur efficacité ayant été analysés en exercice.\\
+
+\subsection{EDF partitionné}
+EDF appartient à une autre famille de tâches : celle des priorités fixes aux jobs. 
+Il a été rappelé plus tôt dans ce document qu'EDF mono-processeur est optimal, 
+c'est à dire qu'il peut ordonnancer tout type de système qui est ordonnançable. 
+Malheureusement, ce résultat n'est pas valable dans le cas multiprocesseur \cite{dertouzos_multiprocessor_1989}.\\
+
+Cet algorithme a lui aussi été adapté à une utilisation multi-processeur en y joignant 
+des heuristiques de bin-packing : \\
+Dans \cite{pereira_zapata_edf_2005}, Zapata et Alvarez décrivent les algorithmes 
+EDF avec partitionnement préalable, par exemple : \\
+\begin{itemize}
+	\item EDF-FF (first-fit)
+	\item EDF-NF (next-fit)
+	\item EDF-WF (worst-fit)
+	\item EDF-NFD (Earliest Deadline First Next Fit Decreasing)
+\end{itemize}
+et proposent une analyse de la complexité. Ils renvoient eux-mêmes vers 
+\cite{lopez_utilization_2004} 
+qui est cité de nombreuses fois et semble être la référence à propos de ces algorithmes. 
+Dans cet article, Lopez, Diaz et Garcia proposent une limite de l'utilisation à la 
+faisabilité en fonction de l'algorithme d'attribution des tâches. 
+
+\subsection{EDF-VD}
+%http://sci-hub.ac/10.1109/RTSS.2016.013
 
 
-Un des problèmes étant que ces solutions ne garantissent pas la solution optimale, puisque ce sont 
-des heuristiques. Un autre problème important étant que dans le processus partitionné, une tâche est 
+\subsection{Avantages et inconvénients des ordonnanceurs partitionnés}
+\subsubsection{Avantages}
+Nous avons vu dans les sections précédentes que les algorithmes d'ordonnanceurs 
+partitionnés sont bien connus, et présentent un certain nombre d'avantages parmi lesquels 
+le fait d'être bien connus, bien documentés, d'avoir de bons tests de faisabilité pour 
+toutes les classes de tâches. 
+Certains algorithmes donnent même de bons résultats, et l'on pourrait se satisfaire de 
+cette famille d'algorithmes.\\
+
+\subsubsection{Inconvénients}
+Toutefois, ces algorithmes présentent quelques inconvénients. 
+L'un d'eux est que leur résolution ne garantit pas de trouver la solution optimale, 
+puisque ce sont des heuristiques. Il n'est pas envisageable de penser 
+que ces algorithmes puissent donc être optimaux pour une famille de tâches.
+
+Un autre problème important est que dans le processus partitionné, une tâche est 
 assignée à un processeur, mais ne pourra pas être assignée à plusieurs. Ainsi, si des solutions 
 existent qui consistent à migrer une tâche sur un autre processeur, elle ne pourra pas être trouvée 
-par un ordonnanceur partitionné \cite{ramamurthy_static-priority_2000}. %TODO cite Static-Priority Periodic Scheduling on Multiprocessor Mark Moir
+par un ordonnanceur partitionné \cite{ramamurthy_static-priority_2000}. 
 Enfin, une autre limite est que ce processus ne permet pas à une tâche d'évoluer avec le temps. 
 Le mode doit être décidé avant l'exécution, et devra être fixé une fois pour toutes. 
-Cela peut convenir à un certain nombre de systèmes, mais ne peut pas être une solution générale.\\
+Cela peut convenir à un certain nombre de systèmes, mais ne peut pas être une solution générale.
+De façon générale, on retrouve dans la littérature l'idée que les ordonnanceurs globaux 
+permettent généralement d'ordonnancer plus de systèmes que les ordonnanceurs globaux, 
+mais la conclusion ne peut être affirmée avec déterminisme : cela dépend des situations
+\cite{lopez_utilization_2004}.\\
+
+%TODO ajouter EDF partionné, dis, on a des tests d'ordonançabilité...
 
 %Des études ont montré que les ordonnanceurs globaux basés sur \textbf{RM} et \textbf{DM} 
 %tendaient à avoir une  plus faible utilisation que les ordonnanceurs partitionnés. 
 %TODO citer  Baruah et al. [4, 5] ?!
 % citer ndoye, oui !
+Il est connu que les algorithmes d'ordonnanceurs globaux et partitionnés ne sont pas comparables, 
+pour la principale raison que les ordonnanceurs partitionnés ne permettent pas de faire des 
+\textit{migrations}. Dans l'article \cite{baruah_techniques_2007}, \textit{Baruah} 
+compare les deux techniques pour des systèmes de tâches \textit{sporadiques}, et 
+ses recherches montrent plusieurs résultats importants :\\
+\begin{mylemme}
+	There are task systems that are schedulable using global FJP algorithms that partitioned FJP algorithms cannot schedule.
+\end{mylemme}
+(il y a des systèmes de tâches ordonnançables avec des algorithmes globaux à priorité fixe 
+sur job que des algorithmes partitionnés à priorité fixe sur job ne peuvent pas ordonnancer)\\
+
+\begin{mylemme}
+	There are task systems that are schedulable using partitioned FJP algorithms that global FJP algorithms cannot schedule
+\end{mylemme}
+(il y a des systèmes de tâches ordonnançables avec des algorithmes partitionnés à priorité fixe 
+	sur job que des algorithmes globaux à priorité fixe sur job ne peuvent pas ordonnancer)\\
+Ceci est prouvé en détaillant des contre-exemples dans l'article et permet de conclure :\\
+\begin{mytheorem}
+	Global and partitioned FJP scheduling are incomparable.
+\end{mytheorem}
+Les ordonnanceurs globaux et partitionnés à priorités fixes sur job sont incomparables. 
+Cela ne dit rien des autres classes, et ne peut pas être généralisé. C'est 
+un résultat cependant important, qui montre que le fait de permettre les migrations 
+change considérablement le comportement des ordonnanceurs.
 
 \section{Multi-processeurs globaux}
-Une autre façon d'ordonnancer plusieurs processeurs est de ne pas procéder à un partitionnement préalable, 
-et donc, de gérer tous les processeurs en même temps. 
-Les deux façons de procéder ne sont pas comparables. Pourquoi ?
---> parler de il n'existe pas de scheduler non clairvoyant optimal.
-Résultat super important, cité avant.\\
+
+
+Une autre façon d'ordonnancer plusieurs processeurs est de ne pas procéder à un partitionnement préalable, et donc, de gérer tous les processeurs en même temps. 
 
 Donc il n'existe pas de test qui permette de savoir si on peut ordonnancer 
 un système sur partionned ou global.
