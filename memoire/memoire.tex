@@ -418,8 +418,7 @@ Le calcul de l'utilisation permet dans certains cas et certaines conditions de d
 à propos de la faisabilité du système par un certain ordonnanceur. 
 \\
 
-Liu et Layland \cite{liulayland} en donnent une définition formelle dans leur article décrivant 
-l'ordonnanceur \textbf{Rate Monotonic} (présenté plus tard dans ce document).\\ 
+Liu et Layland \cite{liu_scheduling_1973} en donnent une définition formelle dans leur article décrivant l'ordonnanceur \textbf{Rate Monotonic} (présenté plus tard dans ce document).\\ 
 
 Soit $C_i$ le temps d'exécution d'une tâche $\tau_i$, et soit $T_i$ sa période, voici la définition de 
 l'utilisation pour un système de $m$ tâches :\\
@@ -466,8 +465,8 @@ par présenter cette famille.
 \section{Ordonnanceurs mono processeur}
 
 \subsection{Rate Monotonic}
-L'ordonnanceur \textbf{R}ate \textbf{M}onotonic (RM) est décrit la première fois par Liu et Layland \cite{liulayland} en 1973. C'est 
-donc un ordonnanceur classique, bien connu, ainsi que largement documenté [\cite{omarkermia}]. 
+L'ordonnanceur \textbf{R}ate \textbf{M}onotonic (RM) est décrit par Liu et Layland \cite{liu_scheduling_1973} en 1973. C'est 
+donc un ordonnanceur classique, bien connu, ainsi que largement documenté \cite{kermia_ordonnancement_2009}. 
 On considère un ensemble de tâches périodiques et indépendantes.
 Les priorités sont statiques et attribuées en fonction de la durée de la période, ainsi 
 la tâche avec la période la plus faible sera de priorité plus élevée. 
@@ -499,7 +498,7 @@ il faudra se tourner vers un autre type d'ordonnanceur.
 \subsection{Deadline Monotonic}
 Deadline Monotonic (DM) est un ordonnanceur pour les systèmes à départ simultanés ($offset = 0$) et 
 à échéance contrainte\ref{echeancecontrainte}($D_i \leq T_i$). Il a été décrit par Leung et Whitehead 
-\cite{LeungW82}. Cet article aborde le point de vue mono-processeur et multi-processeur partitionné, 
+\cite{leung_complexity_1982}. Cet article aborde le point de vue mono-processeur et multi-processeur partitionné, 
 dont il sera question plus loin dans ce document.\\
 
 Avec cet ordonnanceur, les priorités sont fixes, au niveau des tâches.
@@ -507,7 +506,7 @@ Plus la deadline est petite, plus la priorité est élevée. On peut considérer
 un cas particulier de DM, puisque pour RM, les tâches sont à échéance sur requête \ref{echeancesurrequete}.
 Il n'existe pas de test de faisabilité basé sur l'utilisation du système. Pour vérifier celle-ci, 
 il faut avoir recours à l'équation décrite plus haut. 
-On peut la résoudre récursivement à l'aide de ce système : \\
+On peut la résoudre récursivement à l'aide de ce système d'équations: \\
 \begin{enumerate}
 	\item $W_0 = C_i $
 	\item $W_{k+1} = C_i + \sum_{j = 1}^{i-1}\lceil \frac{W_k}{T_j} \rceil \times C_j $
@@ -516,14 +515,14 @@ On peut la résoudre récursivement à l'aide de ce système : \\
 
 
 \subsection{Earliest Deadline First}
-\cite{ndoye}
 \textbf{E}arliest \textbf{D}eadline \textbf{F}irst (EDF) est un ordonnanceur 
 qui a été introduit e 1973, à la même période que Rate Monotonic, également 
-par Lui et Layland \cite{liulayland}. C'est un ordonnanceur à départ différé ($Offset \neq 0$) 
+par Lui et Layland \cite{liu_scheduling_1973}. C'est un ordonnanceur à départ différé ($Offset \neq 0$) 
 et à deadline arbitraire (pas de contrainte sur la deadline par rapport à la période), 
 qui fixe les priorités sur les jobs. L'assignation de la priorité se fait sur base de 
 la proximité de la deadline absolue : Plus cette deadline est proche et plus la priorité est élevée. 
-Une façon déterministe et arbitraire de régler les cas d'égalité doit être décidée.\\
+Une façon déterministe et arbitraire de régler les cas d'égalité doit être décidée.
+\cite{ndoye_ordonnancement_2014}\\
 
 EDF est optimal pour toutes les tâches synchrones et asynchrones, avec et sans 
 contraintes sur les deadlines. 
@@ -719,22 +718,48 @@ Cela ne dit rien des autres classes, et ne peut pas être généralisé. C'est
 un résultat cependant important, qui montre que le fait de permettre les migrations 
 change considérablement le comportement des ordonnanceurs.
 
-\section{Ordonnanceurs dynamiques globaux}
-Un ordonnanceur dynamique global est un ordonnanceur qui gère un ensemble de processeurs et 
+\section{Ordonnanceurs multi-processeurs globaux}
+Un ordonnanceur global est un ordonnanceur qui gère un ensemble de processeurs et 
 un système de tâches. Il ne procède pas à un tri préalable comme dans le cas partitionné. 
-Il gère une "queue" de $n$ tâches qui peuvent être assignées à $m$ processeurs à chaque fois 
-que l'ordonnanceur en a l'occasion.\\
+Il gère une \textit{queue} de $n$ tâches prêtes à être exécutées 
+qui peuvent être assignées à $m$ processeurs à chaque fois que l'ordonnanceur en a l'occasion.\\
 
 Les algorithmes vus précédemment peuvent être adaptés à ce type de stratégie. 
 
-\subsection{Priorité fixe sur tâche : RM/DM global}
-L'assignation des priorités \textit{RM} (ou \textit{DM}) en version multi-processeur global 
-fonctionne de la même façon que dans sa version mono-processeur : 
-pour RM, la priorité la plus élevée est accordée à la tâche qui a la période la plus faible. 
-Les $n$ tâches de priorité supérieures sont exécutées sur les $m$ processeurs. \\
+\subsection{L'Effet Dhall}
+Dans leur article de 1978 \cite{dhall_real-time_1978}, Dhall et Liu montrent que certains ordonnanceurs 
+initialement mono-processeurs, (RM ou EDF) peuvent donner lieu à une utilisation faible des 
+processeurs, ce qui signifie qu'ils ne seraient pas utilisés de façon optimale. 
+Ils montrent par ailleurs qu'en gardant la même méthode d'allocation de priorité, 
+quelle que soit le nombre de processeurs utilisés, la limite de l'utilisation globale 
+d'un système tend vers $1$:\\
+ 
+Cela est connu dans la littérature comme l'"effet Dhall" (Dhall's effect) : \\
+%todo add explications
 
-Dans leur article de 1978, Dhall et Liu décrivent ce qu'on appelle dans la littérature 
-"l'effet Dhall" (\textit{Dhall's effect}), des \textit{anomalies} : \cite{dhall_real-time_1978}\\
+\subsection{Priorité fixe sur tâche : RM/DM global}
+Si l'assignation des priorités \textit{RM} (ou \textit{DM}) en version multi-processeur global 
+fonctionne de la même façon que dans sa version mono-processeur - 
+c'est à dire, la priorité la plus élevée est accordée à la tâche qui a la période la plus faible - 
+\textit{RM} est donc concerné par l'effet Dhall. 
+Dans la version globale de l'ordonnanceur, on devra donc changer de méthode d'assignation de priorité.
+Puis, les $n$ tâches de priorité supérieures seront exécutées sur les $m$ processeurs. \\
+
+Le problème principal de cette méthode est que les tests d'ordonnançabilité 
+
+%todo ref et trouver quoi dire ici...
+
+\subsection{Priorité fixe sur job : g-EDF}
+Comme pour RM et DM, EDF peut simplement être adapté à une exécution multi-processeur, 
+considérant un ensemble $n$ de tâches sur $m$ processeurs. Mais le gros avantage d'EDF 
+dans sa version mono-processeur est son optimalité, qui n'est malheureusement pas conservée ici. 
+Les tests d'ordonnancements les plus favorables %todo add refs + tests...
+
+
+
+
+
+, des \textit{anomalies} : \cite{dhall_real-time_1978}\\
 %todo add def of anomalie ?
 Un système de tâche périodiques avec une ou des tâches dont l'utilisation est proche de 1 
 peut ne pas être ordonnançable par RM, même si une solution existe (RM n'est pas optimal)
