@@ -431,13 +431,13 @@ l'utilisation pour un système de $m$ tâches :\\
 \subsection{Représentation graphique d'un système}
 %TODO fill with an example. Hope not to have to draw it in latex :/
 % http://martin-kumm.de/wiki/doku.php?id=Projects:A_LaTeX_package_for_gantt_plots
-\begin{ganttchart}[vgrid, hgrid]{1}{15}
-	\ganttbar{$\tau_1$}{7}{9}\\
-	\ganttbar{$\tau_2$}{2}{4}\\
-	\ganttbar{$\tau_3$}{5}{6}\\
-	\ganttbar{$\tau_4$}{10}{10}\\
-	\ganttbar{$\tau_5$}{11}{13}
-\end{ganttchart}
+%\begin{ganttchart}[vgrid, hgrid]{1}{15}
+%	\ganttbar{$\tau_1$}{7}{9}\\
+%	\ganttbar{$\tau_2$}{2}{4}\\
+%	\ganttbar{$\tau_3$}{5}{6}\\
+%	\ganttbar{$\tau_4$}{10}{10}\\
+%	\ganttbar{$\tau_5$}{11}{13}
+%\end{ganttchart}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -560,7 +560,8 @@ $P$ le plus petit commun multiple ($ppcm$) de toutes les périodes du système, 
 \end{center}
 
 \section{Multi-processeurs partitionnés}
-
+% TODO !! 2 types de pb : bin packing ou search :
+% todo see http://www.irisa.fr/alf/downloads/puaut/STR/STRmulticore.pdf
 %TODO revoir cours de goossens
 \subsection{RM, DM et bin-packing}
 Dans la partie précédente, nous avons présenté certains algorithmes mono-processeur, 
@@ -582,6 +583,7 @@ une stratégie globale multi-processeur \cite{ndoye_ordonnancement_2014}.
 
 Concrètement, cela revient à diviser un ensemble $\Gamma$ de tâches en $n$ sous-ensembles 
 $\gamma \in \Gamma$ et d'attribuer à chacun des $m$ processeurs un de ces sous-ensembles $\gamma$.\\
+
 
 Le problème du partitionnement consiste donc en premier lieu 
 à résoudre une division du système en sous-systèmes, ce qui est connu dans la 
@@ -616,6 +618,9 @@ Dans cet article, ils décrivent également :\\
 \vspace{1em}
 qui finalement, sont des algorithmes basés sur RM dont le système de tâche est 
 réparti selon les algorithmes heuristiques de \textit{bin-packing} \textit{Next-Fit} et \textit{First-Fit}.
+%TODO ajouter des détails sur ces algos :
+%todo http://www.cse.chalmers.se/edu/year/2016/course/course/EDA222_Real_Time_Systems/Documents/Slides/Slides_14.pdf
+%todo ajouter donc les conditions de faisabilité trouvées
 
 Par la suite, quantité d'algorithmes basés sur \textit{RM} et \textit{DM} avec 
 heuristique de bin-packing sont proposés et leurs performances analysées. 
@@ -681,7 +686,9 @@ permettent généralement d'ordonnancer plus de systèmes que les ordonnanceurs 
 mais la conclusion ne peut être affirmée avec déterminisme : cela dépend des situations
 \cite{lopez_utilization_2004}.\\
 
-%TODO ajouter EDF partionné, dis, on a des tests d'ordonançabilité...
+%todo peut-être parler du fait que si des tâches doivent communiquer entre elles, en plus, 
+%todo le problème du partitionnement peut devenir un peu plus compliqué
+%todo y a pas des algos génétiques ?!
 
 %Des études ont montré que les ordonnanceurs globaux basés sur \textbf{RM} et \textbf{DM} 
 %tendaient à avoir une  plus faible utilisation que les ordonnanceurs partitionnés. 
@@ -712,24 +719,34 @@ Cela ne dit rien des autres classes, et ne peut pas être généralisé. C'est
 un résultat cependant important, qui montre que le fait de permettre les migrations 
 change considérablement le comportement des ordonnanceurs.
 
-\section{Multi-processeurs globaux}
+\section{Ordonnanceurs dynamiques globaux}
+Un ordonnanceur dynamique global est un ordonnanceur qui gère un ensemble de processeurs et 
+un système de tâches. Il ne procède pas à un tri préalable comme dans le cas partitionné. 
+Il gère une "queue" de $n$ tâches qui peuvent être assignées à $m$ processeurs à chaque fois 
+que l'ordonnanceur en a l'occasion.\\
+
+Les algorithmes vus précédemment peuvent être adaptés à ce type de stratégie. 
+
+\subsection{Priorité fixe sur tâche : RM/DM global}
+L'assignation des priorités \textit{RM} (ou \textit{DM}) en version multi-processeur global 
+fonctionne de la même façon que dans sa version mono-processeur : 
+pour RM, la priorité la plus élevée est accordée à la tâche qui a la période la plus faible. 
+Les $n$ tâches de priorité supérieures sont exécutées sur les $m$ processeurs. \\
+
+Dans leur article de 1978, Dhall et Liu décrivent ce qu'on appelle dans la littérature 
+"l'effet Dhall" (\textit{Dhall's effect}), des \textit{anomalies} : \cite{dhall_real-time_1978}\\
+%todo add def of anomalie ?
+Un système de tâche périodiques avec une ou des tâches dont l'utilisation est proche de 1 
+peut ne pas être ordonnançable par RM, même si une solution existe (RM n'est pas optimal)
 
 
-Une autre façon d'ordonnancer plusieurs processeurs est de ne pas procéder à un partitionnement préalable, et donc, de gérer tous les processeurs en même temps. 
-
-Donc il n'existe pas de test qui permette de savoir si on peut ordonnancer 
-un système sur partionned ou global.
-
-Ca signifie qu'il faut essayer de le faire... Simuler.
-
-Problèmeh : les deux façons de procéder sont incomparables. Pourquoi ? Issu du cours, montrer 
-un système schedulable en partionned et pas en global et vice et versa.
-
-Grande idée : il existe PAS de scheduler idéal.
-Du coup, il faut en chercher un qui a le plus grand système de tâche possible, ou du moins, 
-le plus intéressant. 
-
-Parmi ceux-ci, il y a : 
+Stratégie en ligne :
+Quelques résultats déjà connus dans la littérature viennent noircir l'espoir de trouver une 
+solution parfaite. En effet, dans leur article de 1988 \cite{hong_-line_1988}, Hong et Leung montrent :\\
+\textit{"for every $m > 1$, no optimal online scheduler can exist for task systems with two or more distinct
+	deadlines."} (Pour tout $m > 1$, il n'existe pas d'ordonnanceur en ligne 
+optimal pour les ensembles de tâches avec au moins deux échéances distinctes). 
+Ce résultat, quoi que négatif, 
 
 \subsection{EDF-k}
 \subsection{DP-WRAP}
