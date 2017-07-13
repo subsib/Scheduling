@@ -20,6 +20,7 @@
 \usepackage{hyperref}
 \usepackage{tikz}
 \usepackage{pgfgantt} %draw timechart
+\usepackage{amssymb, bm}
 \newtheorem{mydef}{Définition}
 \newtheorem{mytheorem}{Théorème}
 \newtheorem{mylemme}{Lemme}
@@ -778,7 +779,10 @@ qui peuvent être assignées à $m$ processeurs à chaque fois que l'ordonnanceu
 Les algorithmes mono-processeurs vus précédemment peuvent donc être adaptés 
 à ce type de stratégie facilement : en attribuant les priorités à toutes les tâches, et en 
 exécutant plusieurs jobs sur plusieurs processeurs. 
-Plusieurs résultats qui viennent assombrir les perspectives d'une adaptation aussi simple.
+Plusieurs résultats qui viennent assombrir les perspectives d'une adaptation aussi simple. \\
+%Un premier constat est dressé dès 1969 par Liu en ces termes :\\
+%"the simple fact that a task can use only one [resource] even when several [resources]
+%are free at the same time adds a surprising amount of difficulty" \cite{}
 
 \subsection{L'Effet Dhall}
 Dans leur article de 1978 \cite{dhall_real-time_1978}, Dhall et Liu montrent que certains ordonnanceurs 
@@ -844,8 +848,11 @@ Dans ce cas, la priorité des tâches est assignée légèrement différemment :
 Une condition suffisante est alors :\\
 $U = \sum_{i=1}^{n}\frac{C_i}{T_i} \leq \frac{m^2}{3m-2}$
 alors le système de tâches est ordonnançable sur $m$ processeurs
-\cite{andersson_static-priority_2001}. 
-\\
+\cite{andersson_static-priority_2001}. \\
+D'autres documents encore décrivent des conditions d'ordonnançabilité et sont régulièrement 
+cités comme références comme de nombreux articles de Baker 
+\cite{baker_multiprocessor_2003} \cite{baker_analysis_2005} ou Baruah \cite{baruah_optimal_2004}
+\cite{baruah_schedulability_2008} .
 
 \subsection{Il n'existe pas de stratégie en ligne optimale sans clairvoyance}
 Quelques résultats déjà connus dans la littérature viennent noircir l'espoir de trouver une 
@@ -865,9 +872,39 @@ d'un ordonnanceur non-clairvoyant, mais ne peut pas être généralisé dans le 
 l'algorithme a accès à des données sur les tâches au préalable \cite{fisher_optimal_2010}.
 
 \subsection{PFair}
-\textit{PFair} n'est pas un algorithme applicable, il est décrit dans la littérature comme 
-un ordonnanceur idéal permettant de prouver des propriétés importantes pour le domaine. 
+En 1996, Baruah et al. décrivent l'algorithme \textit{PFair}.
+L'article apporte plusieurs définitions importantes :
+\begin{mydef}
+	$Lag(S, x, t) = x.w \times t - \sum_{i\in[0,t)}^{max} S(x, i)$, où 
+	$S$ est un ordonnanceur, $x$, un job, $t$ un instant, et où $S(x, t) = 1$ si 
+	le job $x$ est exécuté à l'instant $t$, $0$ sinon.
+\end{mydef}
+\begin{mydef}
+	Un ordonnanceur est P-fair si et seulement si :\\
+	$\forall x, t : x \in \Gamma, t\in , \mathbb{N} : -1 < lag(S,x,t) < 1$
+\end{mydef}
+\begin{mydef}
+	Un ordonnanceur est P-fair au temps $t$ si et seulement si un ordonnanceur $S'$ existe tel que : \\
+	$\forall x: x \in \Gamma  lag(S,x,t) = lag(S',x,t)$
+\end{mydef}
+\begin{mytheorem}
+	La P-équité (PFairness) implique que toutes les échéances soient satisfaites.
+\end{mytheorem}
 
+Ce n'est pas à proprement parler un algorithme dont le but est qu'il soit appliqué, 
+il est décrit dans la littérature comme un ordonnanceur idéal permettant 
+de prouver des propriétés importantes pour le domaine. 
+L'une d'elle est que chaque ordonnanceur P-Fair est périodique. \\
+
+Il s'applique aux tâches périodiques synchrones à échéances implicites, 
+et l'on connaît le temps de réalisation des tâches, 
+ce qui prévient des résultats négatifs précédents contre 
+l'existence d'un ordonnanceur optimal.\\
+
+
+La notion de P-Fairness est très souvent utilisée dans la littérature et d'elle dérive de 
+nombreuses propositions d'algorithmes, comme pour DP-Fair \cite{levin_dp-fair:_2010}, 
+%todo add refs 
 
 \subsection{EDF-k}
 
