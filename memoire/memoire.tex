@@ -327,10 +327,9 @@ Formellement, une tâche périodique est définie par un 4-uplet $(O, T, D, C)$ 
 	\item[T] est la période, c'est à dire le temps qui sépare deux générations de job par la tâche. 
 	Comme le premier job est généré à l'instant $O$, alors $\forall i \in \{0, \infty \} t = O + i\times T$ 
 	où $t$ est le temps où la tâche est générée la $i$ème fois.
-	\item[D] est la deadline relative, c'est à dire le temps qui sépare au maximum la génération 
+	\item[D] est l'échéance relative, c'est à dire le temps qui sépare au maximum la génération 
 	d'un job et sa réalisation.
-	\item[C] est le temps de réalisation. Dans les algorithmes, on utilise -- comme expliqué précédemment --
-	le \textbf{WCET}.
+	\item[C] est le temps de réalisation. Dans les algorithmes, on utilise -- comme expliqué précédemment -- le \textbf{WCET}.
 \end{itemize}	
 	Dans le cas de tâches périodiques, on distingue trois cas différents : \\
 	\begin{enumerate}
@@ -358,8 +357,8 @@ Formellement, une tâche périodique est définie par un 4-uplet $(O, T, D, C)$ 
 Un job est une instance d'une tâche. %TODO fill...
 
 \subsection{Ordonnanceur}
-Un ordonnanceur (Scheduler) est la partie logicielle de 
-l'OS chargée d'orchestrer l'ordre d'exécution des tâches du système 
+Un ordonnanceur (\textit{Scheduler}) est la partie logicielle de 
+l'\textit{OS} chargée d'orchestrer l'ordre d'exécution des tâches du système 
 selon des priorités fixées à l'avance ou durant l'exécution. 
 On distingue trois types d'assignation de priorités des ordonnanceurs : \\
 \begin{enumerate}
@@ -426,6 +425,9 @@ l'utilisation pour un système de $m$ tâches :\\
 	$U_{tot} = \sum_{i = 1}^{m}(\frac{C_i}{T_i})$
 \end{center}
 
+\subsection{Laxité}
+\ref{laxite}
+blabla.%todo add def
 
 \subsection{Représentation graphique d'un système}
 %TODO fill with an example. Hope not to have to draw it in latex :/
@@ -450,7 +452,6 @@ l'utilisation pour un système de $m$ tâches :\\
 %\part{Si du moins votre travail est divisé en parties}
 %%%%%%%%%%%%%%%%%
 \chapter{État de l'art}
-\newtheorem{defi}{Déf.}
 
 La littérature sur le sujet des ordonnanceurs est assez vaste. 
 Ceux-ci sont composés principalement de trois grandes familles :\\
@@ -467,11 +468,13 @@ par présenter cette famille.
 \subsection{Rate Monotonic}
 L'ordonnanceur \textbf{R}ate \textbf{M}onotonic (RM) est décrit par Liu et Layland \cite{liu_scheduling_1973} en 1973. C'est 
 donc un ordonnanceur classique, bien connu, ainsi que largement documenté \cite{kermia_ordonnancement_2009}. 
+L'idée de base est qu'une tâche avec une période courte évolue rapidement, et 
+doit donc être prioritaire.\\
 On considère un ensemble de tâches périodiques et indépendantes.
 Les priorités sont statiques et attribuées en fonction de la durée de la période, ainsi 
 la tâche avec la période la plus faible sera de priorité plus élevée. 
-Un des points fondamentaux de l'article est de prouver l'optimalité de RM dans le cas de tâches 
-préemptives, périodiques (à échéance sur requête), indépendantes, simultanées.
+Un des points fondamentaux de l'article est la preuve de l'optimalité de RM dans le cas 
+préemptif, à tâches périodiques, à échéance sur requête, indépendantes, simultanées.
 Les auteurs énoncent même une condition suffisante de faisabilité pour un système à $m$ tâches : \\
 \begin{center}
 	$\sum_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1)$
@@ -480,18 +483,18 @@ Notons également que pour $n \rightarrow \infty$, $\sum_{i=1}^{m}\frac{C_i}{T_i
 Une condition suffisante est donc que le facteur d'utilisation du système soit inférieur à 0.69. 
 Dans ce cas, le système est ordonnançable par RM.\\
 
-Des améliorations ont par la suite été apportées par Joseph et Pandya \cite{DBLP}.
+Des améliorations ont par la suite été apportées par Joseph et Pandya \cite{joseph_finding_1986}.
 qui ont trouvé une condition nécessaire et suffisante. 
-Ainsi, si $RT(t_i)$ est le Response Time (\ref{Response Time}) d'une tâche $t_i$, 
+Ainsi, si $RT(t_i)$ est le temps de réponse (\ref{Response Time}) d'une tâche $t_i$, 
 alors si un ensemble de tâches périodiques est trié par ordre décroissant, l'équation suivante 
-définit la borne supérieure du Release Time :
+définit la borne supérieure du temps de réalisation :
 \begin{center}
 	$RT(t_i)^{q+1} = \sum_{j=1}^{i-1} \lceil \frac{RT(t_i)^q}{T(t_i)} \rceil \times C(t_j)) + C(t_i)$
 \end{center}
 Le système est ordonnançable si et seulement si $\forall i_{(1 \leq i \leq m)}RT(t_i) \leq T_i$.
 On pourra résoudre récursivement cette équation afin de prouver sa faisabilité.\\
 
-RM n'est cependant optimal que pour cette classe de tâches. Dès que les propriétés changent, 
+\textit{RM} n'est cependant optimal que pour cette classe de tâches. Dès que les propriétés changent, 
 il faudra se tourner vers un autre type d'ordonnanceur.
 
 
@@ -502,8 +505,8 @@ Deadline Monotonic (DM) est un ordonnanceur pour les systèmes à départ simult
 dont il sera question plus loin dans ce document.\\
 
 Avec cet ordonnanceur, les priorités sont fixes, au niveau des tâches.
-Plus la deadline est petite, plus la priorité est élevée. On peut considérer que RM est 
-un cas particulier de DM, puisque pour RM, les tâches sont à échéance sur requête \ref{echeancesurrequete}.
+Plus l'échéance est petite, plus la priorité est élevée. On peut considérer que \textit{RM} est 
+un cas particulier de \textit{DM}, puisque pour \textit{RM}, les tâches sont à échéance sur requête \ref{echeancesurrequete}.
 Il n'existe pas de test de faisabilité basé sur l'utilisation du système. Pour vérifier celle-ci, 
 il faut avoir recours à l'équation décrite plus haut. 
 On peut la résoudre récursivement à l'aide de ce système d'équations: \\
@@ -516,22 +519,21 @@ On peut la résoudre récursivement à l'aide de ce système d'équations: \\
 
 \subsection{Earliest Deadline First}
 \textbf{E}arliest \textbf{D}eadline \textbf{F}irst (EDF) est un ordonnanceur 
-qui a été introduit e 1973, à la même période que Rate Monotonic, également 
+qui a été introduit en 1973, à la même période que Rate Monotonic, également 
 par Lui et Layland \cite{liu_scheduling_1973}. C'est un ordonnanceur à départ différé ($Offset \neq 0$) 
-et à deadline arbitraire (pas de contrainte sur la deadline par rapport à la période), 
+et à échéance arbitraire (pas de contrainte sur l'échéance par rapport à la période), 
 qui fixe les priorités sur les jobs. L'assignation de la priorité se fait sur base de 
-la proximité de la deadline absolue : Plus cette deadline est proche et plus la priorité est élevée. 
-Une façon déterministe et arbitraire de régler les cas d'égalité doit être décidée.
-\cite{ndoye_ordonnancement_2014}\\
+la proximité de l'échéance absolue : Plus cette échéance est proche et plus la priorité est élevée. 
+Une façon déterministe et arbitraire de régler les cas d'égalité doit être décidée.\\
 
-EDF est optimal pour toutes les tâches synchrones et asynchrones, avec et sans 
-contraintes sur les deadlines. 
-Cela signifie que si un système est ordonnançable, EDF peut l'ordonnancer.\\
-Cette propriété est importante, car les classes de tâches ordonnancées par EDF 
-sont plus larges que RM et DM, par conséquent, EDF peut ordonnancer également les 
-mêmes classes qu'RM et DM en conservant son optimalité. \\
+\textit{EDF} est optimal pour toutes les tâches synchrones et asynchrones, avec et sans 
+contraintes sur les échéances. 
+Cela signifie que si un système est ordonnançable, \textit{EDF} peut l'ordonnancer.\\
+Cette propriété est importante, car les classes de tâches ordonnancées par \textit{EDF} 
+sont plus larges que \textit{RM} et \textit{DM}, par conséquent, \textit{EDF} peut ordonnancer également les 
+mêmes classes qu'\textit{RM} et \textit{DM} en conservant son optimalité. \\
 
-Les tests de faisabilités avec EDF dépendent de la classe de tâche considérée. 
+Les tests de faisabilités avec \textit{EDF} dépendent de la classe de tâche considérée. 
 Pour un système synchrone et à échéance sur requête, 
 une condition nécessaire et suffisante de faisabilité est donc que l'utilisation soit inférieure 
 à 100\%, c'est à dire : \\
@@ -558,21 +560,41 @@ $P$ le plus petit commun multiple ($ppcm$) de toutes les périodes du système, 
 	$P = ppcm\{T_i | i \in \{1, ... m\}\}$
 \end{center}
 
-\section{Multi-processeurs partitionnés}
+\section{Multi-processeurs : les différentes familles d'ordonnanceurs}
 % TODO !! 2 types de pb : bin packing ou search :
 % todo see http://www.irisa.fr/alf/downloads/puaut/STR/STRmulticore.pdf
 %TODO revoir cours de goossens
-\subsection{RM, DM et bin-packing}
 Dans la partie précédente, nous avons présenté certains algorithmes mono-processeur, 
 ainsi que quelques conditions d'ordonnançabilité.
-De nos jours, une grande partie des architectures employées dans un système embarqué 
-est multiprocesseur. Les stratégies mises en place pour l'ordonnancement de tels 
-systèmes sont différentes, il n'est pas suffisant de conserver les mêmes solutions 
-et de les appliquer à plusieurs processeurs.\\
- 
-Afin d'exécuter les tâches sur différents processeurs, plusieurs stratégies existent, 
-dont l'une dite de \textit{partitionnement}. 
-Cette stratégie consiste à diviser l'ensemble de tâches en sous-ensembles qui seront 
+De nos jours, une grande partie des architectures employées dans les systèmes embarqués 
+est multiprocesseur. 
+Les stratégies mises en place pour l'ordonnancement de tels 
+systèmes sont différentes. Dans la littérature, il est habituel de présenter 
+deux familles principales d'ordonnanceurs multi-processeurs :\\
+\begin{itemize}
+	\item Les ordonnanceurs partitionnés
+	\item Les ordonnanceurs globaux
+\end{itemize}
+Nous verrons qu'une troisième famille est souvent présentée également. Elle représente un 
+mélange des deux précédentes. On parle d'ordonnanceurs \textit{hybrides}, ou \textit{semi-globaux}.
+
+\section{Les ordonnanceurs partitionnés}
+L'idée principale derrière la stratégie du partitionnement est que pour tout 
+ensemble $\Gamma$ de $n$ tâches, si l'utilisation de chaque tâche est inférieure à $1$, 
+alors il existe un ordonnanceur de $m <= n$ processeurs capable d'ordonnancer cet ensemble. 
+Il y a principalement deux optiques différentes pour envisager ce problème : \\
+\begin{itemize}
+	\item Partir de l'ensemble maximum et appliquer un algorithme de recherche afin de trouver 
+	la valeur de $m$ la plus petite telle que l'ordonnancement soit possible
+	\item Résoudre ce problème connu dans la littérature comme celui du Bin-Packing, 
+	et rejoindre un domaine bien connu et largement documenté.
+\end{itemize}
+Dans la suite du document, on ne s'intéressera qu'aux heuristiques liées au Bin-Packing et 
+laisserons de côté les algorithmes de recherche.
+
+\subsection{Ordonnanceurs à priorité fixe sur tâche}
+
+La stratégie de partitionnement consiste à diviser l'ensemble de tâches en sous-ensembles qui seront 
 attribués à un processeur particulier. Cela permet de conserver les mêmes algorithmes ainsi 
 que tests d'ordonnançabilité que ceux 
 décrits précédemment puisqu'en divisant le système en sous-systèmes attribués à un 
@@ -587,7 +609,7 @@ $\gamma \in \Gamma$ et d'attribuer à chacun des $m$ processeurs un de ces sous-
 Le problème du partitionnement consiste donc en premier lieu 
 à résoudre une division du système en sous-systèmes, ce qui est connu dans la 
 littérature scientifique comme le problème du bin-packing \cite{ausiello_approximation_1984}.
-Ce problème appartient à la classe de complexité $NP$, si bien qu'en pratique, 
+Ce problème est $NP$ difficile, si bien qu'en pratique, 
 des heuristiques sont appliquées, comme par exemple :\\
 \begin{itemize}
 	\item First-fit 
@@ -595,10 +617,12 @@ des heuristiques sont appliquées, comme par exemple :\\
 	\item Next-fit
 \end{itemize}
 
-Plusieurs algorithmes de ce type ont été présentés dans la littérature scientifique, 
-dans les années 80 comme par exemple \cite{dhall_real-time_1978} Dhall et Liu en 1978. 
+Plusieurs algorithmes de ce type ont été présentés dans la littérature scientifique
+dans les années 80 comme par exemple \cite{dhall_real-time_1978} dans ce 
+document de Dhall et Liu en 1978. 
 Dans leur article, ils notamment des fourchettes d'utilisations 
-permettant d'ordonnancer pour le cas multi-processeur utilisant \textit{RM} :
+permettant d'ordonnancer pour le cas multi-processeur utilisant \textit{RM}, 
+considérant les échéances implicites :
 \begin{mytheorem}
 \textit{"if a set of m tasks is scheduled according to the rate-monotonic scheduling algorithm, then the minimum achievable utilization factor is $m\times(2^{\frac{1}{m}} - 1)$".}
 \end{mytheorem}
@@ -615,25 +639,43 @@ Dans cet article, ils décrivent également :\\
 	\item[RMFFS] : \textit{Rate Monotonic First-Fit Scheduler}
 \end{itemize}
 \vspace{1em}
-qui finalement, sont des algorithmes basés sur RM dont le système de tâche est 
-réparti selon les algorithmes heuristiques de \textit{bin-packing} \textit{Next-Fit} et \textit{First-Fit}.
+qui finalement, sont des algorithmes basés sur \textit{RM} dont le système de tâche est 
+réparti selon les algorithmes heuristiques de \textit{bin-packing} \textit{Next-Fit} et \textit{First-Fit}. 
+Afin de trier les tâches, on considère leur utilisation.
+
 %TODO ajouter des détails sur ces algos :
 %todo http://www.cse.chalmers.se/edu/year/2016/course/course/EDA222_Real_Time_Systems/Documents/Slides/Slides_14.pdf
 %todo ajouter donc les conditions de faisabilité trouvées
 
-Par la suite, quantité d'algorithmes basés sur \textit{RM} et \textit{DM} avec 
+Par la suite, d'autres algorithmes basés sur \textit{RM} et \textit{DM} avec 
 heuristique de bin-packing sont proposés et leurs performances analysées. 
 Un historique complet est proposé dans le travail de thèse de Ndoye \cite{ndoye_ordonnancement_2014}. 
-Les recherches tendent à trouver des conditions de faisabilité.
+Les recherches tendent à trouver des conditions de faisabilité utiles.\\
 
 Ce pan des ordonnanceurs est donc très bien connu à ce jour, très bien documenté. 
 Dans ces conditions, il n'est pas étonnant de voir que ces solutions sont encore largement 
 répandues dans l'industrie à ce jour, les algorithmes \textit{RM} et \textit{DM} 
-étant assez simples à implémenter, des conditions de faisabilité étant connus, 
-des heuristiques ainsi que leur efficacité ayant été analysés en exercice.\\
+étant assez simples à implémenter, des heuristiques ainsi que leur efficacité ayant été analysées, en théorie ainsi qu'en pratique.\\
+
+Un défaut majeur de ces algorithmes est que bien souvent, l'utilisation des processeur sera 
+sous-performante, ce qui est une raison très souvent invoquée dans la littérature pour se 
+tourner vers d'autres solutions. 
+Andersson, Baruah et Jonsson proposent RM-US$\frac{m}{3m-2}$ avec un test 
+de faisabilité plus permissif \cite{andersson_static-priority_2001}. Ils prouvent 
+qu'un système est réalisable sous deux conditions :\\
+\begin{itemize}
+	\item $\forall \tau_i \in \tau, U_i \leq \frac{m}{3m-2}$
+	\item $U(\tau) \leq \frac{m^2}{3m-2}$ 
+\end{itemize}
+\vspace{1em}
+Pour arriver à ces conditions, l'algorithme d'attribution des priorités est légèrement modifié : \\
+\begin{itemize}
+	\item si $U_i > \frac{m}{3m-2}$, $\tau_i$ a la plus grande priorité
+	\item sinon, $\tau_i$ se voit assigner une priorité sous les mêmes conditions que \textit{RM}.
+\end{itemize}
+
 
 \subsection{EDF partitionné}
-EDF appartient à une autre famille de tâches : celle des priorités fixes aux jobs. 
 Il a été rappelé plus tôt dans ce document qu'EDF mono-processeur est optimal, 
 c'est à dire qu'il peut ordonnancer tout type de système qui est ordonnançable. 
 Malheureusement, ce résultat n'est pas valable dans le cas multiprocesseur \cite{dertouzos_multiprocessor_1989}.\\
@@ -652,36 +694,45 @@ et proposent une analyse de la complexité. Ils renvoient eux-mêmes vers
 \cite{lopez_utilization_2004} 
 qui est cité de nombreuses fois et semble être la référence à propos de ces algorithmes. 
 Dans cet article, Lopez, Diaz et Garcia proposent une limite de l'utilisation à la 
-faisabilité en fonction de l'algorithme d'attribution des tâches. 
+faisabilité en fonction de l'algorithme d'attribution des tâches. Ces conditions 
+sont suffisantes, mais pas nécessaires.\\ %TODO verif\\
 
-\subsection{EDF-VD}
+%\subsection{Conclusion}
+%Les algorithmes partitionnés sont bien documentés et ont été présentés brièvement dans ce document, 
+%qui ne traitera pas de ce type de stratégie ultérieurement. 
+%Il est important de noter que malgré le fait que l'on considère de grands avantages dans la 
+%littérature à utiliser des algorithmes globaux, ce domaine continue d'être étudié et 
+%des nouveautés sont encore proposées .
 %http://sci-hub.ac/10.1109/RTSS.2016.013
 
 
 \subsection{Avantages et inconvénients des ordonnanceurs partitionnés}
 \subsubsection{Avantages}
 Nous avons vu dans les sections précédentes que les algorithmes d'ordonnanceurs 
-partitionnés sont bien connus, et présentent un certain nombre d'avantages parmi lesquels 
-le fait d'être bien connus, bien documentés, d'avoir de bons tests de faisabilité pour 
-toutes les classes de tâches. 
+partitionnés sont bien documentés, et présentent un certain nombre d'avantages parmi lesquels 
+le fait d'être bien connus aussi bien en pratique qu'en théorie. 
 Certains algorithmes donnent même de bons résultats, et l'on pourrait se satisfaire de 
-cette famille d'algorithmes.\\
+cette famille d'algorithmes. De nouvelles études et améliorations sont encore à ce jour proposées 
+dans des recherches récentes \cite{rodriguez_paul_multi-criteria_2013}.\\
 
 \subsubsection{Inconvénients}
 Toutefois, ces algorithmes présentent quelques inconvénients. 
 L'un d'eux est que leur résolution ne garantit pas de trouver la solution optimale, 
-puisque ce sont des heuristiques. Il n'est pas envisageable de penser 
+puisque ce sont des heuristiques. 
+Il n'est pas envisageable de penser 
 que ces algorithmes puissent donc être optimaux pour une famille de tâches.
+%todo reformule
 
 Un autre problème important est que dans le processus partitionné, une tâche est 
-assignée à un processeur, mais ne pourra pas être assignée à plusieurs. Ainsi, si des solutions 
-existent qui consistent à migrer une tâche sur un autre processeur, elle ne pourra pas être trouvée 
+assignée à un seul processeur. 
+Ainsi, si des solutions existent qui consistent à migrer une tâche sur un autre processeur, 
+elles ne pourront pas être trouvées 
 par un ordonnanceur partitionné \cite{ramamurthy_static-priority_2000}. 
 Enfin, une autre limite est que ce processus ne permet pas à une tâche d'évoluer avec le temps. 
 Le mode doit être décidé avant l'exécution, et devra être fixé une fois pour toutes. 
 Cela peut convenir à un certain nombre de systèmes, mais ne peut pas être une solution générale.
 De façon générale, on retrouve dans la littérature l'idée que les ordonnanceurs globaux 
-permettent généralement d'ordonnancer plus de systèmes que les ordonnanceurs globaux, 
+permettent généralement d'ordonnancer plus de systèmes que les ordonnanceurs partitionnés, 
 mais la conclusion ne peut être affirmée avec déterminisme : cela dépend des situations
 \cite{lopez_utilization_2004}.\\
 
@@ -724,60 +775,109 @@ un système de tâches. Il ne procède pas à un tri préalable comme dans le ca
 Il gère une \textit{queue} de $n$ tâches prêtes à être exécutées 
 qui peuvent être assignées à $m$ processeurs à chaque fois que l'ordonnanceur en a l'occasion.\\
 
-Les algorithmes vus précédemment peuvent être adaptés à ce type de stratégie. 
+Les algorithmes mono-processeurs vus précédemment peuvent donc être adaptés 
+à ce type de stratégie facilement : en attribuant les priorités à toutes les tâches, et en 
+exécutant plusieurs jobs sur plusieurs processeurs. 
+Plusieurs résultats qui viennent assombrir les perspectives d'une adaptation aussi simple.
 
 \subsection{L'Effet Dhall}
 Dans leur article de 1978 \cite{dhall_real-time_1978}, Dhall et Liu montrent que certains ordonnanceurs 
-initialement mono-processeurs, (RM ou EDF) peuvent donner lieu à une utilisation faible des 
+initialement mono-processeurs, (\textit{RM} ou \textit{EDF}) peuvent donner lieu à une utilisation faible des 
 processeurs, ce qui signifie qu'ils ne seraient pas utilisés de façon optimale. 
-Ils montrent par ailleurs qu'en gardant la même méthode d'allocation de priorité, 
-quelle que soit le nombre de processeurs utilisés, la limite de l'utilisation globale 
-d'un système tend vers $1$:\\
+Ils montrent par ailleurs que pour certains algorithmes, 
+il existe des systèmes qui présentent des \textit{pathologies}.
+Cela signifie que certains systèmes ne sont pas ordonnançables malgré une 
+utilisation totale de $1 + \epsilon$ et ce quel que soit le nombre de processeurs $m$.
  
-Cela est connu dans la littérature comme l'"effet Dhall" (Dhall's effect) : \\
+Cela est connu dans la littérature comme l'"effet Dhall" (Dhall's effect) et remet en 
+question l'intérêt de baser les tests de faisabilité sur l'utilisation totale, et 
+montre que d'autres facteurs devraient être pris en considération.\\
+
+De plus, dans le cas global, les instants critiques ne sont plus aussi faciles à prédire 
+que dans le cas mono-processeur : pour rappel, un instant critique se produit lorsqu'une tâche 
+libère un job à un moment où tous jobs de priorités supérieures doivent être exécutés. 
+Mais cela n'est plus forcément vrai dans le cas multi-processeur.\\
+
+%todo add graph here
+
+
+Une solution proposée pour éviter l'effet Dhall est de modifier la méthode d'attribution 
+des priorités. En effet, en se basant sur la laxité \ref{laxite}, 
+le problème ne se rencontre pas. Cela pourrait donner 
+un avantage à l'algorithme \textit{PFair} ou diriger vers d'autres types de solutions.
 %todo add explications
+
+\subsection{Anomalies}
+Les anomalies sont décrites dans la littérature comme des changements qui intuitivement devraient 
+améliorer l'utilisation des processeurs, et qui rendent cependant le système non-ordonnançable. 
+Cela peut se produire dans diverses circonstances, comme par exemple :\\
+\begin{itemize}
+	\item le temps d'exécution décroît
+	\item La période d'une tâche augmente
+\end{itemize}
+et le système qui était auparavant ordonnançable ne l'est plus.
+
+
 
 \subsection{Priorité fixe sur tâche : RM/DM global}
 Si l'assignation des priorités \textit{RM} (ou \textit{DM}) en version multi-processeur global 
 fonctionne de la même façon que dans sa version mono-processeur - 
 c'est à dire, la priorité la plus élevée est accordée à la tâche qui a la période la plus faible - 
-\textit{RM} est donc concerné par l'effet Dhall. 
-Dans la version globale de l'ordonnanceur, on devra donc changer de méthode d'assignation de priorité.
-Puis, les $n$ tâches de priorité supérieures seront exécutées sur les $m$ processeurs. \\
-
-Le problème principal de cette méthode est que les tests d'ordonnançabilité 
+\textit{RM} est donc concerné par l'effet Dhall. \\
 
 %todo ref et trouver quoi dire ici...
 
-\subsection{Priorité fixe sur job : g-EDF}
-Comme pour RM et DM, EDF peut simplement être adapté à une exécution multi-processeur, 
-considérant un ensemble $n$ de tâches sur $m$ processeurs. Mais le gros avantage d'EDF 
+\subsection{Priorité fixe sur job : EDF}
+Comme pour \textit{RM} et \textit{DM}, \textit{EDF} peut simplement être adapté à une exécution multi-processeur, 
+considérant un ensemble $n$ de tâches sur $m$ processeurs. Mais le gros avantage d'\textit{EDF} 
 dans sa version mono-processeur est son optimalité, qui n'est malheureusement pas conservée ici. 
-Les tests d'ordonnancements les plus favorables %todo add refs + tests...
+Plusieurs versions globales reposant sur \textit{EDF} sont décrites dans la littérature. 
+Il y a \textit{EDF} appliquant \textit{First Fit Decreasing Utilization}, décrit par 
+Lopez et al. \cite{lopez_utilization_2004}, où l'on obtient ces conditions de faisabilité : \\
+$U(\tau) \leq \frac{(m + 1)}{2}$ et $U_{max} \leq 1$. \\
+Un autre exemple est EDF-US. 
+Dans ce cas, la priorité des tâches est assignée légèrement différemment :\\
+\begin{itemize}
+	\item si $U_i > \frac{m}{2m-1}$, la tâche $\tau_i$ se voit assigner la plus haute priorité
+	\item sinon on applique les mêmes règles que pour \textit{EDF} mono-processeur
+\end{itemize}
+Une condition suffisante est alors :\\
+$U = \sum_{i=1}^{n}\frac{C_i}{T_i} \leq \frac{m^2}{3m-2}$
+alors le système de tâches est ordonnançable sur $m$ processeurs
+\cite{andersson_static-priority_2001}. 
+\\
 
-
-
-
-
-, des \textit{anomalies} : \cite{dhall_real-time_1978}\\
-%todo add def of anomalie ?
-Un système de tâche périodiques avec une ou des tâches dont l'utilisation est proche de 1 
-peut ne pas être ordonnançable par RM, même si une solution existe (RM n'est pas optimal)
-
-
-Stratégie en ligne :
+\subsection{Il n'existe pas de stratégie en ligne optimale sans clairvoyance}
 Quelques résultats déjà connus dans la littérature viennent noircir l'espoir de trouver une 
 solution parfaite. En effet, dans leur article de 1988 \cite{hong_-line_1988}, Hong et Leung montrent :\\
 \textit{"for every $m > 1$, no optimal online scheduler can exist for task systems with two or more distinct
 	deadlines."} (Pour tout $m > 1$, il n'existe pas d'ordonnanceur en ligne 
 optimal pour les ensembles de tâches avec au moins deux échéances distinctes). 
-Ce résultat, quoi que négatif, 
+Ce résultat, quoi que négatif, ne peut être généralisé à toutes les classes de tâches, il s'applique 
+aux tâches sporadiques. 
+
+C'est un résultat embarrassant, car beaucoup de systèmes embarqués gèrent des tâches sporadiques :
+en effet, bon nombre d'appareils sont des détecteurs, qui attendent un signal qui par définition 
+ne peut pas arriver à un moment déterministe. 
+Toutefois, de nombreuses publications ultérieures ont montré des algorithmes 
+optimaux pour d'autres classes de tâches. Par ailleurs, ce résultat est juste dans le cas 
+d'un ordonnanceur non-clairvoyant, mais ne peut pas être généralisé dans le cas où 
+l'algorithme a accès à des données sur les tâches au préalable \cite{fisher_optimal_2010}.
+
+\subsection{PFair}
+\textit{PFair} n'est pas un algorithme applicable, il est décrit dans la littérature comme 
+un ordonnanceur idéal permettant de prouver des propriétés importantes pour le domaine. 
+
 
 \subsection{EDF-k}
+
+
+
 \subsection{DP-WRAP}
 \subsection{RUN}
 \subsection{U-EDF}
 
+\subsection{Tableau de synthèse des algorithmes globaux et semi-globaux}
 
 \section{Conclusion}
 % tableau ? Support pour développer argumentation ?
