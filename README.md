@@ -22,6 +22,3 @@ References_
     Antonio Paolillo, Olivier Desenfans, Vladimir Svoboda, Joël Goossens, and Ben Rodriguez. A new configurable and parallel embedded real-time micro-kernel for multi-core platforms. OSPERT, 2015.
 
     The HIPPEROS Real-Time Operating System: https://www.mpi-sws.org/~bbb/events/ospert15/pdf/ospert15-p25.pdf
-
-
-note : Dans le document 1, il est question de PFair et BFair, donc DP-Wrap, je vois pas trop de quoi il s'agit... ?!
