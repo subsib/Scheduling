@@ -677,7 +677,7 @@ Pour arriver à ces conditions, l'algorithme d'attribution des priorités est l�
 
 
 \subsection{EDF partitionné}
-Il a été rappelé plus tôt dans ce document qu'EDF mono-processeur est optimal, 
+Il a été rappelé plus tôt dans ce document qu'\textit{EDF} mono-processeur est optimal, 
 c'est à dire qu'il peut ordonnancer tout type de système qui est ordonnançable. 
 Malheureusement, ce résultat n'est pas valable dans le cas multiprocesseur \cite{dertouzos_multiprocessor_1989}.\\
 
@@ -735,11 +735,16 @@ Cela peut convenir à un certain nombre de systèmes, mais ne peut pas être une
 De façon générale, on retrouve dans la littérature l'idée que les ordonnanceurs globaux 
 permettent généralement d'ordonnancer plus de systèmes que les ordonnanceurs partitionnés, 
 mais la conclusion ne peut être affirmée avec déterminisme : cela dépend des situations
-\cite{lopez_utilization_2004}.\\
+\cite{lopez_utilization_2004}.
+Il y a aussi un problème lié à la communication entre les tâches. Dans nos recherches, 
+la plupart des articles posent que les tâches sont indépendantes entre elles. Dans 
+la réalité, les tâches sont souvent dépendantes, elles doivent communiquer, ce qui pose 
+des problèmes de précédence. 
+L'approche partitionnée gère plusieurs ordonnanceurs indépendants entre eux, si bien 
+que chaque système pourra gérer ces communications localement, mais pas les systèmes entre eux. 
+%todo algo génétiques ??
+\\
 
-%todo peut-être parler du fait que si des tâches doivent communiquer entre elles, en plus, 
-%todo le problème du partitionnement peut devenir un peu plus compliqué
-%todo y a pas des algos génétiques ?!
 
 %Des études ont montré que les ordonnanceurs globaux basés sur \textbf{RM} et \textbf{DM} 
 %tendaient à avoir une  plus faible utilisation que les ordonnanceurs partitionnés. 
@@ -902,9 +907,26 @@ ce qui prévient des résultats négatifs précédents contre
 l'existence d'un ordonnanceur optimal.\\
 
 
-La notion de P-Fairness est très souvent utilisée dans la littérature et d'elle dérive de 
-nombreuses propositions d'algorithmes, comme pour DP-Fair \cite{levin_dp-fair:_2010}, 
+La notion de \textit{P-Fairness} est très souvent utilisée dans la littérature et d'elle dérivent 
+de nombreuses propositions d'algorithmes, comme les classiques \textit{PF}, \textit{PD}, \textit{PD²}, \textit{ER}, 
+et d'autres moins "classiques" comme \textit{DP-Fair} \cite{levin_dp-fair:_2010}, 
+\textit{LB-Pfair} (Loop-Back Proportionate Fair) \cite{kramer_proportionate_2015}. 
 %todo add refs 
+Müller et Werner proposent ainsi ce schéma dans leur article de 2011 :\\
+\begin{figure}[ht]
+	\caption{Généalogie des approches P-Fair, issu de l'article de Müller et Werner\cite{muller_genealogy_2011}}
+	\includegraphics[width=10cm]{img/genealogy_pf}
+\end{figure}
+Ils précisent qu'\textit{EDF} n'est pas concerné par cette classification, mais qu'ayant 
+inspiré certaines approches, il méritait de se trouver sur cette image. 
+Nous invitons le lecteur à prendre connaissance de cet article 
+extrêmement documenté.\\
+
+De la lecture de ces articles, il ressort qu'une partie non négligeable d'entre eux 
+est de parution récente, ce qui montre l'intérêt scientifique 
+actuel pour ce type d'algorithmes. 
+Bien évidemment, les propositions diffèrent par certaines propriétés. Par exemple, 
+\textit{LB-Pfair} est orienté vers les systèmes critiques tolérants aux erreurs. 
 
 \subsection{EDF-k}
 
