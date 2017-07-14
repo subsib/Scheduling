@@ -378,7 +378,8 @@ document, on parlera dans ce cas d'ordonnanceur mono-processeur. Toutefois, de p
 plus de systèmes possèdent plusieurs processeurs, et il existe deux grandes familles 
 d'ordonnanceurs associés à ces systèmes : les Partitionnés, ou les Globaux. \\
 
-%\subsection{En ligne, hors ligne}
+\subsection{Work-Conservative}
+\subsection{En ligne, hors ligne}
 %TODO blabla
 
 \subsubsection{Ordonnanceur multi-processeur Partitionné}
@@ -560,6 +561,12 @@ $P$ le plus petit commun multiple ($ppcm$) de toutes les périodes du système, 
 \begin{center}
 	$P = ppcm\{T_i | i \in \{1, ... m\}\}$
 \end{center}
+
+Malgré le fait que la littérature montre la supériorité d'\textit{EDF} sur \textit{RM}, 
+il semble que ce soit RM qui soit plus volontiers choisi pour implémentation. 
+Sa réputation est qu'il est plus simple. 
+On trouve un résumé du débat qui existe à ce sujet dans un article de Buzzato
+\cite{buttazzo_rate_2005}.
 
 \section{Multi-processeurs : les différentes familles d'ordonnanceurs}
 % TODO !! 2 types de pb : bin packing ou search :
@@ -797,23 +804,32 @@ Ils montrent par ailleurs que pour certains algorithmes,
 il existe des systèmes qui présentent des \textit{pathologies}.
 Cela signifie que certains systèmes ne sont pas ordonnançables malgré une 
 utilisation totale de $1 + \epsilon$ et ce quel que soit le nombre de processeurs $m$.
+La déduction suivante peut en être tirée : la limite de l'utilisation totale 
+pour RM ou EDF est de $1 + \epsilon$, avec $\epsilon$ arbitrairement petit, ce 
+quel que soit $m$.
  
 Cela est connu dans la littérature comme l'"effet Dhall" (Dhall's effect) et remet en 
 question l'intérêt de baser les tests de faisabilité sur l'utilisation totale, et 
-montre que d'autres facteurs devraient être pris en considération.\\
+montre que d'autres facteurs devraient être pris en considération. Dans un premier temps, cependant, 
+cela a participé à montrer la supériorité des approches partitionnées, ce pourquoi elles ont 
+largement été plus étudiées dans les années 80-90 \cite{davis_survey_2011}.\\
 
 De plus, dans le cas global, les instants critiques ne sont plus aussi faciles à prédire 
 que dans le cas mono-processeur : pour rappel, un instant critique se produit lorsqu'une tâche 
 libère un job à un moment où tous jobs de priorités supérieures doivent être exécutés. 
 Mais cela n'est plus forcément vrai dans le cas multi-processeur.\\
 
+
 %todo add graph here
 
+%
+%Une solution proposée pour éviter l'effet Dhall est de modifier la méthode d'attribution 
+%des priorités. En effet, en se basant sur la laxité \ref{laxite}, 
+%le problème ne se rencontre pas. Ceci donne plutôt avantage 
+%à d'autres méthodes d'attribution, comme avec \textit{LLF} (Least Laxity First). 
+%En 
 
-Une solution proposée pour éviter l'effet Dhall est de modifier la méthode d'attribution 
-des priorités. En effet, en se basant sur la laxité \ref{laxite}, 
-le problème ne se rencontre pas. Cela pourrait donner 
-un avantage à l'algorithme \textit{PFair} ou diriger vers d'autres types de solutions.
+
 %todo add explications
 
 \subsection{Anomalies}
@@ -857,7 +873,9 @@ alors le système de tâches est ordonnançable sur $m$ processeurs
 D'autres documents encore décrivent des conditions d'ordonnançabilité et sont régulièrement 
 cités comme références comme de nombreux articles de Baker 
 \cite{baker_multiprocessor_2003} \cite{baker_analysis_2005} ou Baruah \cite{baruah_optimal_2004}
-\cite{baruah_schedulability_2008} .
+\cite{baruah_schedulability_2008}. 
+Dans cet article de Davis et Burns, les auteurs rappellent les 
+limites supérieures d'utilisation pour ces techniques \cite{davis_survey_2011}.
 
 \subsection{Il n'existe pas de stratégie en ligne optimale sans clairvoyance}
 Quelques résultats déjà connus dans la littérature viennent noircir l'espoir de trouver une 
@@ -896,9 +914,8 @@ L'article apporte plusieurs définitions importantes :
 	La P-équité (PFairness) implique que toutes les échéances soient satisfaites.
 \end{mytheorem}
 
-Ce n'est pas à proprement parler un algorithme dont le but est qu'il soit appliqué, 
-il est décrit dans la littérature comme un ordonnanceur idéal permettant 
-de prouver des propriétés importantes pour le domaine. 
+PFair est associé dans la littérature à l'idée de \textit{P-Fairness}, qui est une notion 
+idéale permettant de prouver des propriétés importantes pour le domaine. 
 L'une d'elle est que chaque ordonnanceur P-Fair est périodique. \\
 
 Il s'applique aux tâches périodiques synchrones à échéances implicites, 
@@ -906,34 +923,79 @@ et l'on connaît le temps de réalisation des tâches,
 ce qui prévient des résultats négatifs précédents contre 
 l'existence d'un ordonnanceur optimal.\\
 
+L'idée principale de cet algorithme est basée sur le taux d'utilisation de chaque tâche. 
+L'algorithme divise chaque job en sous-jobs qui devra s'exécuter dans une fenêtre de temps, 
+considérée comme sous-échéance. Dès lors, à chaque sous-échéance, 
+chaque job aura reçu la proportion de temps nécessaire. 
+Cet algorithme présente des intérêts mais aussi un inconvénient : dans certains cas, 
+l'ordonnancement provoque de nombreuses préemptions, ce qui est coûteux en terme de ressources.\\
+%todo s'assurer que j'ai parlé du fait qu'on considère ça nul mais que c'est pas nul dans la vraie vie.
+
+Toutefois, \textit{PFair} est optimal pour les tâches synchrones à échéances implicites, selon 
+la condition suivante :\\
+\begin{mydef}
+	Let $\tau$ be a periodic synchronous implicit-deadline system.
+	A PFAIR schedule exists for $\tau$ on $m$ processors if and only if:\\
+	$U(\tau) \leq m$, and $U_{max} \leq 1$ \cite{baruah_proportionate_1996}.
+\end{mydef}
+(Prenons un système synchrone périodique à échéances implicites. 
+Un ordonnanceur PFair existe pour $\tau$ sur $m$ processeurs si et seulement si:\\
+$U(\tau) \leq m$, et $U_{max} \leq 1$)\\
 
 La notion de \textit{P-Fairness} est très souvent utilisée dans la littérature et d'elle dérivent 
-de nombreuses propositions d'algorithmes, comme les classiques \textit{PF}, \textit{PD}, \textit{PD²}, \textit{ER}, 
+de nombreuses propositions d'algorithmes, comme les classiques \textit{PF} \cite{baruah_proportionate_1996}, \textit{PD}, \textit{PD²} , \textit{ER} \cite{anderson_early-release_2000}, 
 et d'autres moins "classiques" comme \textit{DP-Fair} \cite{levin_dp-fair:_2010}, 
 \textit{LB-Pfair} (Loop-Back Proportionate Fair) \cite{kramer_proportionate_2015}. 
 %todo add refs 
 Müller et Werner proposent ainsi ce schéma dans leur article de 2011 :\\
 \begin{figure}[ht]
-	\caption{Généalogie des approches P-Fair, issu de l'article de Müller et Werner\cite{muller_genealogy_2011}}
+	\caption{"Genealogy of fully dynamic scheduling algorithms with full migration.", issu de l'article de Müller et Werner\cite{muller_genealogy_2011}}
 	\includegraphics[width=10cm]{img/genealogy_pf}
 \end{figure}
 Ils précisent qu'\textit{EDF} n'est pas concerné par cette classification, mais qu'ayant 
 inspiré certaines approches, il méritait de se trouver sur cette image. 
-Nous invitons le lecteur à prendre connaissance de cet article 
-extrêmement documenté.\\
+Nous invitons le lecteur intéressé par les influences des algorithmes entre eux 
+à prendre connaissance de cet article extrêmement documenté.\\
 
-De la lecture de ces articles, il ressort qu'une partie non négligeable d'entre eux 
-est de parution récente, ce qui montre l'intérêt scientifique 
-actuel pour ce type d'algorithmes. 
+De la lecture des articles, il ressort qu'une partie non négligeable d'entre eux 
+est de parution récente, ce qui montre l'intérêt scientifique actuel pour ce type d'algorithmes. 
 Bien évidemment, les propositions diffèrent par certaines propriétés. Par exemple, 
 \textit{LB-Pfair} est orienté vers les systèmes critiques tolérants aux erreurs. 
 
 \subsection{EDF-k}
 
+En 2003, Goossens et al. proposent l'algorithme \textit{EDF-k} \cite{goossens_priority-driven_2003}, 
+dont l'idée principale est d'être basé sur la priorité. 
+La définition de \textit{Priority-driven Algorithm} (axé sur les priorités) 
+est donnée par Ha et Liu en 1994 :
+\begin{mydef}
+	A Scheduling algorithm is said to be a priority driven scheduling algorithm if and 
+	only if it satisfies the condition 
+	that for every pair of jobs $J_i$ and $J_j$, if $J_i$ has a higher priority than $J_j$ at 
+	some instant in time, then $J_i$ always has higher priority than $J_j$.
+\end{mydef}
+(Un algorithme d'ordonnancement est considéré comme axé sur les priorités si et seulement si il 
+satisfait la condition suivante que pour chaque paire $J_i$ et $J_j$, si $J_i$ a une plus 
+grande priorité que $J_j$ à un instant, $J_i$ a alors toujours une plus grande priorité 
+que $J_j$.)\\
+Suivant cette idée, \textit{EDF} est axé sur les priorités, là où \textit{PF} ne l'est pas.\\
 
+Reprenant l'idée précédente de \textit{EDF-US} dont certaines tâches étaient de priorité 
+supérieures, et d'autres de priorité simplement assignées par \textit{EDF} "classique", 
+le nombre $k$ représente le nombre stable de tâches ($-1$) concernées par ces priorités 
+supérieures. En d'autres termes, \textit{EDF-k} donne la priorité la plus élevée à 
+$k - 1$ tâches, tandis que les autres sont ordonnancées suivant \textit{EDF}.\\
 
-\subsection{DP-WRAP}
+L'article propose une équation dont on dérive la valeur optimale de $k$, et où l'on peut 
+atteindre $m$ le plus petit, cette valeur étant améliorée par rapport à \textit{EDF-US}.\\
+
+Une autre approche consiste à considérer la \ref{laxite}{laxité} pour modifier \textit{EDF}. 
+Ainsi, l'idée d'\textit{EDZL} (Earliest Deadline until Zero Laxity) \cite{cirinei_edzl_2007} ou encore d'EDCL \cite{kato_real-time_2007}
+(Earliest Deadline Critical Laxity). \\
+
 \subsection{RUN}
+
+
 \subsection{U-EDF}
 
 \subsection{Tableau de synthèse des algorithmes globaux et semi-globaux}
