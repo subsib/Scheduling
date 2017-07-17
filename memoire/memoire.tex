@@ -947,7 +947,6 @@ La notion de \textit{P-Fairness} est très souvent utilisée dans la littératur
 de nombreuses propositions d'algorithmes, comme les classiques \textit{PF} \cite{baruah_proportionate_1996}, \textit{PD}, \textit{PD²} , \textit{ER} \cite{anderson_early-release_2000}, 
 et d'autres moins "classiques" comme \textit{DP-Fair} \cite{levin_dp-fair:_2010}, 
 \textit{LB-Pfair} (Loop-Back Proportionate Fair) \cite{kramer_proportionate_2015}. 
-%todo add refs 
 Müller et Werner proposent ainsi ce schéma dans leur article de 2011 :\\
 \begin{figure}[ht]
 	\caption{"Genealogy of fully dynamic scheduling algorithms with full migration.", issu de l'article de Müller et Werner\cite{muller_genealogy_2011}}
@@ -962,9 +961,11 @@ De la lecture des articles, il ressort qu'une partie non négligeable d'entre eu
 est de parution récente, ce qui montre l'intérêt scientifique actuel pour ce type d'algorithmes. 
 Bien évidemment, les propositions diffèrent par certaines propriétés. Par exemple, 
 \textit{LB-Pfair} est orienté vers les systèmes critiques tolérants aux erreurs. 
+Un enjeu très important de ce grand nombre d'algorithmes est de trouver une méthode qui 
+garantisse l'optimalité pour la classe sporadique, tout en conservant de bonnes performances. 
 
 \subsection{EDF-k}
-
+%todo vérif la classe de tâches optimale pour EDF-k
 En 2003, Goossens et al. proposent l'algorithme \textit{EDF-k} \cite{goossens_priority-driven_2003}, 
 dont l'idée principale est d'être basé sur la priorité. 
 La définition de \textit{Priority-driven Algorithm} (axé sur les priorités) 
@@ -994,6 +995,16 @@ Une autre approche consiste à considérer la \ref{laxite}{laxité} pour modifie
 Ainsi, l'idée d'\textit{EDZL} (Earliest Deadline until Zero Laxity) \cite{cirinei_edzl_2007} ou encore d'EDCL \cite{kato_real-time_2007}
 (Earliest Deadline Critical Laxity). \\
 
+\subsection{U-EDF}
+\textit{U-EDF} est présenté en 2011 par Nelissen et al. \cite{nelissen_reducing_2011}. Il n'est -- contrairement à un grand nombre d'algorithmes -- pas "\textit{P-Fair}". 
+Il prend en charge les systèmes périodiques à échéances implicites, et est optimal pour cette classe. 
+Tout d'abord, la preuve de son optimalité se limite aux tâches périodiques dont on a dit plus haut qu'elles 
+ne représentaient pas la majorité des classes e tâches des systèmes embarqués. 
+En 2012, la preuve de son optimalité est élargie aux systèmes sporadiques par  Nelissen et al. \cite{nelissen_u-edf:_2012}. Le principal but de cet algorithme est de réduire le nombre de préemptions, 
+ce qui est un grand inconvénient de l'approche globale. \\
+L'idée principale d'\textit{U-EDF} est 
+
+
 \subsection{RUN}
 Reduction to UNiprocessor (\textit{RUN}) est un algorithme présenté par Regnier et al. en 2013 \cite{regnier_multiprocessor_2013}. 
 Cet algorithme est appliqué aux systèmes périodiques préemptifs à tâches indépendantes à 
@@ -1005,10 +1016,33 @@ en suivant deux opérations :\\
     \item Une opération "\textit{Dual}"
     \item Une opération \textit{Pack}
 \end{itemize}
+Un \textit{Dual} se construit par complémentarité avec un \textit{Primal}, dont les règles de constructions sont 
+données dans l'article, et qui -- globalement -- consiste en ?? %TODO add here
+Un serveur est chargé d'ordonnancer chaque sous-système. Celui-ci fonctionne à l'aide 
+d'\textit{EDF}, dont les avantages nombreux ont déjà été évoqués plus tôt dans ce document. 
+Il n'est pas évident à la lecture de l'article de comprendre en quoi 
+diffère l'approche de \textit{RUN} par rapport à un ordonnanceur 
+partitionné qui donnerait lieu à des systèmes ordonnancés à l'aide d'\textit{EDF}. 
+En réalité, \textit{RUN} n'est pas un algorithme global, mais plutôt 
+semi-partitionné, et la différence tient particulièrement du fait que les systèmes ne sont pas 
+gérés par des processeurs distincts mais par des serveurs.  
+Les auteurs insistent sur les avantages théoriques de RUN, qui devraient motiver une implémentation 
+pratique afin de tester ses avantages. Cette implémentation a été faite 
+\cite{compagnin_putting_2014} sur $LITMUS^{RT}$, et dont les résultats demandent à 
+être confirmés mais montrent les bonnes performances sur ce système.\\
+
+\textit{RUN} -- malgré son apparition récente -- a déjà des successeurs. \textit{QPS} est un algorithme 
+également semi-partitionné, mais à la différence de RUN, il peut ordonnancer les systèmes 
+de tâches indépendantes sporadiques à échéances implicites. 
+Il est décrit dans un article de Massa et al. \cite{massa_outstanding_2014} en 2014. 
+Comme pour \textit{RUN}, \textit{QPS} génère des sous-ensembles de tâches qui seront ordonnancés 
+selon \textit{EDF} par des serveurs. Les auteurs présentent l'avantage d'une approche semi-partitionnée, 
+qui fait un compromis entre les avantages de l'approche partitionnée et ceux de l'approche globale 
+mais \textit{RUN} comporte quant à lui l'inconvénient de ne pas pouvoir s'appliquer aux tâches sporadiques. C'est ce qui explique la nécessité de l'existence de \textit{QPS}.
 
 
 
-\subsection{U-EDF}
+
 
 \subsection{Tableau de synthèse des algorithmes globaux et semi-globaux}
 
