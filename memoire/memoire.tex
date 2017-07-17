@@ -950,7 +950,7 @@ et d'autres moins "classiques" comme \textit{DP-Fair} \cite{levin_dp-fair:_2010}
 Müller et Werner proposent ainsi ce schéma dans leur article de 2011 :\\
 \begin{figure}[ht]
 	\caption{"Genealogy of fully dynamic scheduling algorithms with full migration.", issu de l'article de Müller et Werner\cite{muller_genealogy_2011}}
-	\includegraphics[width=10cm]{img/genealogy_pf}
+	\includegraphics[width=10cm]{img/genealogy_pf.ps}
 \end{figure}
 Ils précisent qu'\textit{EDF} n'est pas concerné par cette classification, mais qu'ayant 
 inspiré certaines approches, il méritait de se trouver sur cette image. 
@@ -994,7 +994,16 @@ Ainsi, l'idée d'\textit{EDZL} (Earliest Deadline until Zero Laxity) \cite{cirin
 (Earliest Deadline Critical Laxity). \\
 
 \subsection{RUN}
-
+Reduction to UNiprocessor (\textit{RUN}) est un algorithme présenté par Regnier et al. en 2013 \cite{regnier_multiprocessor_2013}. 
+Cet algorithme est appliqué aux systèmes périodiques préemptifs à tâches indépendantes à 
+échéances implicites. \textit{RUN} -- contrairement aux exemples vus précédemment -- n'applique pas 
+la \textit{P-Fairness}, et parvient à réduire significativement le nombre de préemptions. 
+\textit{RUN} réduit un ensemble de tâches en plus petits ensembles plus facilement ordonnançables 
+en suivant deux opérations :\\
+\begin{itemize}
+    \item Une opération "\textit{Dual}"
+    \item Une opération \textit{Pack}
+\end{itemize}
 
 \subsection{U-EDF}
 

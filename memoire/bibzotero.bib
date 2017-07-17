@@ -5,35 +5,29 @@
 	author = {{Center for History and New Media}}
 }
 
-@article{baruah_schedulability_2008,
-	title = {Schedulability analysis of global edf},
-	volume = {38},
-	issn = {0922-6443, 1573-1383},
-	url = {http://link.springer.com/10.1007/s11241-007-9047-9},
-	doi = {10.1007/s11241-007-9047-9},
-	language = {en},
-	number = {3},
+@inproceedings{compagnin_putting_2014,
+	title = {Putting {RUN} into {Practice}: {Implementation} and {Evaluation}},
+	shorttitle = {Putting {RUN} into {Practice}},
+	url = {http://ieeexplore.ieee.org/document/6932591/},
+	doi = {10.1109/ECRTS.2014.27},
 	urldate = {2017-07-06},
-	journal = {Real-Time Systems},
-	author = {Baruah, Sanjoy and Baker, Theodore},
-	month = apr,
-	year = {2008},
-	pages = {223--235}
+	publisher = {IEEE},
+	author = {Compagnin, Davide and Mezzetti, Enrico and Vardanega, Tullio},
+	month = jul,
+	year = {2014},
+	pages = {75--84}
 }
 
-@article{goossens_priority-driven_2003,
-	title = {Priority-{Driven} {Scheduling} of {Periodic} {Task} {Systems} on {Multiprocessors}},
-	volume = {25},
-	issn = {1573-1383},
-	url = {http://dx.doi.org/10.1023/A:1025120124771},
-	doi = {10.1023/A:1025120124771},
-	abstract = {The scheduling of systems of periodic tasks upon multiprocessor platforms is considered. Utilization-based conditions are derived for determining whether a periodic task system meets all deadlines when scheduled using the earliest deadline first scheduling algorithm (EDF) upon a given multiprocessor platform. A new priority-driven algorithm is proposed for scheduling periodic task systems upon multiprocessor platforms: this algorithm is shown to successfully schedule some task systems for which EDF may fail to meet all deadlines.},
-	number = {2},
-	journal = {Real-Time Systems},
-	author = {Goossens, Joël and Funk, Shelby and Baruah, Sanjoy},
-	month = sep,
-	year = {2003},
-	pages = {187--205}
+@phdthesis{ndoye_ordonnancement_2014,
+	type = {Thesis},
+	title = {Ordonnancement temps réel préemptif multiprocesseur avec prise en compte du coût du système d’exploitation},
+	url = {https://tel.archives-ouvertes.fr/tel-00978366/document},
+	abstract = {Danscettethèsenousétudionsleproblèmed’ordonnancementtempsréelmultiprocesseur préemptif avec prise en compte du coût exact du système d’exploitation. Ce coût est formé de deux parties : une partie facile à déterminer, correspondant au coût de l’ordonnanceur et une partie difﬁcile à déterminer, correspondant au coût de la préemption. Cette difﬁculté est due au fait qu’une préemption peut en engendrer une autre, pouvant ainsi créer un phénomène d’avalanche. Dans un premier temps, nous avons étudié l’ordonnancement hors ligne multiprocesseur de tâches indépendantes avec prise en compte du coût exact de la préemption et proposé une analyse d’ordonnançabilité fondée sur une heuristique d’ordonnancement multiprocesseur. Cette heuristique utilise la stratégie d’ordonnancement multiprocesseur par partitionnement. Pour prendre en compte le coût exact de la préemption sur chaque processeur nous avons utilisé la condition d’ordonnançabilitéproposéeparMeumeuetSorel.Cetteconditiond’ordonnançabilité pourdestâchesàprioritésﬁxes,estbaséesuruneopérationbinaired’ordonnancement qui permet de compter le nombre exact de préemption et d’ajouter leur coût dans l’analyse d’ordonnançabilité des tâches. L’heuristique proposée permet de maximiser le facteur d’utilisation restant aﬁn de répartir équitablement les tâches sur les processeurs et de réduire leur temps de réponse. Elle produit une table d’ordonnancement hors ligne. Dans un second temps, nous avons étudié l’ordonnancement hors ligne multiprocesseur de tâches dépendantes avec prise en compte du coût exact de la préemption. Puisque la condition d’ordonnançabilité utilisée pour ordonnancer les tâches indépendantes ne s’applique qu’à des tâches à priorités ﬁxes, elle ne permet pas de gérer les inversions de priorités que peuvent entraîner les tâches dépendantes. Nous avons donc proposé une nouvelle condition d’ordonnançabilité pour des tâches à priorités dynamiques. Elle prend en compte le coût exact de la préemption et les dépendances sans aucune perte de données. Ensuite en utilisant toujours la stratégie d’ordonnancement par partitionnement, nous avons proposé pour des tâches dépendantes une heuristique d’ordonnancement multiprocesseur qui réutilise cette nouvelle condition d’ordonnançabilité au niveau de chaqueprocesseur.Cetteheuristiqued’ordonnancementprendencomptelescoûts de communication inter-processeurs. Elle permet aussi de minimiser sur chaque processeur le makespan (temps total d’exécution) des tâches. Cette heuristique produit pour chaque processeur une table d’ordonnancement hors ligne contenant les dates de début et de ﬁn de chaque tâches et de chaque commmunication interprocesseur. En supposant que nous avons une architecture multiprocesseur de type dirigée par le temps (Time Trigger TT) pour laquelle tous les processeurs ont une référence de temps unique, nous avons proposé pour chacun des processeurs un ordonnanceur en ligne qui utilise la table d’ordonnancement produite lors de l’ordonnancement hors ligne. Cet ordonnanceur en ligne a l’avantage d’avoir un coût constant et facile à déterminer de manière exacte. En effet il correspond uniquement au temps de lecture dans la table d’ordonnancement pour obtenir la tâche sélectionnée lors de l’analyse d’ordonnançabilité hors ligne, alors que dans les “ordonnanceurs classiques” en ligne ce coût correspond à mettre à jour la liste des tâches qui sont dans l’état prêt à l’exécution puis à sélectionner une tâche selon un algorithme, par exemple RM, DM, EDF, etc. Il varie donc avec le nombre de tâches prêtes à s’exécuter qui change d’une invocation à l’autre de l’ordonnanceur. C’est ce coût qui est utilisé dans les analyses d’ordonnançabilités évoquées ci-dessus. Un autre avantage est qu’il n’est pas nécessaire de synchroniser l’accès auxmémoiresdedonnéespartagéesparplusieurstâches,carcettesynchronisation a été déjà effectuée lors de l’analyse d’ordonnançabilité hors ligne.},
+	language = {fr},
+	school = {UNIVERSITÉ PARIS-SUD, Sciences et Technologie de l’Information, des Télécommunications et des Systèmes INRIA},
+	author = {Ndoye, Falou},
+	month = mar,
+	year = {2014}
 }
 
 @inproceedings{levin_dp-fair:_2010,
@@ -48,6 +42,17 @@
 	month = jul,
 	year = {2010},
 	pages = {3--13}
+}
+
+@techreport{goossens_optimal_2016,
+	title = {Optimal {Scheduling} of {Periodic} {Gang} {Tasks}},
+	abstract = {The gang scheduling of parallel implicit-deadline periodic task systems upon identical multiprocessor platforms is considered. In this scheduling problem, parallel tasks use several processors simultaneously. We propose two DPFAIR (deadline partitioning) algorithms that schedule all jobs in every interval of time delimited by two subsequent deadlines. These algorithms define a static schedule pattern that is stretched at run-time in every interval of the DPFAIR schedule. The first algorithm is based on linear programming and is the first one to be proved  optimal for the considered gang scheduling problem. Furthermore, it runs in polynomial time for a fixed number m of processors and an efficient implementation is fully detailed. The second algorithm is an approximation algorithm based on a fixed-priority rule that is competitive under resource augmentation analysis in order to compute an optimal schedule pattern. Precisely, its speedup factor is bounded by (2-1/m). Both algorithms are also evaluated through intensive numerical experiments.},
+	language = {en},
+	institution = {Leibniz Transactions on Embedded Systems},
+	author = {Goossens, Joël and Richard, Pascal},
+	month = jun,
+	year = {2016},
+	note = {DOI: 10.4230/LITES-v003-i001-a004}
 }
 
 @article{laili_ranking_2013,
@@ -66,53 +71,39 @@
 	pages = {448--463}
 }
 
-@article{wang_energy-efficient_2012,
-	title = {Energy-efficient tasks scheduling algorithm for real-time multiprocessor embedded systems},
-	volume = {62},
-	issn = {0920-8542, 1573-0484},
-	url = {http://link.springer.com/10.1007/s11227-012-0771-0},
-	doi = {10.1007/s11227-012-0771-0},
-	language = {en},
-	number = {2},
+@inproceedings{nelissen_u-edf:_2012,
+	title = {U-{EDF}: {An} {Unfair} {But} {Optimal} {Multiprocessor} {Scheduling} {Algorithm} for {Sporadic} {Tasks}},
+	isbn = {978-1-4673-2032-0},
+	shorttitle = {U-{EDF}},
+	url = {http://ieeexplore.ieee.org/document/6257555/},
+	doi = {10.1109/ECRTS.2012.36},
 	urldate = {2017-07-06},
-	journal = {The Journal of Supercomputing},
-	author = {Wang, Hwang-Cheng and Woungang, Isaac and Yao, Cheng-Wen and Anpalagan, Alagan and Obaidat, Mohammad S.},
-	month = nov,
+	publisher = {IEEE},
+	author = {Nelissen, Geoffrey and Berten, Vandy and Nelis, Vincent and Goossens, Joel and Milojevic, Dragomir},
+	month = jul,
 	year = {2012},
-	pages = {967--988}
+	pages = {13--23}
 }
 
-@article{dilworth_methods_1975,
-	title = {Methods to improve detection of pneumococci in respiratory secretions},
-	volume = {2},
-	issn = {0095-1137},
-	abstract = {Simple methods to enhance the detection of pneumococci in respiratory secretions are needed. Sheep blood agar containing 5 mug of gentamicin per ml was more often positive (89\%) than either standard sheep blood agar (54\%) or mouse inoculation (65\%) in recovering pneumococci from 62 adult and pediatric patients. In adults, the direct quellung test on sputum smear was a rapid, sensitive method for predicting subsequent pneumococcal isolation by culture (19 of 20 patients, 95\%). The quellung test and gentamicin plate show improved sensitivity over current techniques for pneumococcal detection and can be recommended for general use.},
-	language = {eng},
-	number = {5},
-	journal = {Journal of Clinical Microbiology},
-	author = {Dilworth, J. A. and Stewart, P. and Gwaltney, J. M. and Hendley, J. O. and Sande, M. A.},
-	month = nov,
-	year = {1975},
-	pmid = {421},
-	pmcid = {PMC274207},
-	keywords = {Adult, Agar, Animals, Bacteriological Techniques, Blood, Child, Child, Preschool, Evaluation Studies as Topic, Gentamicins, Humans, Pharynx, Sheep, Sputum, Streptococcus pneumoniae},
-	pages = {453--455}
-}
-
-@article{fisher_optimal_2010,
-	title = {Optimal online multiprocessor scheduling of sporadic real-time tasks is impossible},
-	volume = {45},
-	issn = {0922-6443, 1573-1383},
-	url = {http://link.springer.com/10.1007/s11241-010-9092-7},
-	doi = {10.1007/s11241-010-9092-7},
-	language = {en},
-	number = {1-2},
+@inproceedings{kato_semi-partitioned_2009,
+	title = {Semi-partitioned {Fixed}-{Priority} {Scheduling} on {Multiprocessors}},
+	isbn = {978-0-7695-3636-1},
+	url = {http://ieeexplore.ieee.org/document/4840564/},
+	doi = {10.1109/RTAS.2009.9},
 	urldate = {2017-07-06},
-	journal = {Real-Time Systems},
-	author = {Fisher, Nathan and Goossens, Joël and Baruah, Sanjoy},
-	month = jun,
-	year = {2010},
-	pages = {26--71}
+	publisher = {IEEE},
+	author = {Kato, Shinpei and Yamasaki, Nobuyuki},
+	month = apr,
+	year = {2009},
+	pages = {23--32}
+}
+
+@misc{paolillo_new_nodate,
+	title = {A {New} {Configurable} and {Parallel} {Embedded} {Real}-time {Micro}-{Kernel} for {Multi}-core platforms},
+	url = {https://people.mpi-sws.org/~bbb/events/ospert15/pdf/ospert15-p25.pdf},
+	language = {en},
+	publisher = {PARTS Research Center, Universite Libre de Bruxelles, Mangogem S.A. and HIPPEROS S.A},
+	author = {Paolillo, Antonio and Desenfans, Olivier and Svoboda, Vladimir and Goossens, Joël and Rodriguez, Ben}
 }
 
 @article{audsley_hard_1991,
@@ -132,61 +123,20 @@
 	pages = {127--132}
 }
 
-@incollection{wah_real-time_2009,
-	address = {Hoboken, NJ, USA},
-	title = {Real-{Time} {Systems}: {An} {Introduction} and the {State}-of-the-{Art}},
-	isbn = {978-0-470-05011-8},
-	shorttitle = {Real-{Time} {Systems}},
-	url = {http://doi.wiley.com/10.1002/9780470050118.ecse344},
+@article{milligan_use_1996,
+	title = {The use of cache memory in real-time systems},
+	volume = {4},
+	issn = {09670661},
+	url = {http://linkinghub.elsevier.com/retrieve/pii/0967066196001542},
+	doi = {10.1016/0967-0661(96)00154-2},
 	language = {en},
+	number = {10},
 	urldate = {2017-07-06},
-	booktitle = {Wiley {Encyclopedia} of {Computer} {Science} and {Engineering}},
-	publisher = {John Wiley \& Sons, Inc.},
-	author = {Kavi, Krishna and Akl, Robert and Hurson, Ali},
-	editor = {Wah, Benjamin W.},
-	month = mar,
-	year = {2009},
-	note = {DOI: 10.1002/9780470050118.ecse344}
-}
-
-@inproceedings{hong_-line_1988,
-	title = {On-line scheduling of real-time tasks},
-	isbn = {978-0-8186-4894-6},
-	url = {http://ieeexplore.ieee.org/document/51119/},
-	doi = {10.1109/REAL.1988.51119},
-	urldate = {2017-07-06},
-	publisher = {IEEE Comput. Soc. Press},
-	author = {Hong, K.S. and Leung, J.Y.-T.},
-	year = {1988},
-	pages = {244--250}
-}
-
-@techreport{goossens_optimal_2016,
-	title = {Optimal {Scheduling} of {Periodic} {Gang} {Tasks}},
-	abstract = {The gang scheduling of parallel implicit-deadline periodic task systems upon identical multiprocessor platforms is considered. In this scheduling problem, parallel tasks use several processors simultaneously. We propose two DPFAIR (deadline partitioning) algorithms that schedule all jobs in every interval of time delimited by two subsequent deadlines. These algorithms define a static schedule pattern that is stretched at run-time in every interval of the DPFAIR schedule. The first algorithm is based on linear programming and is the first one to be proved  optimal for the considered gang scheduling problem. Furthermore, it runs in polynomial time for a fixed number m of processors and an efficient implementation is fully detailed. The second algorithm is an approximation algorithm based on a fixed-priority rule that is competitive under resource augmentation analysis in order to compute an optimal schedule pattern. Precisely, its speedup factor is bounded by (2-1/m). Both algorithms are also evaluated through intensive numerical experiments.},
-	language = {en},
-	institution = {Leibniz Transactions on Embedded Systems},
-	author = {Goossens, Joël and Richard, Pascal},
-	month = jun,
-	year = {2016},
-	note = {DOI: 10.4230/LITES-v003-i001-a004}
-}
-
-@misc{paolillo_new_nodate,
-	title = {A {New} {Configurable} and {Parallel} {Embedded} {Real}-time {Micro}-{Kernel} for {Multi}-core platforms},
-	url = {https://people.mpi-sws.org/~bbb/events/ospert15/pdf/ospert15-p25.pdf},
-	language = {en},
-	publisher = {PARTS Research Center, Universite Libre de Bruxelles, Mangogem S.A. and HIPPEROS S.A},
-	author = {Paolillo, Antonio and Desenfans, Olivier and Svoboda, Vladimir and Goossens, Joël and Rodriguez, Ben}
-}
-
-@misc{rodriguez_paul_multi-criteria_2013,
-	title = {Multi-{Criteria} {Evaluation} of {Partitioned} {EDF}-{VD} for {Mixed}-{Criticality} {Systems} {Upon} {Identical} {Processors}},
-	url = {http://www-users.cs.york.ac.uk/~robdavis/wmc2013/paper11.pdf},
-	language = {en},
-	urldate = {2017-05-03},
-	author = {Rodriguez, Paul and George, Laurent and Abdeddaïm, Yasmina and Goossens, Joël},
-	year = {2013}
+	journal = {Control Engineering Practice},
+	author = {Milligan, M.K.J. and Cragon, H.G.},
+	month = oct,
+	year = {1996},
+	pages = {1435--1442}
 }
 
 @article{ramamritham_efficient_1990,
@@ -204,15 +154,44 @@
 	pages = {184--194}
 }
 
-@phdthesis{nelissen_geoffrey_efficient_2013,
-	title = {Efficient optimal multiprocessor scheduling algorithms for real-time systems},
-	url = {http://hdl.handle.net/2013/ULB-DIPOT:oai:dipot.ulb.ac.be:2013/209528},
+@article{baruah_schedulability_2008,
+	title = {Schedulability analysis of global edf},
+	volume = {38},
+	issn = {0922-6443, 1573-1383},
+	url = {http://link.springer.com/10.1007/s11241-007-9047-9},
+	doi = {10.1007/s11241-007-9047-9},
 	language = {en},
-	urldate = {2017-06-07},
-	school = {Université libre de Bruxelles, Ecole polytechnique de Bruxelles},
-	author = {Nelissen, Geoffrey},
-	month = jan,
-	year = {2013}
+	number = {3},
+	urldate = {2017-07-06},
+	journal = {Real-Time Systems},
+	author = {Baruah, Sanjoy and Baker, Theodore},
+	month = apr,
+	year = {2008},
+	pages = {223--235}
+}
+
+@techreport{zhang_towards_2011,
+	title = {Towards the {Implementation} and {Evaluation} of {Semi}-{Partitioned} {Multi}-{Core} {Scheduling}},
+	abstract = {Recent theoretical studies have shown that partitioning-based scheduling has better real-time performance than other scheduling paradigms like global scheduling on multi-cores. Especially, a class of partitioning-based scheduling algorithms (called semi-partitioned scheduling), which allow to split a small number of tasks among different cores, offer very high resource utilization, and appear to be a promising solution for scheduling real-time systems on multi-cores. The major concern about the semi-partitioned scheduling is that due to the task splitting, some tasks will migrate from one core to another at run time, and might incur higher context switch overhead than partitioned scheduling. So one would suspect whether the extra overhead caused by task splitting would counteract the theoretical performance gain of semi-partitioned scheduling.
+
+In this work, we implement a semi-partitioned scheduler in the Linux operating system, and run experiments on a Intel Core-i7 4-cores machine to measure the real overhead in both partitioned scheduling and semi-partitioned scheduling. Then we integrate the obtained overhead into the state-of-the-art partitioned scheduling and semi-partitioned scheduling algorithms, and conduct empirical comparison of their real-time performance. Our results show that the extra overhead caused by task splitting in semi-partitioned scheduling is very low, and its effect on the system schedulability is very small. Semi-partitioned scheduling indeed outperforms partitioned scheduling in realistic systems.},
+	language = {eng},
+	institution = {Schloss Dagstuhl - Leibniz-Zentrum fuer Informatik GmbH, Wadern/Saarbruecken, Germany},
+	author = {Zhang, Yi and Guan, Nan and Yi, Wang and Herbstritt, Marc},
+	year = {2011},
+	note = {DOI: 10.4230/OASIcs.PPES.2011.42}
+}
+
+@inproceedings{hong_-line_1988,
+	title = {On-line scheduling of real-time tasks},
+	isbn = {978-0-8186-4894-6},
+	url = {http://ieeexplore.ieee.org/document/51119/},
+	doi = {10.1109/REAL.1988.51119},
+	urldate = {2017-07-06},
+	publisher = {IEEE Comput. Soc. Press},
+	author = {Hong, K.S. and Leung, J.Y.-T.},
+	year = {1988},
+	pages = {244--250}
 }
 
 @article{phavorin_online_2017,
@@ -228,6 +207,99 @@
 	year = {2017}
 }
 
+@phdthesis{bimbard_franck_dimensionnement_2007,
+	address = {France},
+	title = {Dimensionnement temporel de systèmes embarqués  : application à {OSEK}},
+	abstract = {Cette thèse traite du dimensionnement temps réel de systèmes embarqués. Nous proposons un ensemble d’outils algorithmiques permettant de garantir, avant son déploiement, qu’une application, une fois installée sur une architecture monoprocesseur donnée, sera exécutée en temps réel. Nous nous plaçons dans un contexte temps réel strict avec des échéances de terminaison au plus tard. De plus, nous ne considérons que des applications constituées de tâches à échéance arbitraire, périodiques, préemptives ou non, indépendantes et non concrètes. Le standard OSEK, étudié dans cette thèse, est basé sur un ordonnancement FP/FIFO et prescrit le mécanisme du plafond de priorité pour protéger les ressources. Cette étude commence naturellement par l’identification et la caractérisation des charges dues à notre exécutif OSEK. Puis, nous proposons des conditions de faisabilité, intégrant les charges précédentes, valables pour tout ensemble de tâches ordonnancées FP/FIFO et se partageant, au plus, une ressource. Bien que le standard OSEK n’admette que des priorités fixes, nous montrons comment mettre en oeuvre un ordonnancement EDF pour des tâches n’utilisant, cette fois, aucune ressource. Là encore, de nouvelles conditions de faisabilité, intégrant les charges cumulées du système d’exploitation et de notre implémentation, sont présentées. Enfin, nous expérimentons les conditions de faisabilité précédentes sur une plateforme réelle. Les résultats confirment que les charges dues au système d’exploitation ne peuvent être négligées. Ces expérimentations montrent également que nos conditions de faisabilité s’avèrent opérationnelles pour le dimensionnement temps réel d’applications embarquées.},
+	language = {français},
+	school = {Conservatoire national des arts et métiers},
+	author = {Bimbard, Franck and Gressier-Soudan, Eric and George, Laurent},
+	year = {2007}
+}
+
+@article{fisher_optimal_2010,
+	title = {Optimal online multiprocessor scheduling of sporadic real-time tasks is impossible},
+	volume = {45},
+	issn = {0922-6443, 1573-1383},
+	url = {http://link.springer.com/10.1007/s11241-010-9092-7},
+	doi = {10.1007/s11241-010-9092-7},
+	language = {en},
+	number = {1-2},
+	urldate = {2017-07-06},
+	journal = {Real-Time Systems},
+	author = {Fisher, Nathan and Goossens, Joël and Baruah, Sanjoy},
+	month = jun,
+	year = {2010},
+	pages = {26--71}
+}
+
+@phdthesis{fauberteau_temporal_nodate,
+	title = {Temporal safety for real-time multiprocessor systems},
+	url = {https://pastel.archives-ouvertes.fr/tel-00668537},
+	school = {Université Paris-Est},
+	author = {Fauberteau, Frédéric}
+}
+
+@article{wang_energy-efficient_2012,
+	title = {Energy-efficient tasks scheduling algorithm for real-time multiprocessor embedded systems},
+	volume = {62},
+	issn = {0920-8542, 1573-0484},
+	url = {http://link.springer.com/10.1007/s11227-012-0771-0},
+	doi = {10.1007/s11227-012-0771-0},
+	language = {en},
+	number = {2},
+	urldate = {2017-07-06},
+	journal = {The Journal of Supercomputing},
+	author = {Wang, Hwang-Cheng and Woungang, Isaac and Yao, Cheng-Wen and Anpalagan, Alagan and Obaidat, Mohammad S.},
+	month = nov,
+	year = {2012},
+	pages = {967--988}
+}
+
+@phdthesis{kermia_ordonnancement_2009,
+	type = {Thesis},
+	title = {Ordonnancement temps réel multiprocesseur de tâches non-préemptives avec contraintes de précédence, de périodicité stricte et de latence},
+	language = {fr},
+	school = {Université Paris XI, UFR scientifique d'Orsay},
+	author = {Kermia, Omar},
+	year = {2009}
+}
+
+@misc{rodriguez_paul_multi-criteria_2013,
+	title = {Multi-{Criteria} {Evaluation} of {Partitioned} {EDF}-{VD} for {Mixed}-{Criticality} {Systems} {Upon} {Identical} {Processors}},
+	url = {http://www-users.cs.york.ac.uk/~robdavis/wmc2013/paper11.pdf},
+	language = {en},
+	urldate = {2017-05-03},
+	author = {Rodriguez, Paul and George, Laurent and Abdeddaïm, Yasmina and Goossens, Joël},
+	year = {2013}
+}
+
+@phdthesis{nelissen_geoffrey_efficient_2013,
+	title = {Efficient optimal multiprocessor scheduling algorithms for real-time systems},
+	url = {http://hdl.handle.net/2013/ULB-DIPOT:oai:dipot.ulb.ac.be:2013/209528},
+	language = {en},
+	urldate = {2017-06-07},
+	school = {Université libre de Bruxelles, Ecole polytechnique de Bruxelles},
+	author = {Nelissen, Geoffrey},
+	month = jan,
+	year = {2013}
+}
+
+@article{goossens_priority-driven_2003,
+	title = {Priority-{Driven} {Scheduling} of {Periodic} {Task} {Systems} on {Multiprocessors}},
+	volume = {25},
+	issn = {1573-1383},
+	url = {http://dx.doi.org/10.1023/A:1025120124771},
+	doi = {10.1023/A:1025120124771},
+	abstract = {The scheduling of systems of periodic tasks upon multiprocessor platforms is considered. Utilization-based conditions are derived for determining whether a periodic task system meets all deadlines when scheduled using the earliest deadline first scheduling algorithm (EDF) upon a given multiprocessor platform. A new priority-driven algorithm is proposed for scheduling periodic task systems upon multiprocessor platforms: this algorithm is shown to successfully schedule some task systems for which EDF may fail to meet all deadlines.},
+	number = {2},
+	journal = {Real-Time Systems},
+	author = {Goossens, Joël and Funk, Shelby and Baruah, Sanjoy},
+	month = sep,
+	year = {2003},
+	pages = {187--205}
+}
+
 @inproceedings{massa_outstanding_2014,
 	title = {{OUTSTANDING} {PAPER}: {Optimal} and {Adaptive} {Multiprocessor} {Real}-{Time} {Scheduling}: {The} {Quasi}-{Partitioning} {Approach}},
 	shorttitle = {{OUTSTANDING} {PAPER}},
@@ -239,16 +311,6 @@
 	month = jul,
 	year = {2014},
 	pages = {291--300}
-}
-
-@phdthesis{bimbard_franck_dimensionnement_2007,
-	address = {France},
-	title = {Dimensionnement temporel de systèmes embarqués  : application à {OSEK}},
-	abstract = {Cette thèse traite du dimensionnement temps réel de systèmes embarqués. Nous proposons un ensemble d’outils algorithmiques permettant de garantir, avant son déploiement, qu’une application, une fois installée sur une architecture monoprocesseur donnée, sera exécutée en temps réel. Nous nous plaçons dans un contexte temps réel strict avec des échéances de terminaison au plus tard. De plus, nous ne considérons que des applications constituées de tâches à échéance arbitraire, périodiques, préemptives ou non, indépendantes et non concrètes. Le standard OSEK, étudié dans cette thèse, est basé sur un ordonnancement FP/FIFO et prescrit le mécanisme du plafond de priorité pour protéger les ressources. Cette étude commence naturellement par l’identification et la caractérisation des charges dues à notre exécutif OSEK. Puis, nous proposons des conditions de faisabilité, intégrant les charges précédentes, valables pour tout ensemble de tâches ordonnancées FP/FIFO et se partageant, au plus, une ressource. Bien que le standard OSEK n’admette que des priorités fixes, nous montrons comment mettre en oeuvre un ordonnancement EDF pour des tâches n’utilisant, cette fois, aucune ressource. Là encore, de nouvelles conditions de faisabilité, intégrant les charges cumulées du système d’exploitation et de notre implémentation, sont présentées. Enfin, nous expérimentons les conditions de faisabilité précédentes sur une plateforme réelle. Les résultats confirment que les charges dues au système d’exploitation ne peuvent être négligées. Ces expérimentations montrent également que nos conditions de faisabilité s’avèrent opérationnelles pour le dimensionnement temps réel d’applications embarquées.},
-	language = {français},
-	school = {Conservatoire national des arts et métiers},
-	author = {Bimbard, Franck and Gressier-Soudan, Eric and George, Laurent},
-	year = {2007}
 }
 
 @article{regnier_multiprocessor_2013,
@@ -268,100 +330,168 @@
 	pages = {436--474}
 }
 
-@inproceedings{compagnin_putting_2014,
-	title = {Putting {RUN} into {Practice}: {Implementation} and {Evaluation}},
-	shorttitle = {Putting {RUN} into {Practice}},
-	url = {http://ieeexplore.ieee.org/document/6932591/},
-	doi = {10.1109/ECRTS.2014.27},
-	urldate = {2017-07-06},
-	publisher = {IEEE},
-	author = {Compagnin, Davide and Mezzetti, Enrico and Vardanega, Tullio},
-	month = jul,
-	year = {2014},
-	pages = {75--84}
-}
-
-@techreport{zhang_towards_2011,
-	title = {Towards the {Implementation} and {Evaluation} of {Semi}-{Partitioned} {Multi}-{Core} {Scheduling}},
-	abstract = {Recent theoretical studies have shown that partitioning-based scheduling has better real-time performance than other scheduling paradigms like global scheduling on multi-cores. Especially, a class of partitioning-based scheduling algorithms (called semi-partitioned scheduling), which allow to split a small number of tasks among different cores, offer very high resource utilization, and appear to be a promising solution for scheduling real-time systems on multi-cores. The major concern about the semi-partitioned scheduling is that due to the task splitting, some tasks will migrate from one core to another at run time, and might incur higher context switch overhead than partitioned scheduling. So one would suspect whether the extra overhead caused by task splitting would counteract the theoretical performance gain of semi-partitioned scheduling.
-
-In this work, we implement a semi-partitioned scheduler in the Linux operating system, and run experiments on a Intel Core-i7 4-cores machine to measure the real overhead in both partitioned scheduling and semi-partitioned scheduling. Then we integrate the obtained overhead into the state-of-the-art partitioned scheduling and semi-partitioned scheduling algorithms, and conduct empirical comparison of their real-time performance. Our results show that the extra overhead caused by task splitting in semi-partitioned scheduling is very low, and its effect on the system schedulability is very small. Semi-partitioned scheduling indeed outperforms partitioned scheduling in realistic systems.},
+@article{dilworth_methods_1975,
+	title = {Methods to improve detection of pneumococci in respiratory secretions},
+	volume = {2},
+	issn = {0095-1137},
+	abstract = {Simple methods to enhance the detection of pneumococci in respiratory secretions are needed. Sheep blood agar containing 5 mug of gentamicin per ml was more often positive (89\%) than either standard sheep blood agar (54\%) or mouse inoculation (65\%) in recovering pneumococci from 62 adult and pediatric patients. In adults, the direct quellung test on sputum smear was a rapid, sensitive method for predicting subsequent pneumococcal isolation by culture (19 of 20 patients, 95\%). The quellung test and gentamicin plate show improved sensitivity over current techniques for pneumococcal detection and can be recommended for general use.},
 	language = {eng},
-	institution = {Schloss Dagstuhl - Leibniz-Zentrum fuer Informatik GmbH, Wadern/Saarbruecken, Germany},
-	author = {Zhang, Yi and Guan, Nan and Yi, Wang and Herbstritt, Marc},
-	year = {2011},
-	note = {DOI: 10.4230/OASIcs.PPES.2011.42}
+	number = {5},
+	journal = {Journal of Clinical Microbiology},
+	author = {Dilworth, J. A. and Stewart, P. and Gwaltney, J. M. and Hendley, J. O. and Sande, M. A.},
+	month = nov,
+	year = {1975},
+	pmid = {421},
+	pmcid = {PMC274207},
+	keywords = {Adult, Agar, Animals, Bacteriological Techniques, Blood, Child, Child, Preschool, Evaluation Studies as Topic, Gentamicins, Humans, Pharynx, Sheep, Sputum, Streptococcus pneumoniae},
+	pages = {453--455}
 }
 
-@inproceedings{kato_semi-partitioned_2009,
-	title = {Semi-partitioned {Fixed}-{Priority} {Scheduling} on {Multiprocessors}},
-	isbn = {978-0-7695-3636-1},
-	url = {http://ieeexplore.ieee.org/document/4840564/},
-	doi = {10.1109/RTAS.2009.9},
+@incollection{wah_real-time_2009,
+	address = {Hoboken, NJ, USA},
+	title = {Real-{Time} {Systems}: {An} {Introduction} and the {State}-of-the-{Art}},
+	isbn = {978-0-470-05011-8},
+	shorttitle = {Real-{Time} {Systems}},
+	url = {http://doi.wiley.com/10.1002/9780470050118.ecse344},
+	language = {en},
 	urldate = {2017-07-06},
+	booktitle = {Wiley {Encyclopedia} of {Computer} {Science} and {Engineering}},
+	publisher = {John Wiley \& Sons, Inc.},
+	author = {Kavi, Krishna and Akl, Robert and Hurson, Ali},
+	editor = {Wah, Benjamin W.},
+	month = mar,
+	year = {2009},
+	note = {DOI: 10.1002/9780470050118.ecse344}
+}
+
+@inproceedings{kato_global_2008,
+	title = {Global {EDF}-{Based} {Scheduling} with {Efficient} {Priority} {Promotion}},
+	isbn = {978-0-7695-3349-0},
+	url = {http://ieeexplore.ieee.org/document/4617288/},
+	doi = {10.1109/RTCSA.2008.11},
+	urldate = {2017-07-14},
 	publisher = {IEEE},
 	author = {Kato, Shinpei and Yamasaki, Nobuyuki},
-	month = apr,
-	year = {2009},
-	pages = {23--32}
+	month = aug,
+	year = {2008},
+	pages = {197--206}
 }
 
-@article{milligan_use_1996,
-	title = {The use of cache memory in real-time systems},
-	volume = {4},
-	issn = {09670661},
-	url = {http://linkinghub.elsevier.com/retrieve/pii/0967066196001542},
-	doi = {10.1016/0967-0661(96)00154-2},
+@article{leung_complexity_1982,
+	title = {On the complexity of fixed-priority scheduling of periodic, real-time tasks},
+	volume = {2},
+	issn = {01665316},
+	url = {http://linkinghub.elsevier.com/retrieve/pii/0166531682900244},
+	doi = {10.1016/0166-5316(82)90024-4},
 	language = {en},
-	number = {10},
-	urldate = {2017-07-06},
-	journal = {Control Engineering Practice},
-	author = {Milligan, M.K.J. and Cragon, H.G.},
-	month = oct,
-	year = {1996},
-	pages = {1435--1442}
+	number = {4},
+	urldate = {2017-07-12},
+	journal = {Performance Evaluation},
+	author = {Leung, Joseph Y.-T. and Whitehead, Jennifer},
+	month = dec,
+	year = {1982},
+	pages = {237--250}
 }
 
-@phdthesis{fauberteau_temporal_nodate,
-	title = {Temporal safety for real-time multiprocessor systems},
-	url = {https://pastel.archives-ouvertes.fr/tel-00668537},
-	school = {Université Paris-Est},
-	author = {Fauberteau, Frédéric}
+@inproceedings{baker_multiprocessor_2003,
+	title = {Multiprocessor {EDF} and deadline monotonic schedulability analysis},
+	isbn = {978-0-7695-2044-5},
+	url = {http://ieeexplore.ieee.org/document/1253260/},
+	doi = {10.1109/REAL.2003.1253260},
+	urldate = {2017-07-13},
+	publisher = {IEEE Comput. Soc},
+	author = {Baker, T.P.},
+	year = {2003},
+	pages = {120--129}
 }
 
-@phdthesis{ndoye_ordonnancement_2014,
-	type = {Thesis},
-	title = {Ordonnancement temps réel préemptif multiprocesseur avec prise en compte du coût du système d’exploitation},
-	url = {https://tel.archives-ouvertes.fr/tel-00978366/document},
-	abstract = {Danscettethèsenousétudionsleproblèmed’ordonnancementtempsréelmultiprocesseur préemptif avec prise en compte du coût exact du système d’exploitation. Ce coût est formé de deux parties : une partie facile à déterminer, correspondant au coût de l’ordonnanceur et une partie difﬁcile à déterminer, correspondant au coût de la préemption. Cette difﬁculté est due au fait qu’une préemption peut en engendrer une autre, pouvant ainsi créer un phénomène d’avalanche. Dans un premier temps, nous avons étudié l’ordonnancement hors ligne multiprocesseur de tâches indépendantes avec prise en compte du coût exact de la préemption et proposé une analyse d’ordonnançabilité fondée sur une heuristique d’ordonnancement multiprocesseur. Cette heuristique utilise la stratégie d’ordonnancement multiprocesseur par partitionnement. Pour prendre en compte le coût exact de la préemption sur chaque processeur nous avons utilisé la condition d’ordonnançabilitéproposéeparMeumeuetSorel.Cetteconditiond’ordonnançabilité pourdestâchesàprioritésﬁxes,estbaséesuruneopérationbinaired’ordonnancement qui permet de compter le nombre exact de préemption et d’ajouter leur coût dans l’analyse d’ordonnançabilité des tâches. L’heuristique proposée permet de maximiser le facteur d’utilisation restant aﬁn de répartir équitablement les tâches sur les processeurs et de réduire leur temps de réponse. Elle produit une table d’ordonnancement hors ligne. Dans un second temps, nous avons étudié l’ordonnancement hors ligne multiprocesseur de tâches dépendantes avec prise en compte du coût exact de la préemption. Puisque la condition d’ordonnançabilité utilisée pour ordonnancer les tâches indépendantes ne s’applique qu’à des tâches à priorités ﬁxes, elle ne permet pas de gérer les inversions de priorités que peuvent entraîner les tâches dépendantes. Nous avons donc proposé une nouvelle condition d’ordonnançabilité pour des tâches à priorités dynamiques. Elle prend en compte le coût exact de la préemption et les dépendances sans aucune perte de données. Ensuite en utilisant toujours la stratégie d’ordonnancement par partitionnement, nous avons proposé pour des tâches dépendantes une heuristique d’ordonnancement multiprocesseur qui réutilise cette nouvelle condition d’ordonnançabilité au niveau de chaqueprocesseur.Cetteheuristiqued’ordonnancementprendencomptelescoûts de communication inter-processeurs. Elle permet aussi de minimiser sur chaque processeur le makespan (temps total d’exécution) des tâches. Cette heuristique produit pour chaque processeur une table d’ordonnancement hors ligne contenant les dates de début et de ﬁn de chaque tâches et de chaque commmunication interprocesseur. En supposant que nous avons une architecture multiprocesseur de type dirigée par le temps (Time Trigger TT) pour laquelle tous les processeurs ont une référence de temps unique, nous avons proposé pour chacun des processeurs un ordonnanceur en ligne qui utilise la table d’ordonnancement produite lors de l’ordonnancement hors ligne. Cet ordonnanceur en ligne a l’avantage d’avoir un coût constant et facile à déterminer de manière exacte. En effet il correspond uniquement au temps de lecture dans la table d’ordonnancement pour obtenir la tâche sélectionnée lors de l’analyse d’ordonnançabilité hors ligne, alors que dans les “ordonnanceurs classiques” en ligne ce coût correspond à mettre à jour la liste des tâches qui sont dans l’état prêt à l’exécution puis à sélectionner une tâche selon un algorithme, par exemple RM, DM, EDF, etc. Il varie donc avec le nombre de tâches prêtes à s’exécuter qui change d’une invocation à l’autre de l’ordonnanceur. C’est ce coût qui est utilisé dans les analyses d’ordonnançabilités évoquées ci-dessus. Un autre avantage est qu’il n’est pas nécessaire de synchroniser l’accès auxmémoiresdedonnéespartagéesparplusieurstâches,carcettesynchronisation a été déjà effectuée lors de l’analyse d’ordonnançabilité hors ligne.},
-	language = {fr},
-	school = {UNIVERSITÉ PARIS-SUD, Sciences et Technologie de l’Information, des Télécommunications et des Systèmes INRIA},
-	author = {Ndoye, Falou},
-	month = mar,
-	year = {2014}
+@article{buttazzo_rate_2005,
+	title = {Rate {Monotonic} vs. {EDF}: {Judgment} {Day}},
+	volume = {29},
+	issn = {0922-6443},
+	shorttitle = {Rate {Monotonic} vs. {EDF}},
+	url = {http://link.springer.com/10.1023/B:TIME.0000048932.30002.d9},
+	doi = {10.1023/B:TIME.0000048932.30002.d9},
+	language = {en},
+	number = {1},
+	urldate = {2017-07-14},
+	journal = {Real-Time Systems},
+	author = {Buttazzo, Giorgio C.},
+	month = jan,
+	year = {2005},
+	pages = {5--26}
 }
 
-@inproceedings{nelissen_u-edf:_2012,
-	title = {U-{EDF}: {An} {Unfair} {But} {Optimal} {Multiprocessor} {Scheduling} {Algorithm} for {Sporadic} {Tasks}},
-	isbn = {978-1-4673-2032-0},
-	shorttitle = {U-{EDF}},
-	url = {http://ieeexplore.ieee.org/document/6257555/},
-	doi = {10.1109/ECRTS.2012.36},
-	urldate = {2017-07-06},
+@article{baruah_optimal_2004,
+	title = {Optimal utilization bounds for the fixed-priority scheduling of periodic task systems on identical multiprocessors},
+	volume = {53},
+	issn = {0018-9340},
+	url = {http://ieeexplore.ieee.org/document/1288553/},
+	doi = {10.1109/TC.2004.16},
+	language = {en},
+	number = {6},
+	urldate = {2017-07-13},
+	journal = {IEEE Transactions on Computers},
+	author = {Baruah, S.K.},
+	month = jun,
+	year = {2004},
+	pages = {781--784}
+}
+
+@inproceedings{andersson_multiprocessor_2006,
+	title = {Multiprocessor {Scheduling} with {Few} {Preemptions}},
+	isbn = {978-0-7695-2676-8},
+	url = {http://ieeexplore.ieee.org/document/1691331/},
+	doi = {10.1109/RTCSA.2006.45},
+	urldate = {2017-07-07},
 	publisher = {IEEE},
-	author = {Nelissen, Geoffrey and Berten, Vandy and Nelis, Vincent and Goossens, Joel and Milojevic, Dragomir},
-	month = jul,
-	year = {2012},
-	pages = {13--23}
+	author = {Andersson, B. and Tovar, E.},
+	year = {2006},
+	pages = {322--334}
 }
 
-@phdthesis{kermia_ordonnancement_2009,
-	type = {Thesis},
-	title = {Ordonnancement temps réel multiprocesseur de tâches non-préemptives avec contraintes de précédence, de périodicité stricte et de latence},
-	language = {fr},
-	school = {Université Paris XI, UFR scientifique d'Orsay},
-	author = {Kermia, Omar},
-	year = {2009}
+@article{ioannides_effect_1976,
+	title = {The effect of allyl compounds on hepatic microsomal mixed function oxidation and porphyrogenesis},
+	volume = {14},
+	issn = {0009-2797},
+	abstract = {The activities of 5-aminolaevulinate (5-ALA) synthetase and of various microsomat drug-metabolising enzymes have been determined in the livers of rats pretreated with different drugs and chemicals containing the allyl group. Safrole, isosafrole and secobarbital gave rise to slight increases in 5-ALA synthetase, whereas alclophenac and triallyl cyanurate almost doubled the enzyme activity and the known porphyrogenic agents, allylisopropylacetamide (AIA) and allobarbital caused increases of 1.5- and 2.5-fold, respectively. Allobarbital induced the microsomal drug-metabolising enzymes while secobarbital had only a weak effect and alclophenac and triallyl cyanurate had no effect at all. From these results it is suggested that induction of the synthesis of cytochrome P-450 is not rate dependent on the synthesis haem and induction of porphyrin biosynthesis.},
+	language = {eng},
+	number = {3-4},
+	journal = {Chemico-Biological Interactions},
+	author = {Ioannides, C. and Parke, D. V.},
+	month = aug,
+	year = {1976},
+	pmid = {8216},
+	keywords = {5-Aminolevulinate Synthetase, Allyl Compounds, Allylisopropylacetamide, Animals, Barbiturates, Ethylmorphine-N-Demethylase, Liver, Male, Microsomes, Liver, Mixed Function Oxygenases, Oxidoreductases, Porphyrins, Rats, Safrole, Secobarbital, Structure-Activity Relationship},
+	pages = {241--249}
+}
+
+@inproceedings{funaoka_work-conserving_2008,
+	title = {Work-{Conserving} {Optimal} {Real}-{Time} {Scheduling} on {Multiprocessors}},
+	isbn = {978-0-7695-3298-1},
+	url = {http://ieeexplore.ieee.org/document/4573099/},
+	doi = {10.1109/ECRTS.2008.15},
+	urldate = {2017-07-07},
+	publisher = {IEEE},
+	author = {Funaoka, Kenji and Kato, Shinpei and Yamasaki, Nobuyuki},
+	month = jul,
+	year = {2008},
+	pages = {13--22}
+}
+
+@article{baker_analysis_2005,
+	title = {An analysis of {EDF} schedulability on a multiprocessor},
+	volume = {16},
+	issn = {1045-9219},
+	url = {http://ieeexplore.ieee.org/document/1458691/},
+	doi = {10.1109/TPDS.2005.88},
+	number = {8},
+	urldate = {2017-07-13},
+	journal = {IEEE Transactions on Parallel and Distributed Systems},
+	author = {Baker, T.P.},
+	month = aug,
+	year = {2005},
+	pages = {760--768}
 }
 
 @article{iwata_[encephalitis_1975,
@@ -379,6 +509,37 @@ In this work, we implement a semi-partitioned scheduler in the Linux operating s
 	pages = {879--887}
 }
 
+@article{baruah_proportionate_1996,
+	title = {Proportionate progress: {A} notion of fairness in resource allocation},
+	volume = {15},
+	issn = {0178-4617, 1432-0541},
+	shorttitle = {Proportionate progress},
+	url = {http://link.springer.com/10.1007/BF01940883},
+	doi = {10.1007/BF01940883},
+	language = {en},
+	number = {6},
+	urldate = {2017-07-13},
+	journal = {Algorithmica},
+	author = {Baruah, S. K. and Cohen, N. K. and Plaxton, C. G. and Varvel, D. A.},
+	month = jun,
+	year = {1996},
+	pages = {600--625}
+}
+
+@article{muller_genealogy_2011,
+	title = {Genealogy of hard real-time preemptive scheduling algorithms for identical multiprocessors},
+	volume = {1},
+	issn = {2299-1093},
+	url = {http://www.degruyter.com/view/j/comp.2011.1.issue-3/s13537-011-0023-z/s13537-011-0023-z.xml},
+	doi = {10.2478/s13537-011-0023-z},
+	number = {3},
+	urldate = {2017-07-14},
+	journal = {Open Computer Science},
+	author = {Müller, Dirk and Werner, Matthias},
+	month = jan,
+	year = {2011}
+}
+
 @article{goossens_real-time_2002,
 	title = {Real-time {Scheduling} on {Multiprocessors}},
 	doi = {10.1.1.15.9855},
@@ -389,41 +550,17 @@ In this work, we implement a semi-partitioned scheduler in the Linux operating s
 	pages = {189--204}
 }
 
-@inproceedings{cho_optimal_2006,
-	title = {An {Optimal} {Real}-{Time} {Scheduling} {Algorithm} for {Multiprocessors}},
-	isbn = {978-0-7695-2761-1},
-	url = {http://ieeexplore.ieee.org/document/4032340/},
-	doi = {10.1109/RTSS.2006.10},
-	urldate = {2017-07-07},
+@inproceedings{cirinei_edzl_2007,
+	title = {{EDZL} {Scheduling} {Analysis}},
+	isbn = {978-0-7695-2914-1},
+	url = {http://ieeexplore.ieee.org/document/4271676/},
+	doi = {10.1109/ECRTS.2007.14},
+	urldate = {2017-07-14},
 	publisher = {IEEE},
-	author = {Cho, Hyeonjoong and Ravindran, Binoy and Jensen, E.},
-	year = {2006},
-	pages = {101--110}
-}
-
-@inproceedings{andersson_multiprocessor_2006,
-	title = {Multiprocessor {Scheduling} with {Few} {Preemptions}},
-	isbn = {978-0-7695-2676-8},
-	url = {http://ieeexplore.ieee.org/document/1691331/},
-	doi = {10.1109/RTCSA.2006.45},
-	urldate = {2017-07-07},
-	publisher = {IEEE},
-	author = {Andersson, B. and Tovar, E.},
-	year = {2006},
-	pages = {322--334}
-}
-
-@inproceedings{kato_real-time_2007,
-	title = {Real-{Time} {Scheduling} with {Task} {Splitting} on {Multiprocessors}},
-	isbn = {978-0-7695-2975-2},
-	url = {http://ieeexplore.ieee.org/document/4296882/},
-	doi = {10.1109/RTCSA.2007.61},
-	urldate = {2017-07-07},
-	publisher = {IEEE},
-	author = {Kato, Shinpei and Yamasaki, Nobuyuki},
-	month = aug,
+	author = {Cirinei, Michele and Baker, Theodore P.},
+	month = jul,
 	year = {2007},
-	pages = {441--450}
+	pages = {9--18}
 }
 
 @inproceedings{funaoka_new_2008,
@@ -439,17 +576,150 @@ In this work, we implement a semi-partitioned scheduler in the Linux operating s
 	pages = {357--364}
 }
 
-@inproceedings{funaoka_work-conserving_2008,
-	title = {Work-{Conserving} {Optimal} {Real}-{Time} {Scheduling} on {Multiprocessors}},
-	isbn = {978-0-7695-3298-1},
-	url = {http://ieeexplore.ieee.org/document/4573099/},
-	doi = {10.1109/ECRTS.2008.15},
+@incollection{ausiello_approximation_1984,
+	address = {Vienna},
+	title = {Approximation {Algorithms} for {Bin}-{Packing} — {An} {Updated} {Survey}},
+	volume = {284},
+	isbn = {978-3-211-81816-9 978-3-7091-4338-4},
+	url = {http://link.springer.com/10.1007/978-3-7091-4338-4_3},
+	urldate = {2017-07-11},
+	booktitle = {Algorithm {Design} for {Computer} {System} {Design}},
+	publisher = {Springer Vienna},
+	author = {Coffman, E. G. and Garey, M. R. and Johnson, D. S.},
+	editor = {Ausiello, G. and Lucertini, M. and Serafini, P.},
+	year = {1984},
+	note = {DOI: 10.1007/978-3-7091-4338-4\_3},
+	pages = {49--106}
+}
+
+@inproceedings{brandenburg_scalability_2008,
+	title = {On the {Scalability} of {Real}-{Time} {Scheduling} {Algorithms} on {Multicore} {Platforms}: {A} {Case} {Study}},
+	isbn = {978-0-7695-3477-0},
+	shorttitle = {On the {Scalability} of {Real}-{Time} {Scheduling} {Algorithms} on {Multicore} {Platforms}},
+	url = {http://ieeexplore.ieee.org/document/4700432/},
+	doi = {10.1109/RTSS.2008.23},
+	urldate = {2017-07-08},
+	publisher = {IEEE},
+	author = {Brandenburg, Björn B. and Calandrino, John M. and Anderson, James H.},
+	month = nov,
+	year = {2008},
+	pages = {157--169}
+}
+
+@inproceedings{andersson_fixed-priority_2000,
+	title = {Fixed-priority preemptive multiprocessor scheduling: to partition or not to partition},
+	isbn = {978-0-7695-0930-3},
+	shorttitle = {Fixed-priority preemptive multiprocessor scheduling},
+	url = {http://ieeexplore.ieee.org/document/896409/},
+	doi = {10.1109/RTCSA.2000.896409},
+	urldate = {2017-07-12},
+	publisher = {IEEE Comput. Soc},
+	author = {Andersson, B. and Jonsson, J.},
+	year = {2000},
+	pages = {337--346}
+}
+
+@article{dertouzos_multiprocessor_1989,
+	title = {Multiprocessor online scheduling of hard-real-time tasks},
+	volume = {15},
+	issn = {00985589},
+	url = {http://ieeexplore.ieee.org/document/58762/},
+	doi = {10.1109/32.58762},
+	number = {12},
+	urldate = {2017-07-11},
+	journal = {IEEE Transactions on Software Engineering},
+	author = {Dertouzos, M.L. and Mok, A.K.},
+	month = dec,
+	year = {1989},
+	pages = {1497--1506}
+}
+
+@article{liu_scheduling_1973,
+	title = {Scheduling {Algorithms} for {Multiprogramming} in a {Hard}-{Real}-{Time} {Environment}},
+	volume = {20},
+	issn = {00045411},
+	url = {http://portal.acm.org/citation.cfm?doid=321738.321743},
+	doi = {10.1145/321738.321743},
+	number = {1},
+	urldate = {2017-07-12},
+	journal = {Journal of the ACM},
+	author = {Liu, C. L. and Layland, James W.},
+	month = jan,
+	year = {1973},
+	pages = {46--61}
+}
+
+@article{lopez_utilization_2004,
+	title = {Utilization {Bounds} for {EDF} {Scheduling} on {Real}-{Time} {Multiprocessor} {Systems}},
+	volume = {28},
+	issn = {0922-6443},
+	url = {http://link.springer.com/10.1023/B:TIME.0000033378.56741.14},
+	doi = {10.1023/B:TIME.0000033378.56741.14},
+	language = {en},
+	number = {1},
+	urldate = {2017-07-11},
+	journal = {Real-Time Systems},
+	author = {López, J. M. and Díaz, J. L. and García, D. F.},
+	month = oct,
+	year = {2004},
+	pages = {39--68}
+}
+
+@article{schmoldt_digitoxin_1975,
+	title = {Digitoxin metabolism by rat liver microsomes},
+	volume = {24},
+	issn = {1873-2968},
+	language = {eng},
+	number = {17},
+	journal = {Biochemical Pharmacology},
+	author = {Schmoldt, A. and Benthe, H. F. and Haberland, G.},
+	month = sep,
+	year = {1975},
+	pmid = {10},
+	keywords = {Animals, Chromatography, Thin Layer, Digitoxigenin, Digitoxin, Hydroxylation, In Vitro Techniques, Male, Microsomes, Liver, NADP, Rats, Time Factors},
+	pages = {1639--1641}
+}
+
+@article{hwang_comparison_2008,
+	title = {A comparison of multiprocessor task scheduling algorithms with communication costs},
+	volume = {35},
+	issn = {03050548},
+	url = {http://linkinghub.elsevier.com/retrieve/pii/S0305054806001432},
+	doi = {10.1016/j.cor.2006.05.013},
+	language = {en},
+	number = {3},
+	urldate = {2017-07-08},
+	journal = {Computers \& Operations Research},
+	author = {Hwang, Reakook and Gen, Mitsuo and Katayama, Hiroshi},
+	month = mar,
+	year = {2008},
+	pages = {976--993}
+}
+
+@inproceedings{kato_real-time_2007,
+	title = {Real-{Time} {Scheduling} with {Task} {Splitting} on {Multiprocessors}},
+	isbn = {978-0-7695-2975-2},
+	url = {http://ieeexplore.ieee.org/document/4296882/},
+	doi = {10.1109/RTCSA.2007.61},
 	urldate = {2017-07-07},
 	publisher = {IEEE},
-	author = {Funaoka, Kenji and Kato, Shinpei and Yamasaki, Nobuyuki},
-	month = jul,
-	year = {2008},
-	pages = {13--22}
+	author = {Kato, Shinpei and Yamasaki, Nobuyuki},
+	month = aug,
+	year = {2007},
+	pages = {441--450}
+}
+
+@inproceedings{baruah_techniques_2007,
+	title = {Techniques for {Multiprocessor} {Global} {Schedulability} {Analysis}},
+	isbn = {978-0-7695-3062-8},
+	url = {http://ieeexplore.ieee.org/document/4408297/},
+	doi = {10.1109/RTSS.2007.35},
+	urldate = {2017-07-11},
+	publisher = {IEEE},
+	author = {Baruah, Sanjoy},
+	month = dec,
+	year = {2007},
+	pages = {119--128}
 }
 
 @article{funk_lre-tl:_2010,
@@ -469,218 +739,6 @@ In this work, we implement a semi-partitioned scheduler in the Linux operating s
 	pages = {332--359}
 }
 
-@inproceedings{zhang_implementation_2011,
-	title = {Implementation and empirical comparison of partitioning-based multi-core scheduling},
-	isbn = {978-1-61284-818-1},
-	url = {http://ieeexplore.ieee.org/document/5953668/},
-	doi = {10.1109/SIES.2011.5953668},
-	urldate = {2017-07-08},
-	publisher = {IEEE},
-	author = {Zhang, Yi and Guan, Nan and Xiao, Yanbin and Yi, Wang},
-	month = jun,
-	year = {2011},
-	pages = {248--255}
-}
-
-@inproceedings{brandenburg_scalability_2008,
-	title = {On the {Scalability} of {Real}-{Time} {Scheduling} {Algorithms} on {Multicore} {Platforms}: {A} {Case} {Study}},
-	isbn = {978-0-7695-3477-0},
-	shorttitle = {On the {Scalability} of {Real}-{Time} {Scheduling} {Algorithms} on {Multicore} {Platforms}},
-	url = {http://ieeexplore.ieee.org/document/4700432/},
-	doi = {10.1109/RTSS.2008.23},
-	urldate = {2017-07-08},
-	publisher = {IEEE},
-	author = {Brandenburg, Björn B. and Calandrino, John M. and Anderson, James H.},
-	month = nov,
-	year = {2008},
-	pages = {157--169}
-}
-
-@article{hwang_comparison_2008,
-	title = {A comparison of multiprocessor task scheduling algorithms with communication costs},
-	volume = {35},
-	issn = {03050548},
-	url = {http://linkinghub.elsevier.com/retrieve/pii/S0305054806001432},
-	doi = {10.1016/j.cor.2006.05.013},
-	language = {en},
-	number = {3},
-	urldate = {2017-07-08},
-	journal = {Computers \& Operations Research},
-	author = {Hwang, Reakook and Gen, Mitsuo and Katayama, Hiroshi},
-	month = mar,
-	year = {2008},
-	pages = {976--993}
-}
-
-@inproceedings{ramamurthy_static-priority_2000,
-	title = {Static-priority periodic scheduling on multiprocessors},
-	isbn = {978-0-7695-0900-6},
-	url = {http://ieeexplore.ieee.org/document/895997/},
-	doi = {10.1109/REAL.2000.895997},
-	urldate = {2017-07-10},
-	publisher = {IEEE},
-	author = {Ramamurthy, S. and Moir, M.},
-	year = {2000},
-	pages = {69--78}
-}
-
-@article{dhall_real-time_1978,
-	title = {On a {Real}-{Time} {Scheduling} {Problem}},
-	volume = {26},
-	issn = {0030-364X, 1526-5463},
-	url = {http://pubsonline.informs.org/doi/abs/10.1287/opre.26.1.127},
-	doi = {10.1287/opre.26.1.127},
-	language = {en},
-	number = {1},
-	urldate = {2017-07-10},
-	journal = {Operations Research},
-	author = {Dhall, Sudarshan K. and Liu, C. L.},
-	month = feb,
-	year = {1978},
-	pages = {127--140}
-}
-
-@incollection{ausiello_approximation_1984,
-	address = {Vienna},
-	title = {Approximation {Algorithms} for {Bin}-{Packing} — {An} {Updated} {Survey}},
-	volume = {284},
-	isbn = {978-3-211-81816-9 978-3-7091-4338-4},
-	url = {http://link.springer.com/10.1007/978-3-7091-4338-4_3},
-	urldate = {2017-07-11},
-	booktitle = {Algorithm {Design} for {Computer} {System} {Design}},
-	publisher = {Springer Vienna},
-	author = {Coffman, E. G. and Garey, M. R. and Johnson, D. S.},
-	editor = {Ausiello, G. and Lucertini, M. and Serafini, P.},
-	year = {1984},
-	note = {DOI: 10.1007/978-3-7091-4338-4\_3},
-	pages = {49--106}
-}
-
-@inproceedings{baruah_techniques_2007,
-	title = {Techniques for {Multiprocessor} {Global} {Schedulability} {Analysis}},
-	isbn = {978-0-7695-3062-8},
-	url = {http://ieeexplore.ieee.org/document/4408297/},
-	doi = {10.1109/RTSS.2007.35},
-	urldate = {2017-07-11},
-	publisher = {IEEE},
-	author = {Baruah, Sanjoy},
-	month = dec,
-	year = {2007},
-	pages = {119--128}
-}
-
-@article{pereira_zapata_edf_2005,
-	title = {{EDF} and {RM} {Multiprocessor} {Scheduling} {Algorithms}: {Survey} and {Performance} {Evaluation}},
-	author = {Pereira Zapata, Omar and Mejia Alvarez, Pedro},
-	year = {2005}
-}
-
-@article{lopez_utilization_2004,
-	title = {Utilization {Bounds} for {EDF} {Scheduling} on {Real}-{Time} {Multiprocessor} {Systems}},
-	volume = {28},
-	issn = {0922-6443},
-	url = {http://link.springer.com/10.1023/B:TIME.0000033378.56741.14},
-	doi = {10.1023/B:TIME.0000033378.56741.14},
-	language = {en},
-	number = {1},
-	urldate = {2017-07-11},
-	journal = {Real-Time Systems},
-	author = {López, J. M. and Díaz, J. L. and García, D. F.},
-	month = oct,
-	year = {2004},
-	pages = {39--68}
-}
-
-@article{dertouzos_multiprocessor_1989,
-	title = {Multiprocessor online scheduling of hard-real-time tasks},
-	volume = {15},
-	issn = {00985589},
-	url = {http://ieeexplore.ieee.org/document/58762/},
-	doi = {10.1109/32.58762},
-	number = {12},
-	urldate = {2017-07-11},
-	journal = {IEEE Transactions on Software Engineering},
-	author = {Dertouzos, M.L. and Mok, A.K.},
-	month = dec,
-	year = {1989},
-	pages = {1497--1506}
-}
-
-@inproceedings{andersson_fixed-priority_2000,
-	title = {Fixed-priority preemptive multiprocessor scheduling: to partition or not to partition},
-	isbn = {978-0-7695-0930-3},
-	shorttitle = {Fixed-priority preemptive multiprocessor scheduling},
-	url = {http://ieeexplore.ieee.org/document/896409/},
-	doi = {10.1109/RTCSA.2000.896409},
-	urldate = {2017-07-12},
-	publisher = {IEEE Comput. Soc},
-	author = {Andersson, B. and Jonsson, J.},
-	year = {2000},
-	pages = {337--346}
-}
-
-@article{ioannides_effect_1976,
-	title = {The effect of allyl compounds on hepatic microsomal mixed function oxidation and porphyrogenesis},
-	volume = {14},
-	issn = {0009-2797},
-	abstract = {The activities of 5-aminolaevulinate (5-ALA) synthetase and of various microsomat drug-metabolising enzymes have been determined in the livers of rats pretreated with different drugs and chemicals containing the allyl group. Safrole, isosafrole and secobarbital gave rise to slight increases in 5-ALA synthetase, whereas alclophenac and triallyl cyanurate almost doubled the enzyme activity and the known porphyrogenic agents, allylisopropylacetamide (AIA) and allobarbital caused increases of 1.5- and 2.5-fold, respectively. Allobarbital induced the microsomal drug-metabolising enzymes while secobarbital had only a weak effect and alclophenac and triallyl cyanurate had no effect at all. From these results it is suggested that induction of the synthesis of cytochrome P-450 is not rate dependent on the synthesis haem and induction of porphyrin biosynthesis.},
-	language = {eng},
-	number = {3-4},
-	journal = {Chemico-Biological Interactions},
-	author = {Ioannides, C. and Parke, D. V.},
-	month = aug,
-	year = {1976},
-	pmid = {8216},
-	keywords = {5-Aminolevulinate Synthetase, Allyl Compounds, Allylisopropylacetamide, Animals, Barbiturates, Ethylmorphine-N-Demethylase, Liver, Male, Microsomes, Liver, Mixed Function Oxygenases, Oxidoreductases, Porphyrins, Rats, Safrole, Secobarbital, Structure-Activity Relationship},
-	pages = {241--249}
-}
-
-@article{schmoldt_digitoxin_1975,
-	title = {Digitoxin metabolism by rat liver microsomes},
-	volume = {24},
-	issn = {1873-2968},
-	language = {eng},
-	number = {17},
-	journal = {Biochemical Pharmacology},
-	author = {Schmoldt, A. and Benthe, H. F. and Haberland, G.},
-	month = sep,
-	year = {1975},
-	pmid = {10},
-	keywords = {Animals, Chromatography, Thin Layer, Digitoxigenin, Digitoxin, Hydroxylation, In Vitro Techniques, Male, Microsomes, Liver, NADP, Rats, Time Factors},
-	pages = {1639--1641}
-}
-
-@article{liu_scheduling_1973,
-	title = {Scheduling {Algorithms} for {Multiprogramming} in a {Hard}-{Real}-{Time} {Environment}},
-	volume = {20},
-	issn = {00045411},
-	url = {http://portal.acm.org/citation.cfm?doid=321738.321743},
-	doi = {10.1145/321738.321743},
-	number = {1},
-	urldate = {2017-07-12},
-	journal = {Journal of the ACM},
-	author = {Liu, C. L. and Layland, James W.},
-	month = jan,
-	year = {1973},
-	pages = {46--61}
-}
-
-@article{leung_complexity_1982,
-	title = {On the complexity of fixed-priority scheduling of periodic, real-time tasks},
-	volume = {2},
-	issn = {01665316},
-	url = {http://linkinghub.elsevier.com/retrieve/pii/0166531682900244},
-	doi = {10.1016/0166-5316(82)90024-4},
-	language = {en},
-	number = {4},
-	urldate = {2017-07-12},
-	journal = {Performance Evaluation},
-	author = {Leung, Joseph Y.-T. and Whitehead, Jennifer},
-	month = dec,
-	year = {1982},
-	pages = {237--250}
-}
-
 @article{joseph_finding_1986,
 	title = {Finding {Response} {Times} in a {Real}-{Time} {System}},
 	volume = {29},
@@ -697,76 +755,17 @@ In this work, we implement a semi-partitioned scheduler in the Linux operating s
 	pages = {390--395}
 }
 
-@inproceedings{andersson_static-priority_2001,
-	title = {Static-priority scheduling on multiprocessors},
-	isbn = {978-0-7695-1420-8},
-	url = {http://ieeexplore.ieee.org/document/990610/},
-	doi = {10.1109/REAL.2001.990610},
-	urldate = {2017-07-13},
-	publisher = {IEEE Comput. Soc},
-	author = {Andersson, B. and Baruah, S. and Jonsson, J.},
-	year = {2001},
-	pages = {193--202}
-}
-
-@inproceedings{baker_multiprocessor_2003,
-	title = {Multiprocessor {EDF} and deadline monotonic schedulability analysis},
-	isbn = {978-0-7695-2044-5},
-	url = {http://ieeexplore.ieee.org/document/1253260/},
-	doi = {10.1109/REAL.2003.1253260},
-	urldate = {2017-07-13},
-	publisher = {IEEE Comput. Soc},
-	author = {Baker, T.P.},
-	year = {2003},
-	pages = {120--129}
-}
-
-@article{baker_analysis_2005,
-	title = {An analysis of {EDF} schedulability on a multiprocessor},
-	volume = {16},
-	issn = {1045-9219},
-	url = {http://ieeexplore.ieee.org/document/1458691/},
-	doi = {10.1109/TPDS.2005.88},
-	number = {8},
-	urldate = {2017-07-13},
-	journal = {IEEE Transactions on Parallel and Distributed Systems},
-	author = {Baker, T.P.},
-	month = aug,
-	year = {2005},
-	pages = {760--768}
-}
-
-@article{baruah_optimal_2004,
-	title = {Optimal utilization bounds for the fixed-priority scheduling of periodic task systems on identical multiprocessors},
-	volume = {53},
-	issn = {0018-9340},
-	url = {http://ieeexplore.ieee.org/document/1288553/},
-	doi = {10.1109/TC.2004.16},
-	language = {en},
-	number = {6},
-	urldate = {2017-07-13},
-	journal = {IEEE Transactions on Computers},
-	author = {Baruah, S.K.},
+@inproceedings{zhang_implementation_2011,
+	title = {Implementation and empirical comparison of partitioning-based multi-core scheduling},
+	isbn = {978-1-61284-818-1},
+	url = {http://ieeexplore.ieee.org/document/5953668/},
+	doi = {10.1109/SIES.2011.5953668},
+	urldate = {2017-07-08},
+	publisher = {IEEE},
+	author = {Zhang, Yi and Guan, Nan and Xiao, Yanbin and Yi, Wang},
 	month = jun,
-	year = {2004},
-	pages = {781--784}
-}
-
-@article{baruah_proportionate_1996,
-	title = {Proportionate progress: {A} notion of fairness in resource allocation},
-	volume = {15},
-	issn = {0178-4617, 1432-0541},
-	shorttitle = {Proportionate progress},
-	url = {http://link.springer.com/10.1007/BF01940883},
-	doi = {10.1007/BF01940883},
-	language = {en},
-	number = {6},
-	urldate = {2017-07-13},
-	journal = {Algorithmica},
-	author = {Baruah, S. K. and Cohen, N. K. and Plaxton, C. G. and Varvel, D. A.},
-	month = jun,
-	year = {1996},
-	pages = {600--625}
+	year = {2011},
+	pages = {248--255}
 }
 
 @article{cheng_sys-edf:_2009,
@@ -798,18 +797,32 @@ In this work, we implement a semi-partitioned scheduler in the Linux operating s
 	pages = {088--093}
 }
 
-@article{muller_genealogy_2011,
-	title = {Genealogy of hard real-time preemptive scheduling algorithms for identical multiprocessors},
-	volume = {1},
-	issn = {2299-1093},
-	url = {http://www.degruyter.com/view/j/comp.2011.1.issue-3/s13537-011-0023-z/s13537-011-0023-z.xml},
-	doi = {10.2478/s13537-011-0023-z},
-	number = {3},
+@inproceedings{anderson_early-release_2000,
+	title = {Early-release fair scheduling},
+	isbn = {978-0-7695-0734-7},
+	url = {http://ieeexplore.ieee.org/document/853990/},
+	doi = {10.1109/EMRTS.2000.853990},
 	urldate = {2017-07-14},
-	journal = {Open Computer Science},
-	author = {Müller, Dirk and Werner, Matthias},
-	month = jan,
-	year = {2011}
+	publisher = {IEEE Comput. Soc},
+	author = {Anderson, J.H. and Srinivasan, A.},
+	year = {2000},
+	pages = {35--43}
+}
+
+@article{dhall_real-time_1978,
+	title = {On a {Real}-{Time} {Scheduling} {Problem}},
+	volume = {26},
+	issn = {0030-364X, 1526-5463},
+	url = {http://pubsonline.informs.org/doi/abs/10.1287/opre.26.1.127},
+	doi = {10.1287/opre.26.1.127},
+	language = {en},
+	number = {1},
+	urldate = {2017-07-10},
+	journal = {Operations Research},
+	author = {Dhall, Sudarshan K. and Liu, C. L.},
+	month = feb,
+	year = {1978},
+	pages = {127--140}
 }
 
 @article{davis_survey_2011,
@@ -828,57 +841,44 @@ In this work, we implement a semi-partitioned scheduler in the Linux operating s
 	pages = {1--44}
 }
 
-@article{buttazzo_rate_2005,
-	title = {Rate {Monotonic} vs. {EDF}: {Judgment} {Day}},
-	volume = {29},
-	issn = {0922-6443},
-	shorttitle = {Rate {Monotonic} vs. {EDF}},
-	url = {http://link.springer.com/10.1023/B:TIME.0000048932.30002.d9},
-	doi = {10.1023/B:TIME.0000048932.30002.d9},
-	language = {en},
-	number = {1},
-	urldate = {2017-07-14},
-	journal = {Real-Time Systems},
-	author = {Buttazzo, Giorgio C.},
-	month = jan,
-	year = {2005},
-	pages = {5--26}
+@article{pereira_zapata_edf_2005,
+	title = {{EDF} and {RM} {Multiprocessor} {Scheduling} {Algorithms}: {Survey} and {Performance} {Evaluation}},
+	author = {Pereira Zapata, Omar and Mejia Alvarez, Pedro},
+	year = {2005}
 }
 
-@inproceedings{anderson_early-release_2000,
-	title = {Early-release fair scheduling},
-	isbn = {978-0-7695-0734-7},
-	url = {http://ieeexplore.ieee.org/document/853990/},
-	doi = {10.1109/EMRTS.2000.853990},
-	urldate = {2017-07-14},
-	publisher = {IEEE Comput. Soc},
-	author = {Anderson, J.H. and Srinivasan, A.},
+@inproceedings{ramamurthy_static-priority_2000,
+	title = {Static-priority periodic scheduling on multiprocessors},
+	isbn = {978-0-7695-0900-6},
+	url = {http://ieeexplore.ieee.org/document/895997/},
+	doi = {10.1109/REAL.2000.895997},
+	urldate = {2017-07-10},
+	publisher = {IEEE},
+	author = {Ramamurthy, S. and Moir, M.},
 	year = {2000},
-	pages = {35--43}
+	pages = {69--78}
 }
 
-@inproceedings{cirinei_edzl_2007,
-	title = {{EDZL} {Scheduling} {Analysis}},
-	isbn = {978-0-7695-2914-1},
-	url = {http://ieeexplore.ieee.org/document/4271676/},
-	doi = {10.1109/ECRTS.2007.14},
-	urldate = {2017-07-14},
+@inproceedings{cho_optimal_2006,
+	title = {An {Optimal} {Real}-{Time} {Scheduling} {Algorithm} for {Multiprocessors}},
+	isbn = {978-0-7695-2761-1},
+	url = {http://ieeexplore.ieee.org/document/4032340/},
+	doi = {10.1109/RTSS.2006.10},
+	urldate = {2017-07-07},
 	publisher = {IEEE},
-	author = {Cirinei, Michele and Baker, Theodore P.},
-	month = jul,
-	year = {2007},
-	pages = {9--18}
+	author = {Cho, Hyeonjoong and Ravindran, Binoy and Jensen, E.},
+	year = {2006},
+	pages = {101--110}
 }
 
-@inproceedings{kato_global_2008,
-	title = {Global {EDF}-{Based} {Scheduling} with {Efficient} {Priority} {Promotion}},
-	isbn = {978-0-7695-3349-0},
-	url = {http://ieeexplore.ieee.org/document/4617288/},
-	doi = {10.1109/RTCSA.2008.11},
-	urldate = {2017-07-14},
-	publisher = {IEEE},
-	author = {Kato, Shinpei and Yamasaki, Nobuyuki},
-	month = aug,
-	year = {2008},
-	pages = {197--206}
+@inproceedings{andersson_static-priority_2001,
+	title = {Static-priority scheduling on multiprocessors},
+	isbn = {978-0-7695-1420-8},
+	url = {http://ieeexplore.ieee.org/document/990610/},
+	doi = {10.1109/REAL.2001.990610},
+	urldate = {2017-07-13},
+	publisher = {IEEE Comput. Soc},
+	author = {Andersson, B. and Baruah, S. and Jonsson, J.},
+	year = {2001},
+	pages = {193--202}
 }
