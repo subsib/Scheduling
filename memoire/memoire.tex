@@ -876,7 +876,8 @@ cités comme références comme de nombreux articles de Baker
 \cite{baker_multiprocessor_2003} \cite{baker_analysis_2005} ou Baruah \cite{baruah_optimal_2004}
 \cite{baruah_schedulability_2008}. 
 Dans cet article de Davis et Burns, les auteurs rappellent les 
-limites supérieures d'utilisation pour ces techniques \cite{davis_survey_2011}.
+limites supérieures d'utilisation pour ces techniques \cite{davis_survey_2011}.\\
+
 
 \subsection{Il n'existe pas de stratégie en ligne optimale sans clairvoyance}
 Quelques résultats déjà connus dans la littérature viennent noircir l'espoir de trouver une 
@@ -944,7 +945,7 @@ Un ordonnanceur PFair existe pour $\tau$ sur $m$ processeurs si et seulement si:
 $U(\tau) \leq m$, et $U_{max} \leq 1$)\\
 
 La notion de \textit{P-Fairness} est très souvent utilisée dans la littérature et d'elle dérivent 
-de nombreuses propositions d'algorithmes, comme les classiques \textit{PF} \cite{baruah_proportionate_1996}, \textit{PD}, \textit{PD²} , \textit{ER} \cite{anderson_early-release_2000}, 
+de nombreuses propositions d'algorithmes, comme les classiques \textit{PF} \cite{baruah_proportionate_1996}, \textit{PD} \cite{baruah_fast_1995}, \textit{PD²} \cite{srinivasan_optimal_2006} , \textit{ER} \cite{anderson_early-release_2000}, 
 et d'autres moins "classiques" comme \textit{DP-Fair} \cite{levin_dp-fair:_2010}, 
 \textit{LB-Pfair} (Loop-Back Proportionate Fair) \cite{kramer_proportionate_2015}. 
 Müller et Werner proposent ainsi ce schéma dans leur article de 2011 :\\
@@ -1006,6 +1007,10 @@ Une autre approche consiste à considérer la \ref{laxite}{laxité} pour modifie
 Ainsi, l'idée d'\textit{EDZL} (Earliest Deadline until Zero Laxity) \cite{cirinei_edzl_2007} ou encore d'EDCL \cite{kato_real-time_2007}
 (Earliest Deadline Critical Laxity). \\
 
+Des travaux récents continuent d'implémenter des versions d'\textit{EDF} avec stratégie 
+globale, par exemple \textit{GEDF} \cite{li_global_2015}, donnant lieu à \textit{PGEDF}. Cette 
+branche continue donc d'être étudiée et présente des intérêts.
+
 \subsection{U-EDF}
 \textit{U-EDF} est présenté en 2011 par Nelissen et al. \cite{nelissen_reducing_2011}. Il n'est pas "\textit{P-Fair}", et se démarque donc d'une bonne partie des algorithmes 
 par le fait qu'il ne cherche pas à vérifier de condition de "P-équité".
@@ -1057,18 +1062,48 @@ devrait être faite afin d'orienter le choix vers un ordonnanceur plutôt qu'un 
 
 \vspace{1em}
 
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
     \hline
-    & blabla & blabla \\
+    \textbf{Nom} & \textbf{Classe} &  \textbf{Optimal} & \textbf{Migrations}\\
+    \hline
+    \hline
+    EDF-k & Sporadique, échéance implicite & Optimal (P-Fair) & Nombreuses \\
+    \hline
+    GEDF & Sporadique, échéance implicite & Non optimal & Nombreuses \\
+    \hline    
+    U-EDF & Sporadique, échéance implicite  & Optimal & Réduites\\
+    \hline
+    DP-WRAP & Sporadique, échéances arbitraires & Optimal (P-Fair)& Réduites\\
+    \hline
+    LLREF & Périodique, échéances arbitraires & Optimal & Réduites \\
+    \hline
+    BF & Périodiques, échéances implicites & Optimal & Réduites \\
+    \hline
+    RUN & Périodiques, échéances implicites & Optimal & Un peu réduites\\
+    \hline
+    QPS & Sporadiques, échéances arbitraires & Optimal & Réduites\\
     \hline
     
 \end{tabular}
 
 
 \section{Conclusion}
-% tableau ? Support pour développer argumentation ?
+Nous avons exploré une petite partie de la littérature scientifique au sujet des ordonnanceurs 
+globaux ou semi-partitionnés afin d'en sélectionner un pour implémentation et tests. 
+Il ressort de cette étude que plusieurs candidats présentent des intérêts, sont mieux 
+connus dans la littérature que dans la pratique, et gagneraient à être mieux analysés. 
+Notre choix sera influencé par ces paramètres : \\
+\begin{itemize}
+    \item L'ordonnanceur est-il optimal
+    \item Quels systèmes de tâche peut-il ordonnancer ?
+    \item Des efforts ont-ils été fournis afin d'éviter les migrations ?
+    \item A-t-il déjà bénéficié d'implémentations ?
+\end{itemize}
+De ces paramètres, il ressort que l'algorithme \textit{QPS} est optimal, semi-partitionné, 
+peut ordonnancer les systèmes sporadiques à échéances arbitraires et 
+les articles à son sujet parlent de bonnes performances concernant les migrations. \\
+C'est donc vers cet algorithme que notre choix se porte.
 
-Ici, je fais le résumé des algos dont on a parlé précédemment et je construis un tableau récapitulatif. 
 
 \bibliographystyle{plain}
 \bibliography{bibzotero}
