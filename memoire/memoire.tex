@@ -964,6 +964,17 @@ Bien évidemment, les propositions diffèrent par certaines propriétés. Par ex
 Un enjeu très important de ce grand nombre d'algorithmes est de trouver une méthode qui 
 garantisse l'optimalité pour la classe sporadique, tout en conservant de bonnes performances. 
 
+La préoccupation principale actuelle est de trouver un moyen d'améliorer l'utilisation des processeurs (limitée à 
+50\% pour les algorithmes partitionnés \cite{oh_utilization_1998}), sans détériorer les performances par 
+une explosion du nombre de migrations, comme c'est généralement le cas avec des algorithmes globaux. 
+Dans l'article d'Andersson de 2006 \cite{andersson_multiprocessor_2006}, la limite d'utilisation 
+n'est pas aussi importante qu'avec une approche globale, mais le nombre de préemptions est limité par 
+une constante $k$. En 2006 toujours, Cho et al. \cite{cho_optimal_2006} proposent \textit{LLREF} 
+(largest local remaining execution time), dont l'optimalité est prouvée pour les 
+systèmes périodiques. Ses performances ne sont à ce jour pas bien connues en pratique. %todo citer éventuellement 
+% http://tesi.cab.unipd.it/51896/1/Implementation_and_Test_of_EDF_and_LLREF_Scgheduler_in_FreeRTOS.pdf
+La liste proposée ici n'est pas exhaustive, un très grand nombre de propositions existe actuellement. 
+
 \subsection{EDF-k}
 %todo vérif la classe de tâches optimale pour EDF-k
 En 2003, Goossens et al. proposent l'algorithme \textit{EDF-k} \cite{goossens_priority-driven_2003}, 
@@ -996,14 +1007,14 @@ Ainsi, l'idée d'\textit{EDZL} (Earliest Deadline until Zero Laxity) \cite{cirin
 (Earliest Deadline Critical Laxity). \\
 
 \subsection{U-EDF}
-\textit{U-EDF} est présenté en 2011 par Nelissen et al. \cite{nelissen_reducing_2011}. Il n'est -- contrairement à un grand nombre d'algorithmes -- pas "\textit{P-Fair}". 
+\textit{U-EDF} est présenté en 2011 par Nelissen et al. \cite{nelissen_reducing_2011}. Il n'est pas "\textit{P-Fair}", et se démarque donc d'une bonne partie des algorithmes 
+par le fait qu'il ne cherche pas à vérifier de condition de "P-équité".
 Il prend en charge les systèmes périodiques à échéances implicites, et est optimal pour cette classe. 
 Tout d'abord, la preuve de son optimalité se limite aux tâches périodiques dont on a dit plus haut qu'elles 
 ne représentaient pas la majorité des classes e tâches des systèmes embarqués. 
 En 2012, la preuve de son optimalité est élargie aux systèmes sporadiques par  Nelissen et al. \cite{nelissen_u-edf:_2012}. Le principal but de cet algorithme est de réduire le nombre de préemptions, 
 ce qui est un grand inconvénient de l'approche globale. \\
-L'idée principale d'\textit{U-EDF} est 
-
+L'idée principale d'\textit{U-EDF} est %todo add
 
 \subsection{RUN}
 Reduction to UNiprocessor (\textit{RUN}) est un algorithme présenté par Regnier et al. en 2013 \cite{regnier_multiprocessor_2013}. 
@@ -1040,11 +1051,19 @@ selon \textit{EDF} par des serveurs. Les auteurs présentent l'avantage d'une ap
 qui fait un compromis entre les avantages de l'approche partitionnée et ceux de l'approche globale 
 mais \textit{RUN} comporte quant à lui l'inconvénient de ne pas pouvoir s'appliquer aux tâches sporadiques. C'est ce qui explique la nécessité de l'existence de \textit{QPS}.
 
+\subsection{Tableau comparatif des algorithmes globaux et semi-globaux}
+Afin de faire le choix de l'algorithme à implémenter, une comparaison de ces algorithmes 
+devrait être faite afin d'orienter le choix vers un ordonnanceur plutôt qu'un autre. 
 
+\vspace{1em}
 
+\begin{tabular}{|c|c|c|}
+    \hline
+    & blabla & blabla \\
+    \hline
+    
+\end{tabular}
 
-
-\subsection{Tableau de synthèse des algorithmes globaux et semi-globaux}
 
 \section{Conclusion}
 % tableau ? Support pour développer argumentation ?
