@@ -2,7 +2,9 @@
 Avancées de mes travaux/recherches en la matière
 
 1. Le dépôt se trouve là : [GitHub](https://github.com/subsib/Scheduling.git)
-2. Avancées en matière d'état de l'art ici : [state of art](./refs/statof_arts.md)
+2. Premières avancées en matière d'état de l'art ici : [work in progress](./refs/statof_arts.md)
+3. Finalement, le pdf en construction est là : [state of art](./memoire/memoire.pdf)
+
 
 Le sujet est :
 
