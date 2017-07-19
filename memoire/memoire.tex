@@ -124,14 +124,15 @@
 
 Dans le paysage quotidien des appareils informatiques, il existe toujours plus de systèmes embarqués. 
 Parmi eux, un nombre très important de systèmes temps réel qui nécessitent des 
-ordonnanceurs adaptés. Ce champ scientifique a été largement fourni durant les 
+ordonnanceurs adaptés. Ce champ de recherche a été largement nourri durant les 
 vingt dernières années par de nombreuses publications scientifiques. \\
 
 Les systèmes embarqués n'ont pas toujours de grands besoins en efficacité, 
 ils doivent principalement être sûrs, et réactifs. 
-Toutefois, un système "non efficace" n'utilise pas ses ressources de façon optimale. 
+Toutefois, un système dont l'efficacité n'est pas maximale n'utilise pas ses ressources 
+de façon optimale. 
 De nos jours où la gestion énergétique se doit d'être la plus économe possible, 
-où l'efficacité des appareils est de plus en plus exigée, il est envisageable que 
+où l'on est de plus en plus exigeant concernant l'efficacité, il est envisageable que 
 la solution évolue du côté des industries.\\
 
 Par ailleurs, cela fait plusieurs années que la croissance de l'efficacité des appareils n'est plus 
@@ -141,16 +142,16 @@ de paralléliser les exécutions, et c'est ainsi que la quasi stagnation des
 technologies a pu être contournée pour continuer la progression.
 % TODO add ref du cours de micro
 
+
 Le monde des systèmes embarqués en temps réel a bénéficié de ces améliorations, 
 et dispose également de processeurs multi-c\oe{}urs. Cependant, leur gestion n'est 
 à l'heure actuelle pas optimale, la plupart des systèmes sont  
 gérés soit comme des systèmes mono-processeurs, soit avec des algorithmes partitionnés \cite{paolillo_new_nodate}. 
-Dans le premier cas, les ressources ne sont pas utilisées de façon optimales, 
+Dans le premier cas, les ressources ne sont pas utilisées de façon optimale, 
 et dans le second, des implémentations et tests ont montré empiriquement 
 que les algorithmes globaux pouvaient présenter des avantages intéressants, comme 
-une meilleure répartition de l'utilisation des processeurs. 
-\\ %TODO vérif ça, c'est pas correct
-%TODO https://pdfs.semanticscholar.org/64df/4e9ecf8c2a22595d7c9bc0f8814c4445a614.pdf
+une meilleure répartition de l'utilisation des processeurs \cite{baker_analysis_2005}. 
+\\ 
 
 Le décalage entre la connaissance scientifique et les implémentations réelles 
 peut s'expliquer en partie par le fait qu'il soit compliqué de gérer le partage des ressources, 
@@ -169,7 +170,7 @@ pour les systèmes embarqués pose plusieurs problèmes :
 \end{enumerate}
 
 Toutes ces raisons poussent à s'intéresser à une implémentation réelle et réaliste 
-d'ordonnanceur connu dans la littérature, mais moins dans la réalité.
+d'ordonnanceurs connus dans la littérature, mais moins dans la réalité.
 
 C'est dans ce contexte que s'inscrit ce travail d'implémentation d'un ordonnanceur en temps réel 
 global et multiprocesseur, dont un des objectifs est d'améliorer la connaissance pratique 
@@ -250,8 +251,9 @@ peut elle-aussi apporter à la connaissance générale des détails importants.
 
 
 \section{Problématique}
-L'ordonnanceur idéal, c'est à dire optimal pour toute classe de tâche n'existant pas, 
-une partie du problème est donc de sélectionner l'un d'eux parmi une liste 
+L'ordonnanceur idéal -- c'est à dire optimal pour toute classe de tâches et 
+qui ne fasse pas de multiples migrations coûteuses n'existant pas, 
+notre sujet est de sélectionner l'un d'eux parmi une liste 
 d'ordonnanceurs connus (ne serait-ce que dans la littérature) afin que cela apporte 
 à la connaissance générale, tant sur le plan théorique que pratique.
 
@@ -269,29 +271,8 @@ sélectionner un ordonnanceur pertinent à implémenter sur le \textbf{RTOS} \te
 
 \section{Vocabulaire général sur les systèmes temps réel}
 
-\subsection{RTOS}
-\begin{mydef}
-(Real Time Operating System) Système d'Exploitation Temps Réel.\\
-Un système d'exploitation Temps Réel est implémenté dans des systèmes à temps réel. 
-Il s'agit globalement de systèmes embarqués critiques, comme il en existe à ce jour 
-énormément (dans les avions, comme systèmes de contrôles, dans les voitures, etc.).
-Les contraintes ne sont pas les mêmes que dans un OS (\textbf{O}perating \textbf{S}ystem, Système d'Exploitation) classique, particulièrement pour
-l'ordonnanceur. 
-En effet, celui-ci doit gérer un ensemble de tâches qui doivent 
-(impérativement, ou pas) respecter des temps limites. 
-Attention cependant à ne pas confondre le besoin de synchronisation avec le besoin de rapidité : 
-tous les systèmes à temps réel n'ont pas forcément besoin de vitesse. 
-
-Il faut néanmoins s'assurer que tous les délais peuvent être respectés, et 
-c'est là une partie très importante du travail avant de mettre sur le 
-marché un système embarqué.\\
-%TODO https://fr.wikipedia.org/wiki/Syst%C3%A8me_d%27exploitation_temps_r%C3%A9el
-
-\end{mydef}
-	
-\subsection{Contraintes strictes, contraintes relatives} 
-Dans le cas strict, le système doit impérativement respecter tous les temps limites. Aucun dépassement n'est toléré. Dans le cas des contraintes relatives, ce respect 
-est moins impératif, et on pourra dépasser les délais occasionnellement. \\
+\subsection{Système de tâches}
+Un système de tâches et un ensemble de tâches ayant les mêmes propriétés devant être exécutées. 
 
 \subsection{Tâche (temps réel)}
 Une tâche correspond à une sorte de programme, c'est à dire une série d'instructions 
@@ -299,64 +280,88 @@ qui doivent être exécutées par un processeur.
 Il y a plusieurs caractéristiques 
 et propriétés qui définissent une tâche, que nous allons définir ici : 
 \begin{itemize}
-	\item[\textbf{Release Time}] : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
-	\item[\textbf{Start, End}] : Le moment où la tâche commence effectivement à être exécutée, ou termine son exécution.
-	\item[\textbf{Response Time\label{Response Time}}] : Temps maximum nécessaire à la réalisation de la tâche 
-	entre le Release Time et End. %TODO vérif
-	\item[\textbf{Deadline, temps limite}] : Correspond au temps limite au delà duquel la tâche doit avoir été exécutée. Il existe deux types de deadlines : 
-	une absolue, et une relative. La deadline relative est une valeur fixe qui 
-	est une propriété de la tâche, elle dépend donc du release time.\\
-	La deadline absolue quant à elle est calculée avant l'exécution, et correspond 
-	à un temps $t$ absolu.%TODO explain better, relire cours ptete ?!
-	
-	\item[\textbf{Worst Case Execution Time}] Afin de faciliter les calculs et l'abstraction du problème, l'on pose habituellement que le temps considéré d'exécution de 
-	la tâche est le pire temps. Cela permet d'envisager le pire scénario, et ainsi 
-	de s'assurer que si celui-ci est possible, alors dans de meilleures conditions, 
-	la faisabilité est conservée. La notation utilisée dans le reste de ce document 
-	est  \textbf{WCET} : \textbf{W}orst \textbf{C}ase \textbf{E}xecution \textbf{T}ime
-	
-	\item[\textbf{Laxité}] La laxité d'une tâche est la durée entre sa réalisation et son échéance. 
-	Pour une tâche $\tau_i$, la laxité est :
-	\begin{center}
-		$L_i = D_i - C_i$
-	\end{center}
-\vspace{0.5cm}
-	\item[\textbf{Tâches périodiques}]
-	Une tâche périodique est une tâche qui génère régulièrement des jobs.  
-Formellement, une tâche périodique est définie par un 4-uplet $(O, T, D, C)$ où 
-\begin{itemize}
-	\item[O] est l'"offset", c'est à dire le temps que met la tâche à générer un premier job.
-	\item[T] est la période, c'est à dire le temps qui sépare deux générations de job par la tâche. 
-	Comme le premier job est généré à l'instant $O$, alors $\forall i \in \{0, \infty \} t = O + i\times T$ 
-	où $t$ est le temps où la tâche est générée la $i$ème fois.
-	\item[D] est l'échéance relative, c'est à dire le temps qui sépare au maximum la génération 
-	d'un job et sa réalisation.
-	\item[C] est le temps de réalisation. Dans les algorithmes, on utilise -- comme expliqué précédemment -- le \textbf{WCET}.
-\end{itemize}	
-	Dans le cas de tâches périodiques, on distingue trois cas différents : \\
-	\begin{enumerate}
-		\item si l'échéance est égale à la période $\forall \tau_i, D_i = T_i$ : tâche à \label{echeancesurrequete}échéance sur requête
-		\item si l'échéance est inférieure ou égale à la période $\forall \tau_i, D_i \leq T_i $ , on dit que la tâche est à \label{echeancecontrainte} échéance contrainte
-		\item s'il n'y a pas de contrainte particulière, la tâche est dite "à échéance arbitraire".
-	\end{enumerate}
-	Les solutions d'ordonnancement pour ces trois types de tâches diffèrent donc. 
-	Globalement, on peut ordonner ces trois types de tâches : \\
-	échéance sur requêtes $\subset$ échéance contrainte $\subset$ échéance arbitraire.
-	
-	\item[\textbf{Tâche sporadique}] : Une tâche est sporadique est une tâche qui génère de nouveaux jobs, 
-	comme dans le cas de la tâche périodique. 
-	La différence entre ces deux types est que la tâche sporadique 
-	génère deux jobs avec un intervalle de temps au moins égal à la durée correspondant à sa période, 
-	et pas exactement égal. 
-	
-	\item[\textbf{Tâche apériodique}] : Pour ce type de tâches, on ignore la régularité de 
-	l'arrivée de nouveaux jobs. Les propriétés du job ne sont connues que lorsqu'un job est 
-	généré dans le système.
-	
+    \item[\textbf{Temps de réalisation}] : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
+    \item[\textbf{Début, Fin}] : Le moment où la tâche commence effectivement à être exécutée, ou termine son exécution.
+    \item[\textbf{Temps de réponse\label{Response Time}}] : Temps maximum nécessaire à la réalisation de la tâche 
+    entre le temps de réalisation et Fin. %TODO vérif
+    \item[\textbf{Échéance, temps limite}] : Correspond au temps limite au delà duquel la tâche doit avoir été exécutée. Il existe deux types d'échéances : 
+    une absolue, et une relative. L'échéances relative est une valeur fixe qui 
+    est une propriété de la tâche, elle dépend donc du temps de réalisation.\\
+    L'échéances absolue quant à elle est calculée avant l'exécution, et correspond 
+    à un temps $t$ absolu.%TODO explain better, relire cours ptete ?!
+    
+    \item[\textbf{Worst Case Execution Time}] Afin de faciliter les calculs et l'abstraction du problème, l'on pose habituellement que le temps considéré d'exécution de 
+    la tâche est le pire temps. Cela permet d'envisager le pire scénario, et ainsi 
+    de s'assurer que si celui-ci est possible, alors dans de meilleures conditions, 
+    la faisabilité est conservée. La notation utilisée dans le reste de ce document 
+    est  \textbf{WCET} : \textbf{W}orst \textbf{C}ase \textbf{E}xecution \textbf{T}ime
+    
+    \item[\textbf{Laxité}] La laxité d'une tâche est la durée entre sa réalisation et son échéance. 
+    Pour une tâche $\tau_i$, la laxité est :
+    \begin{center}
+        $L_i = D_i - C_i$
+    \end{center}
+    \vspace{0.5cm}
+    \item[\textbf{Tâches périodiques}]
+    Une tâche périodique est une tâche qui génère régulièrement des jobs.  
+    Formellement, une tâche périodique est définie par un 4-uplet $(O, T, D, C)$ où 
+    \begin{itemize}
+        \item[O] est l'"offset", c'est à dire le temps que met la tâche à générer un premier job.
+        \item[T] est la période, c'est à dire le temps qui sépare deux générations de job par la tâche. 
+        Comme le premier job est généré à l'instant $O$, alors $\forall i \in \{0, \infty \} t = O + i\times T$ 
+        où $t$ est le temps où la tâche est générée la $i$ème fois.
+        \item[D] est l'échéance relative, c'est à dire le temps qui sépare au maximum la génération 
+        d'un job et sa réalisation.
+        \item[C] est le temps de réalisation. Dans les algorithmes, on utilise -- comme expliqué précédemment -- le \textbf{WCET}.
+    \end{itemize}	
+    Dans le cas de tâches périodiques, on distingue trois cas différents : \\
+    \begin{enumerate}
+        \item si l'échéance est égale à la période $\forall \tau_i, D_i = T_i$ : tâche à \label{echeancesurrequete}échéance sur requête
+        \item si l'échéance est inférieure ou égale à la période $\forall \tau_i, D_i \leq T_i $ , on dit que la tâche est à \label{echeancecontrainte} échéance contrainte
+        \item s'il n'y a pas de contrainte particulière, la tâche est dite "à échéance arbitraire".
+    \end{enumerate}
+    Les solutions d'ordonnancement pour ces trois types de tâches diffèrent donc. 
+    Globalement, on peut ordonner ces trois types de tâches : \\
+    échéance sur requêtes $\subset$ échéance contrainte $\subset$ échéance arbitraire.
+    
+    \item[\textbf{Tâche sporadique}] : Une tâche sporadique est une tâche qui génère de nouveaux jobs, 
+    comme dans le cas de la tâche périodique. 
+    La différence entre ces deux types est que la tâche sporadique 
+    génère deux jobs avec un intervalle de temps au moins égal à la durée correspondant à sa période, 
+    et pas exactement égal. Les systèmes embarqués ont souvent des tâches sporadiques à gérer : 
+    en effet, un système qui est composé de capteur aura du mal à prévoir l'arrivée d'un signal de 
+    celui-ci. 
+    
+    \item[\textbf{Tâche apériodique}] : Pour ce type de tâches, on ignore la régularité de 
+    l'arrivée de nouveaux jobs. Les propriétés du job ne sont connues que lorsqu'un job est 
+    généré dans le système.
+    
 \end{itemize}
 
 \subsection{Job}
-Un job est une instance d'une tâche. %TODO fill...
+Un job est une instance d'une tâche. 
+\subsection{RTOS}
+(Real Time Operating System) Système d'Exploitation Temps Réel.\\
+Un système d'exploitation Temps Réel un système d'exploitation implémenté pour les systèmes 
+à temps réel, c'est à dire dont l'objectif est d'assurer le respect de certaines échéances. 
+
+Cela concerne pour beaucoup les systèmes dits "critiques", c'est à dire dont la sécurité 
+est primordiale (avions, centrales nucléaires, pacemakers, etc.). Ce type de dispositifs 
+est actuellement très répandu, notamment dans les voitures.\\
+Les contraintes sont différentes de celles des systèmes d'exploitations traditionnels puisqu'on 
+doit garantir le respect des échéances associées à chacune des tâches. 
+
+Cependant, si les systèmes d'exploitation temps réel ont des besoins de respect des échéances, 
+cela ne signifie pas qu'ils aient forcément de grands besoins en efficacité ou en rapidité, ce qui 
+est primordial est que les échéances soient respectées. 
+Pour certains systèmes critiques, on comprend qu'il soit important de pouvoir prouver 
+minutieusement que le système est correct, et ne risque pas de produire des pannes, ce qui peut 
+s'avérer très grave. \\
+	
+\subsection{Contraintes strictes, contraintes relatives} 
+Dans le cas strict, le système doit impérativement respecter tous les temps limites. Aucun dépassement n'est toléré. Dans le cas des contraintes relatives, ce respect 
+est moins impératif, et on pourra dépasser les délais occasionnellement. \\
+
 
 \subsection{Ordonnanceur}
 Un ordonnanceur (\textit{Scheduler}) est la partie logicielle de 
@@ -371,7 +376,7 @@ On distingue trois types d'assignation de priorités des ordonnanceurs : \\
 	\item Priorité fixe au niveau des jobs : La priorité est fixée par l'ordonnanceur à l'arrivée du job 
 	dans l'exécution, et elle ne peut pas changer jusqu'à la réalisation du job. Un exemple sera présenté plus loin : Earliest Deadline First.
 	\item Priorité dynamique : L'ordonnanceur peut recalculer à tout moment de l'exécution 
-	la priorité du job avec un exemple connu, Least Laxity First %TODO add ref
+	la priorité du job avec un exemple connu, Least Laxity First\cite{hutchison_predictability_2006}.
 \end{enumerate}
 	
 Selon les cas, l'ordonnanceur peut avoir à gérer un seul processeur. Dans ce 
@@ -379,25 +384,30 @@ document, on parlera dans ce cas d'ordonnanceur mono-processeur. Toutefois, de p
 plus de systèmes possèdent plusieurs processeurs, et il existe deux grandes familles 
 d'ordonnanceurs associés à ces systèmes : les Partitionnés, ou les Globaux. \\
 
-\subsection{Work-Conservative}
+\subsection{Work-Conservative} 
+Un ordonnanceur peut-être "économe", ou "non-économe". Dans le premier cas, si le processeur est libre, 
+et qu'une tâche est prête à être exécutée, l'ordonnanceur donnera l'instance : cela signifie 
+qu'on évite les temps d'inactivité du processeur. Dans le second cas, une tâche ne sera pas toujours ordonnancée.
+Dans le reste de ce document, les ordonnanceurs présentés sont tous économes selon cette définition.
+
 \subsection{En ligne, hors ligne}
-%TODO blabla
+Un ordonnanceur en ligne fait ses opérations d'ordonnancement durant le runtime. 
+Un ordonnanceur hors ligne fait des opérations au préalable. 
+Un exemple pour illustrer cela est un ordonnanceur partitionné, qui aura partagé le système 
+en sous-systèmes durant une phase hors-ligne, et un ordonnanceur global non clairvoyant qui 
+ordonnance au fur et à mesure durant l'exécution. 
 
 \subsubsection{Ordonnanceur multi-processeur Partitionné}
-Dans ce cas de figure, un traitement hors ligne aura permis de diviser/partitionner 
-les tâches en des ensembles selon certaines propriétés. Par la suite, le traitement 
-est similaire à un ordonnanceur mono-processeur.
+Un ordonnanceur partitionné composé de $n$ tâches et de $m$ processeurs divise 
+le système en $m$ sous-systèmes qui seront ensuite ordonnancés par autant d'ordonnanceurs 
+mono-processeurs. Le problème principal consiste à découper efficacement le système de tâches.
 
 \subsubsection{Ordonnanceur multi-processeur Global}
-Ici, le traitement "idéal" se fait en ligne entièrement, le système gère directement 
-plusieurs processeurs et un système de tâches. Ces ordonnanceurs sont par 
-conséquents plus complexes, et par ailleurs, comme il a été précisé plus haut dans 
-ce document, l'ordonnanceur global qui peut orchestrer n'importe quel ensemble de 
-tâche optimal n'existe pas.
-
-Dans la littérature, on décrit des ordonnanceurs dont une partie du travail se fait 
-hors ligne (RUN) %TODO add ref
-et on parle alors d'ordonnanceur "hybride".
+Un ordonnanceur global ne sépare pas le système en sous-systèmes mais gère une 
+queue de tâches prêtes à être exécutées. Ainsi à chaque instant où il devra prendre une décision 
+d'ordonnancement, il devra ordonnancer toute la liste des $m$ processeurs.\\
+Contrairement aux ordonnanceurs partitionnés, les migrations sont possibles. Le problème 
+est donc de réduire leur nombre pour ne pas faire de mouvements inutilement.
 	
 \subsection{Préemption et hypothèse} 
 Un système est dit préemptif s'il a la capacité 
@@ -429,19 +439,10 @@ l'utilisation pour un système de $m$ tâches :\\
 \end{center}
 
 \subsection{Laxité}
-\ref{laxite}
-blabla.%todo add def
+%\ref{laxite}
+La laxité d'un job est la durée entre son temps de réalisation et son échéance absolue. 
+%todo add blabla
 
-\subsection{Représentation graphique d'un système}
-%TODO fill with an example. Hope not to have to draw it in latex :/
-% http://martin-kumm.de/wiki/doku.php?id=Projects:A_LaTeX_package_for_gantt_plots
-%\begin{ganttchart}[vgrid, hgrid]{1}{15}
-%	\ganttbar{$\tau_1$}{7}{9}\\
-%	\ganttbar{$\tau_2$}{2}{4}\\
-%	\ganttbar{$\tau_3$}{5}{6}\\
-%	\ganttbar{$\tau_4$}{10}{10}\\
-%	\ganttbar{$\tau_5$}{11}{13}
-%\end{ganttchart}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -449,11 +450,6 @@ blabla.%todo add def
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%
-%
-%%%%%%%%%%%%%%%%%
-%\part{Si du moins votre travail est divisé en parties}
-%%%%%%%%%%%%%%%%%
 \chapter{État de l'art}
 
 La littérature sur le sujet des ordonnanceurs est assez vaste. 
@@ -463,7 +459,7 @@ Ceux-ci sont composés principalement de trois grandes familles :\\
 	\item Les multi-processeurs Partitionnés
 	\item Les multiprocesseurs Globaux
 \end{itemize}
-Les ordonnanceurs mon-processeurs étant plus simples à appréhender, nous commencerons 
+Les ordonnanceurs mono-processeurs étant plus simples à appréhender, nous commencerons 
 par présenter cette famille.
 
 \section{Ordonnanceurs mono processeur}
@@ -536,7 +532,7 @@ Cette propriété est importante, car les classes de tâches ordonnancées par \
 sont plus larges que \textit{RM} et \textit{DM}, par conséquent, \textit{EDF} peut ordonnancer également les 
 mêmes classes qu'\textit{RM} et \textit{DM} en conservant son optimalité. \\
 
-Les tests de faisabilités avec \textit{EDF} dépendent de la classe de tâche considérée. 
+Les tests de faisabilité avec \textit{EDF} dépendent de la classe de tâche considérée. 
 Pour un système synchrone et à échéance sur requête, 
 une condition nécessaire et suffisante de faisabilité est donc que l'utilisation soit inférieure 
 à 100\%, c'est à dire : \\
@@ -629,7 +625,7 @@ des heuristiques sont appliquées, comme par exemple :\\
 Plusieurs algorithmes de ce type ont été présentés dans la littérature scientifique
 dans les années 80 comme par exemple \cite{dhall_real-time_1978} dans ce 
 document de Dhall et Liu en 1978. 
-Dans leur article, ils notamment des fourchettes d'utilisations 
+Dans leur article, ils donnent notamment des fourchettes d'utilisations 
 permettant d'ordonnancer pour le cas multi-processeur utilisant \textit{RM}, 
 considérant les échéances implicites :
 \begin{mytheorem}
@@ -666,7 +662,7 @@ Dans ces conditions, il n'est pas étonnant de voir que ces solutions sont encor
 répandues dans l'industrie à ce jour, les algorithmes \textit{RM} et \textit{DM} 
 étant assez simples à implémenter, des heuristiques ainsi que leur efficacité ayant été analysées, en théorie ainsi qu'en pratique.\\
 
-Un défaut majeur de ces algorithmes est que bien souvent, l'utilisation des processeur sera 
+Un défaut majeur de ces algorithmes est que bien souvent, l'utilisation des processeurs sera 
 sous-performante, ce qui est une raison très souvent invoquée dans la littérature pour se 
 tourner vers d'autres solutions. 
 Andersson, Baruah et Jonsson proposent RM-US$\frac{m}{3m-2}$ avec un test 
@@ -742,7 +738,7 @@ Le mode doit être décidé avant l'exécution, et devra être fixé une fois po
 Cela peut convenir à un certain nombre de systèmes, mais ne peut pas être une solution générale.
 De façon générale, on retrouve dans la littérature l'idée que les ordonnanceurs globaux 
 permettent généralement d'ordonnancer plus de systèmes que les ordonnanceurs partitionnés, 
-mais la conclusion ne peut être affirmée avec déterminisme : cela dépend des situations
+mais la conclusion ne peut être considérée comme définitive : cela dépend des situations
 \cite{lopez_utilization_2004}.
 Il y a aussi un problème lié à la communication entre les tâches. Dans nos recherches, 
 la plupart des articles posent que les tâches sont indépendantes entre elles. Dans 
@@ -880,8 +876,8 @@ limites supérieures d'utilisation pour ces techniques \cite{davis_survey_2011}.
 
 
 \subsection{Il n'existe pas de stratégie en ligne optimale sans clairvoyance}
-Quelques résultats déjà connus dans la littérature viennent noircir l'espoir de trouver une 
-solution parfaite. En effet, dans leur article de 1988 \cite{hong_-line_1988}, Hong et Leung montrent :\\
+Quelques résultats déjà connus dans la littérature montrent que le sujet est difficile. 
+En effet, dans leur article de 1988 \cite{hong_-line_1988}, Hong et Leung montrent :\\
 \textit{"for every $m > 1$, no optimal online scheduler can exist for task systems with two or more distinct
 	deadlines."} (Pour tout $m > 1$, il n'existe pas d'ordonnanceur en ligne 
 optimal pour les ensembles de tâches avec au moins deux échéances distinctes). 
@@ -1003,7 +999,7 @@ $k - 1$ tâches, tandis que les autres sont ordonnancées suivant \textit{EDF}.\
 L'article propose une équation dont on dérive la valeur optimale de $k$, et où l'on peut 
 atteindre $m$ le plus petit, cette valeur étant améliorée par rapport à \textit{EDF-US}.\\
 
-Une autre approche consiste à considérer la \ref{laxite}{laxité} pour modifier \textit{EDF}. 
+Une autre approche consiste à considérer la laxité pour modifier \textit{EDF}. 
 Ainsi, l'idée d'\textit{EDZL} (Earliest Deadline until Zero Laxity) \cite{cirinei_edzl_2007} ou encore d'EDCL \cite{kato_real-time_2007}
 (Earliest Deadline Critical Laxity). \\
 
@@ -1033,7 +1029,7 @@ en suivant deux opérations :\\
     \item Une opération \textit{Pack}
 \end{itemize}
 Un \textit{Dual} se construit par complémentarité avec un \textit{Primal}, dont les règles de constructions sont 
-données dans l'article, et qui -- globalement -- consiste en ?? %TODO add here
+données dans l'article.
 Un serveur est chargé d'ordonnancer chaque sous-système. Celui-ci fonctionne à l'aide 
 d'\textit{EDF}, dont les avantages nombreux ont déjà été évoqués plus tôt dans ce document. 
 Il n'est pas évident à la lecture de l'article de comprendre en quoi 
