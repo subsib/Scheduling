@@ -115,7 +115,6 @@
 
 % chapitre introduction
 
-% TODO trouver meilleur nom qu'introduction, l'introduction est une partie de cette première partie.
 \chapter{Introduction}{}
 \setcounter{page}{1}
 
@@ -131,20 +130,40 @@ Les systèmes embarqués n'ont pas toujours de grands besoins en efficacité,
 ils doivent principalement être sûrs, et réactifs. 
 Toutefois, un système dont l'efficacité n'est pas maximale n'utilise pas 
 ses ressources de façon optimale. 
+
+
+
 De nos jours où la gestion énergétique se doit d'être la plus 
 économe possible, 
 où l'on est de plus en plus exigeant concernant l'efficacité, 
-il est envisageable que la solution évolue du côté des industries.
-%todo parler des prix des composants, autonomie, poids
-En effet, \\
+il est envisageable que la solution évolue du côté des industries : 
+%todo Parler de l'autonomie, du poids, du prix des composants
+%durant le passé, les lois de Moore %todo add ref
+%se sont vérifiées car il était encore possible de miniaturiser les composants, 
+%ce qui faisait gagner en efficacité d'autant. Cela n'est actuellement plus le cas, 
+%les composants étant déjà largement miniaturisés, de nouvelles miniaturisations 
+%n'entraineraient plus de gain. 
+Un souci peut être par exemple de laisser en place un composant le plus 
+longtemps possible (difficilement atteignable), des appareils de taille très réduite 
+devraient fournir un maximum de puissance. 
+Dans le cas d'un pacemaker, on imagine aisément que l'on souhaite obtenir un appareil 
+de petite taille, que l'on manipulera le moins possible, y compris pour le fournir en 
+énergie. \\
 
 Par ailleurs, cela fait plusieurs années que la croissance de l'efficacité des appareils n'est plus 
 principalement due à des améliorations physiques des composants. 
-
-En effet, la multiplication des processeurs dans les ordinateurs a permis
-de paralléliser les exécutions, et c'est ainsi que la quasi stagnation des 
-technologies a pu être contournée pour continuer la progression.
-
+Considérant l'efficacité 
+En effet, durant une cinquantaine d'années, dans le passé, les lois de Moore %todo add ref
+se sont vérifiées : des règles empiriques qui postulent que la fréquence des processeurs 
+double tous les dix-huit mois environ. 
+Il était alors encore possible de miniaturiser les composants, 
+ce qui faisait gagner en efficacité d'autant. 
+Cela n'est actuellement plus le cas, 
+les composants étant déjà largement miniaturisés, de nouvelles miniaturisations 
+n'entraineraient plus de gain. La croissance doit emprunter d'autres voies. Parmi celles 
+empruntées, outre de nouvelles propositions technologiques, 
+il y a l'amélioration logicielle avec notamment la parallélisation.
+\\
 
 Le monde des systèmes embarqués en temps réel a bénéficié de ces améliorations, 
 et dispose également de processeurs multi-c\oe{}urs. Cependant, leur gestion n'est 
@@ -170,6 +189,7 @@ pour les systèmes embarqués pose plusieurs problèmes :
 	sur ces appareils parfois sans source de renouvellement d'énergie.
 	\item Certains systèmes embarqués nécessitent une très basse consommation car 
 	ils sont difficiles d'accès ou non faciles à recharger.
+	\item 
 \end{enumerate}
 
 Toutes ces raisons poussent à s'intéresser à une implémentation réelle et réaliste 
@@ -213,15 +233,14 @@ Si parmi ces deux familles d'ordonnanceurs, les systèmes mono-processeurs, voir
 partitionnés ont le plus de succès auprès de l'industrie, 
 ce n'est pas la famille la plus efficace pour tout type de classe de tâches. 
 Les algorithmes globaux répartissent habituellement mieux l'utilisation des processeurs, 
-les migrations sont possibles et donc les temps de réalisation sont généralement moins grands.
-\\ % TODO add ref ?... J'ai une conf, mais pas un papier scientifique...
-% http://retis.sssup.it/~giorgio/slides/cbsd/mc3-global-2p.pdf
+les migrations sont possibles et donc les temps de réponse sont généralement moins grands.
+\\ 
 
 
 En 1988, Hong and Leung \cite{hong_-line_1988} publient un article dans lequel est 
 démontré que : \\
 \textit{"For every m > 1, no optimal on-line scheduler can exist for task systems with two or more distinct deadlines"} : 
-\textit{Il n'existe pas d'ordonnanceur multiprocesseur en ligne optimal pour un système de tâches 
+\textit{Il n'existe pas d'ordonnanceur multiprocesseur en ligne \ref{optimal}{optimal} pour un système de tâches 
 avec plusieurs échéances distinctes}, donc un système de tâches dites "sporadiques".
 
 Or, les systèmes embarqués doivent très souvent exécuter des systèmes de tâches sporadiques, 
@@ -237,7 +256,7 @@ que des ordonnanceurs globaux optimaux existent, mais nécessitent de la clairvo
 
 \subsection{HIPPEROS}
 \textbf{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
-est un \textbf{RTOS} développé depuis plusieurs années par une spinoff de l'ULB.
+est un \textbf{RTOS} (Real Time Operating System) développé depuis plusieurs années par une spinoff de l'ULB.
 Il bénéficie des connaissances apportées par le monde de la recherche dans 
 le domaine des systèmes critiques avec multic\oe{}urs. Une de ses particularités 
 est sa modularité, qui permet d'adapter ses possibilités en fonction du système 
@@ -258,24 +277,34 @@ L'ordonnanceur idéal -- c'est à dire optimal pour toute classe de tâches et
 qui ne fasse pas de multiples migrations coûteuses n'existant pas, 
 notre sujet est de sélectionner l'un d'eux parmi une liste 
 d'ordonnanceurs connus (ne serait-ce que dans la littérature) afin que cela apporte 
-à la connaissance générale, tant sur le plan théorique que pratique.
+à la connaissance générale, tant sur le plan théorique que pratique.\\
 
 Par ailleurs, certains des ordonnanceurs présentés dans l'état de l'art 
  ont déjà bénéficié d'une implémentation sur un \textbf{RTOS}, et une nouvelle 
  implémentation sur un \textbf{OS} différent pourrait apporter un éclairage intéressant quant 
  aux différences de comportements.
-Dans certaines présentations d'ordonnanceurs sont proposées des hypothèses à propos du comportement, 
-comme faire globalement plus de préemption, de migrations. 
-Le comportement observé dans des conditions différentes pourrait être vérifié, ou le contraire.
+ En effet, on comprend que pour réaliser l'observation pratique d'un ordonnanceur, 
+ on implémente l'algorithme et on procède à des tests dans un certain environnement. 
+ Il serait -- dans ce cadre -- intéressant de voir si la modification de l'environnement 
+ pourrait permettre de confirmer, ou au contraire, infirmer, les premières observations faites.
 
+%todo relire cette horreur... 
+ D'autres articles citent des avantages d'un algorithme, comme par exemple 
+ le nombre réduit de migration, ou de préemptions attendues. Pour la même raison, 
+ il pourrait être intéressant de confronter une implémentation pratique avec ses attentes 
+ théoriques.\\
+
+Pour finir, dans la littérature, l'hypothèse que le temps de préemption est nul 
+est souvent faite. Celle-ci permet de simplifier la question théorique. 
+Cette hypothèse est bien entendu fausse, et il faudra en tenir compte, 
+particulièrement dans ce travail où l'on tente de faire 
+le lien entre la théorie et la mise en pratique.\\
+ 
 La question cruciale de cette première partie de travail 
 consiste donc à faire un tour d'horizon de la littérature afin de pouvoir 
 sélectionner un ordonnanceur pertinent à implémenter sur le \textbf{RTOS} \textbf{HIPPEROS}.
 
 \section{Vocabulaire général sur les systèmes temps réel}
-
-\subsection{Système de tâches}
-Un système de tâches et un ensemble de tâches ayant les mêmes propriétés devant être exécutées. 
 
 \subsection{Tâche (temps réel)}
 Une tâche correspond à une sorte de programme, c'est à dire une série d'instructions 
@@ -284,15 +313,8 @@ Il y a plusieurs caractéristiques
 et propriétés qui définissent une tâche, que nous allons définir ici : 
 \begin{itemize}
     \item[\textbf{Temps de réalisation}] : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
-    \item[\textbf{Début, Fin}] : Le moment où la tâche commence effectivement à être exécutée, ou termine son exécution.
     \item[\textbf{Temps de réponse\label{Response Time}}] : Temps maximum nécessaire à la réalisation de la tâche 
-    entre le temps de réalisation et Fin. %TODO vérif
-    \item[\textbf{Échéance, temps limite}] : Correspond au temps limite au delà duquel la tâche doit avoir été exécutée. Il existe deux types d'échéances : 
-    une absolue, et une relative. L'échéances relative est une valeur fixe qui 
-    est une propriété de la tâche, elle dépend donc du temps de réalisation.\\
-    L'échéances absolue quant à elle est calculée avant l'exécution, et correspond 
-    à un temps $t$ absolu.%TODO explain better, relire cours ptete ?!
-    
+    entre le temps de réalisation et Fin.
     \item[\textbf{Worst Case Execution Time}] Afin de faciliter les calculs et l'abstraction du problème, l'on pose habituellement que le temps considéré d'exécution de 
     la tâche est le pire temps. Cela permet d'envisager le pire scénario, et ainsi 
     de s'assurer que si celui-ci est possible, alors dans de meilleures conditions, 
@@ -341,30 +363,63 @@ et propriétés qui définissent une tâche, que nous allons définir ici :
     
 \end{itemize}
 
+\subsection{Système de tâches}
+Un système de tâches et un ensemble de tâches devant être exécutées conjointement. 
+
+\subsection{Faisabilité}
+Un système de tâches est dit faisable si un ordonnanceur qui permette de 
+l'ordonnancer existe.
+
+\subsection{Synchrone/asynchrone}
+Une tâche est définie par son offset, et lorsque toutes les tâches ont un \textit{offset} égal à 0, on parle de 
+système synchrone. Lorsque les \textit{offset} ne sont pas tous de 0, les départs sont dits différés, 
+le système est dit asynchrone.
+
+\subsection{Hyperpériode}
+L'hyperpériode est un intervalle de temps qui est défini de façon formelle comme suit :\\
+$P = ppcm\{T_i\i \in \{1,... m\}\}$
+
+Cette notion est souvent utilisée afin d'obtenir l'intervalle de temps 
+minimal durant lequel tester la faisabilité d'un système par un ordonnanceur.
+
 \subsection{Job}
 Un job est une instance d'une tâche. 
+Il peut avoir des propriétés. 
+Dans certains algorithmes, certaines propriétés sont plutôt liées à la tâche, 
+et dans d'autres, ces mêmes propriétés sont plutôt dynamiques, et donc liées au job.
+\begin{itemize}
+	\item[\textbf{Début, Fin}] : Le moment où un job commence à être exécuté, ou termine son exécution.
+    \item[\textbf{Échéance, temps limite}] : Correspond au temps limite au delà duquel le job doit avoir été exécuté. Il existe deux types d'échéances : 
+une absolue, et une relative. L'échéances relative est une valeur fixe qui 
+est une propriété de la tâche, elle dépend donc du temps de réalisation.\\
+L'échéances absolue quant à elle est calculée avant l'exécution, et correspond 
+à un temps $t$ absolu, elle est donc une propriété du job.
+\end{itemize}
+
 \subsection{RTOS}
 (Real Time Operating System) Système d'Exploitation Temps Réel.\\
 Un système d'exploitation Temps Réel un système d'exploitation implémenté pour les systèmes 
 à temps réel, c'est à dire dont l'objectif est d'assurer le respect de certaines échéances. 
 
-Cela concerne pour beaucoup les systèmes dits "critiques", c'est à dire dont la sécurité 
+Cela concerne pour beaucoup les systèmes dits "critiques", c'est à dire dont la fiabilité 
 est primordiale (avions, centrales nucléaires, pacemakers, etc.). Ce type de dispositifs 
 est actuellement très répandu, notamment dans les voitures.\\
-Les contraintes sont différentes de celles des systèmes d'exploitations traditionnels puisqu'on 
-doit garantir le respect des échéances associées à chacune des tâches. 
+Les contraintes sont différentes de celles des systèmes d'exploitations des ordinateurs 
+de bureau puisque l'on doit garantir le respect des échéances associées à chacune des tâches. 
 
 Cependant, si les systèmes d'exploitation temps réel ont des besoins de respect des échéances, 
 cela ne signifie pas qu'ils aient forcément de grands besoins en efficacité ou en rapidité, ce qui 
 est primordial est que les échéances soient respectées. 
-Pour certains systèmes critiques, on comprend qu'il soit important de pouvoir prouver 
-minutieusement que le système est correct, et ne risque pas de produire des pannes, ce qui peut 
-s'avérer très grave. \\
-	
+En effet, dans un système dit "critique", une défaillance du système pourrait entraîner des dégâts 
+très importants. 
+Dans ce cadre, l'on a besoin de garanties que le système soit fiable, et c'est là une priorité absolue.
+L'efficacité en elle-même n'est pas le besoin le plus fondamental de ce type de système.\\
+
 \subsection{Contraintes strictes, contraintes relatives} 
 Dans le cas strict, le système doit impérativement respecter tous les temps limites. Aucun dépassement n'est toléré. Dans le cas des contraintes relatives, ce respect 
 est moins impératif, et on pourra dépasser les délais occasionnellement. \\
-
+Dans la littérature scientifique, on parle de \textbf{hard real-time} dans le cas d'un ordonnanceur 
+qui ne tolère aucun dépassement, et de \textbf{soft real-time} dans le cas contraire.
 
 \subsection{Ordonnanceur}
 Un ordonnanceur (\textit{Scheduler}) est la partie logicielle de 
@@ -385,7 +440,11 @@ On distingue trois types d'assignation de priorités des ordonnanceurs : \\
 Selon les cas, l'ordonnanceur peut avoir à gérer un seul processeur. Dans ce 
 document, on parlera dans ce cas d'ordonnanceur mono-processeur. Toutefois, de plus en 
 plus de systèmes possèdent plusieurs processeurs, et il existe deux grandes familles 
-d'ordonnanceurs associés à ces systèmes : les Partitionnés, ou les Globaux. \\
+d'ordonnanceurs associés à ces systèmes : les partitionnés, ou les globaux. \\
+
+\subsection{Optimalité}\label{optimal}
+Un ordonnanceur est dit optimal si pour un système de tâche pour lequel une solution 
+existe, l'ordonnanceur permet de l'ordonnancer.
 
 \subsection{Work-Conservative} 
 Un ordonnanceur peut-être "économe", ou "non-économe". Dans le premier cas, si le processeur est libre, 
@@ -394,11 +453,15 @@ qu'on évite les temps d'inactivité du processeur. Dans le second cas, une tâc
 Dans le reste de ce document, les ordonnanceurs présentés sont tous économes selon cette définition.
 
 \subsection{En ligne, hors ligne}
-Un ordonnanceur en ligne fait ses opérations d'ordonnancement durant le runtime. 
-Un ordonnanceur hors ligne fait des opérations au préalable. 
+Un ordonnanceur peut faire ses opérations d'ordonnancement de deux façons : \\
+\begin{itemize}
+	\item Durant le runtime, on parlera d'opérations en ligne
+	\item Avant l'exécution, on parlera d'opérations hors ligne
+\end{itemize}
 Un exemple pour illustrer cela est un ordonnanceur partitionné, qui aura partagé le système 
-en sous-systèmes durant une phase hors-ligne, et un ordonnanceur global non clairvoyant qui 
+en sous-systèmes durant une phase hors-ligne, et un ordonnanceur global qui 
 ordonnance au fur et à mesure durant l'exécution. 
+
 
 \subsubsection{Ordonnanceur multi-processeur Partitionné}
 Un ordonnanceur partitionné composé de $n$ tâches et de $m$ processeurs divise 
@@ -411,29 +474,31 @@ queue de tâches prêtes à être exécutées. Ainsi à chaque instant où il de
 d'ordonnancement, il devra ordonnancer toute la liste des $m$ processeurs.\\
 Contrairement aux ordonnanceurs partitionnés, les migrations sont possibles. Le problème 
 est donc de réduire leur nombre pour ne pas faire de mouvements inutilement.
-	
-\subsection{Préemption et hypothèse} 
+
+\subsection{Clairvoyance}
+Un ordonnanceur est dit "clairvoyant" s'il peut prédire des éléments (l'échéance d'un job, 
+le début, la fin d'un job) des tâches du système qu'il ordonnance.
+%todo pas sûre de la définition...
+
+\subsection{Préemption} 
 Un système est dit préemptif s'il a la capacité 
 	de mettre l'exécution d'un job en pause et d'exécuter un autre à la place. 
-	Une hypothèse pour simplifier la question théorique des ordonnanceur est 
-	très souvent faite dans la littérature : on considère le temps de 
-	préemption comme nul. Cette hypothèse est bien entendu fausse, et il faudra 
-	en tenir compte, particulièrement dans ce travail où l'on tente de faire 
-	le lien entre la théorie et la mise en pratique. 
 
 \subsection{Utilisation}
 Le facteur d'utilisation $U_i$ d'une tâche périodique $\tau_i$ est le rapport entre 
 son temps d'exécution et sa période. Par exemple, pour une tâche $\tau_i$ tel que 
-$WCET = 50 ms$ et $T = 30 ms$, le processeur doit allouer $\frac{30}{50}$ du temps 
+$WCET = 30 ms$ et $T = 50 ms$, le processeur doit allouer $\frac{30}{50}$ du temps 
 total d'exécution à cette tâche.\\
 
 L'utilisation (ou le facteur d'utilisation) d'un système périodique est la proportion de temps 
-passée par le processeur à l'exécution de tâches d'un système donné. 
+passée par le processeur à l'exécution de tâches d'un système donné. En pratique, l'utilisation 
+est calculée avec le WCET, qui est la borne supérieure du temps d'exécution réel, on 
+peut donc penser que l'utilisation réelle sera inférieure à ce nombre.
 Le calcul de l'utilisation permet dans certains cas et certaines conditions de donner une indication 
 à propos de la faisabilité du système par un certain ordonnanceur. 
 \\
 
-Liu et Layland \cite{liu_scheduling_1973} en donnent une définition formelle dans leur article décrivant l'ordonnanceur \textbf{Rate Monotonic} (présenté plus tard dans ce document).\\ 
+Liu et Layland \cite{liu_scheduling_1973} en donnent une définition formelle.\\ 
 
 Soit $C_i$ le temps d'exécution d'une tâche $\tau_i$, et soit $T_i$ sa période, voici la définition de 
 l'utilisation pour un système de $m$ tâches :\\
@@ -443,9 +508,11 @@ l'utilisation pour un système de $m$ tâches :\\
 
 \subsection{Laxité}
 %\ref{laxite}
-La laxité d'un job est la durée entre son temps de réalisation et son échéance absolue. 
-%todo add blabla
+La laxité d'un job est définie par la différence entre le temps de réponse et l'échéance 
+d'une tâche. Sa définition formelle varie en fonction de l'ordonnanceur dont il est question.
 
+\subsection{Instant critique}
+%todo add it NOW
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -466,8 +533,9 @@ Les ordonnanceurs mono-processeurs étant plus simples à appréhender, nous com
 par présenter cette famille.
 
 \section{Ordonnanceurs mono-processeur}
+\subsection{Ordonnanceurs à priorité fixe sur tâche}
 
-\subsection{Rate Monotonic}
+\subsubsection{Rate Monotonic}
 L'ordonnanceur \textbf{R}ate \textbf{M}onotonic (RM) est décrit par Liu et Layland \cite{liu_scheduling_1973} en 1973. C'est 
 donc un ordonnanceur classique, bien connu, ainsi que largement documenté \cite{kermia_ordonnancement_2009}. 
 L'idée de base est qu'une tâche avec une période courte évolue rapidement, et 
@@ -481,15 +549,16 @@ Les auteurs énoncent même une condition suffisante de faisabilité pour un sys
 \begin{center}
 	$\sum_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1)$
 \end{center}
-Notons également que pour $n \rightarrow \infty$, $\sum_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1) \rightarrow \ln(2) \approx 0.69$.
+Notons également que pour $m \rightarrow \infty$, $\sum_{i=1}^{m}\frac{C_i}{T_i} \leq m(2^{\frac{1}{m}}-1) \rightarrow \ln(2) \approx 0.69$.
 Une condition suffisante est donc que le facteur d'utilisation du système soit inférieur à 0.69. 
 Dans ce cas, le système est ordonnançable par RM.\\
 
 Des améliorations ont par la suite été apportées par Joseph et Pandya \cite{joseph_finding_1986}.
 qui ont trouvé une condition nécessaire et suffisante. 
 Ainsi, si $RT(t_i)$ est le temps de réponse (\ref{Response Time}) d'une tâche $t_i$, 
-alors si un ensemble de tâches périodiques est trié par ordre décroissant, l'équation suivante 
-définit la borne supérieure du temps de réalisation :
+alors si un ensemble de tâches périodiques est trié par ordre décroissant, l'équation 
+récurrente suivante 
+définit la borne supérieure du temps de réalisation, lorsqu'elle tend vers un point fixe :
 \begin{center}
 	$RT(t_i)^{q+1} = \sum_{j=1}^{i-1} \lceil \frac{RT(t_i)^q}{T(t_i)} \rceil \times C(t_j)) + C(t_i)$
 \end{center}
@@ -500,9 +569,11 @@ On pourra résoudre récursivement cette équation afin de prouver sa faisabilit
 il faudra se tourner vers un autre type d'ordonnanceur.
 
 
-\subsection{Deadline Monotonic}
-Deadline Monotonic (DM) est un ordonnanceur pour les systèmes à départ simultanés ($offset = 0$) et 
-à échéance contrainte\ref{echeancecontrainte}($D_i \leq T_i$). Il a été décrit par Leung et Whitehead 
+\subsubsection{Deadline Monotonic}
+Deadline Monotonic (DM) est un ordonnanceur optimal pour la classe de systèmes à départ 
+simultanés (offset = 0) et à échéances contraintes
+(\ref{echeancecontrainte}). 
+Il a été décrit par Leung et Whitehead 
 \cite{leung_complexity_1982}. Cet article aborde le point de vue mono-processeur et multi-processeur partitionné, 
 dont il sera question plus loin dans ce document.\\
 
@@ -518,10 +589,10 @@ On peut la résoudre récursivement à l'aide de ce système d'équations: \\
 \end{enumerate}
 
 
-
+\subsection{Ordonnanceurs à priorité fixe sur job}
 \subsection{Earliest Deadline First}
 \textbf{E}arliest \textbf{D}eadline \textbf{F}irst (EDF) est un ordonnanceur 
-qui a été introduit en 1973, à la même période que Rate Monotonic, également 
+qui a été introduit en 1973, dans le même article que celui où est présenté Rate Monotonic 
 par Lui et Layland \cite{liu_scheduling_1973}. C'est un ordonnanceur à départ différé ($Offset \neq 0$) 
 et à échéance arbitraire (pas de contrainte sur l'échéance par rapport à la période), 
 qui fixe les priorités sur les jobs. L'assignation de la priorité se fait sur base de 
@@ -634,7 +705,7 @@ considérant les échéances implicites :
 \begin{mytheorem}
 \textit{"if a set of m tasks is scheduled according to the rate-monotonic scheduling algorithm, then the minimum achievable utilization factor is $m\times(2^{\frac{1}{m}} - 1)$".}
 \end{mytheorem}
-(Si un ensemble de $m$ tâches est planifié selon l'algorithme \textit{Rate-Monotonic}, 
+(Si un ensemble de $m$ tâches est ordonnancé selon l'algorithme \textit{Rate-Monotonic}, 
 alors le facteur d'utilisation minimum réalisable est $m\times(2^{\frac{1}{m}} - 1)$). \\
 Ils ajoutent :\\
 \textit{Note that according to theorem 1, as $m$ approches infinity, 
@@ -693,10 +764,10 @@ des heuristiques de bin-packing : \\
 Dans \cite{pereira_zapata_edf_2005}, Zapata et Alvarez décrivent les algorithmes 
 EDF avec partitionnement préalable, par exemple : \\
 \begin{itemize}
-	\item EDF-FF (first-fit)
-	\item EDF-NF (next-fit)
-	\item EDF-WF (worst-fit)
-	\item EDF-NFD (Earliest Deadline First Next Fit Decreasing)
+	\item first-fit
+	\item next-fit
+	\item worst-fit
+	\item Earliest Deadline First Next Fit Decreasing
 \end{itemize}
 et proposent une analyse de la complexité. Ils renvoient eux-mêmes vers 
 \cite{lopez_utilization_2004} 
@@ -737,7 +808,7 @@ Ainsi, si des solutions existent qui consistent à migrer une tâche sur un autr
 elles ne pourront pas être trouvées 
 par un ordonnanceur partitionné \cite{ramamurthy_static-priority_2000}. 
 Enfin, une autre limite est que ce processus ne permet pas à une tâche d'évoluer avec le temps. 
-Le mode doit être décidé avant l'exécution, et devra être fixé une fois pour toutes. 
+Ses propriétés doivent être fixes. 
 Cela peut convenir à un certain nombre de systèmes, mais ne peut pas être une solution générale.
 De façon générale, on retrouve dans la littérature l'idée que les ordonnanceurs globaux 
 permettent généralement d'ordonnancer plus de systèmes que les ordonnanceurs partitionnés, 
@@ -802,6 +873,7 @@ initialement mono-processeurs, (\textit{RM} ou \textit{EDF}) peuvent donner lieu
 processeurs, ce qui signifie qu'ils ne seraient pas utilisés de façon optimale. 
 Ils montrent par ailleurs que pour certains algorithmes, 
 il existe des systèmes qui présentent des \textit{pathologies}.
+%todo ah bon? La propriété dans l'article de 1978 n'est pas aussi forte --> check it
 Cela signifie que certains systèmes ne sont pas ordonnançables malgré une 
 utilisation totale de $1 + \epsilon$ et ce quel que soit le nombre de processeurs $m$.
 La déduction suivante peut en être tirée : la limite de l'utilisation totale 
@@ -814,27 +886,16 @@ montre que d'autres facteurs devraient être pris en considération. Dans un pre
 cela a participé à montrer la supériorité des approches partitionnées, ce pourquoi elles ont 
 largement été plus étudiées dans les années 80-90 \cite{davis_survey_2011}.\\
 
+%todo améliorer ce passage...
 De plus, dans le cas global, les instants critiques ne sont plus aussi faciles à prédire 
 que dans le cas mono-processeur : pour rappel, un instant critique se produit lorsqu'une tâche 
 libère un job à un moment où tous jobs de priorités supérieures doivent être exécutés. 
 Mais cela n'est plus forcément vrai dans le cas multi-processeur.\\
 
 
-%todo add graph here
-
-%
-%Une solution proposée pour éviter l'effet Dhall est de modifier la méthode d'attribution 
-%des priorités. En effet, en se basant sur la laxité \ref{laxite}, 
-%le problème ne se rencontre pas. Ceci donne plutèt avantage 
-%à d'autres méthodes d'attribution, comme avec \textit{LLF} (Least Laxity First). 
-%En 
-
-
-%todo add explications
-
 \subsection{Anomalies}
-Les anomalies sont décrites dans la littérature comme des changements qui intuitivement devraient 
-améliorer l'utilisation des processeurs, et qui rendent cependant le système non-ordonnançable. 
+Les anomalies sont décrites dans la littérature comme des changements qui intuitivement ne devraient 
+pas affecter l'ordonnançabilité des tâches, et qui rendent cependant le système non-ordonnançable. 
 Cela peut se produire dans diverses circonstances, comme par exemple :\\
 \begin{itemize}
 	\item le temps d'exécution décroît
@@ -898,7 +959,7 @@ l'algorithme a accès à des données sur les tâches au préalable \cite{fisher
 \subsection{PFair}
 En 1996, Baruah et al. décrivent l'algorithme \textit{PFair}.
 L'article apporte plusieurs définitions importantes :
-\begin{mydef}
+\begin{mydef} %TODO expliquer la syntaxe
 	$Lag(S, x, t) = x.w \times t - \sum_{i\in[0,t)}^{max} S(x, i)$, où 
 	$S$ est un ordonnanceur, $x$, un job, $t$ un instant, et où $S(x, t) = 1$ si 
 	le job $x$ est exécuté à l'instant $t$, $0$ sinon.
