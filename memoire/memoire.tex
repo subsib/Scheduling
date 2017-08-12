@@ -188,18 +188,10 @@
 	démontré que : \medskip
 	\textit{"For every m > 1, no optimal on-line scheduler can exist for task systems with two or more distinct deadlines"} : 
 	\textit{Il n'existe pas d'ordonnanceur multi-processeur en ligne \ref{optimal}{optimal} pour un système de tâches 
-		avec plusieurs échéances distinctes}, donc un système de tâches dites "sporadiques".
-	
-	Or, les systèmes embarqués doivent très souvent exécuter des systèmes de tâches sporadiques, 
-	cela tient de leur nature : la plupart d'entre eux attendent en effet de recevoir des 
-	signaux, qui arrivent de façon indéterminée.
+		avec plusieurs échéances distinctes}.
 	
 	Toutefois, des publications ultérieures viennent compléter cette preuve, et démontrent 
 	que des ordonnanceurs globaux optimaux existent, mais nécessitent de la clairvoyance.
-	%TODO add ref gossens
-	
-	
-	
 	
 	\subsection{HIPPEROS}
 	\textbf{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
@@ -235,7 +227,7 @@
 	Il serait -- dans ce cadre -- intéressant de voir si la modification de l'environnement 
 	pourrait permettre de confirmer, ou au contraire, infirmer, les premières observations faites.
 	
-	%todo relire cette horreur... 
+	
 	D'autres articles citent des avantages d'un algorithme, comme par exemple 
 	le nombre réduit de migration, ou de préemptions attendues. Pour la même raison, 
 	il pourrait être intéressant de confronter une implémentation pratique avec ses attentes 
@@ -425,7 +417,6 @@
 	\subsection{Clairvoyance}
 	Un ordonnanceur est dit "clairvoyant" s'il peut prédire des éléments (l'échéance d'un job, 
 	le début, la fin d'un job) des tâches du système qu'il ordonnance.
-	%todo pas sûre de la définition...
 	
 	\subsection{Préemption} 
 	Un système est dit préemptif s'il a la capacité 
@@ -454,12 +445,13 @@
 	\end{center}
 	
 	\subsection{Laxité}
-	%\ref{laxite}
+	\label{laxite}
 	La laxité d'un job est définie par la différence entre le temps de réponse et l'échéance 
 	d'une tâche. Sa définition formelle varie en fonction de l'ordonnanceur dont il est question.
 	
 	\subsection{Instant critique}
-	%todo add it NOW
+	\label{instantcritique}
+	Un instant critique est le moment où le temps de réponse d'un système ordonnancé est le plus long.
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -624,7 +616,6 @@
 	décrits précédemment puisqu'en divisant le système en sous-systèmes attribués à un 
 	processeur chacun, cela revient à appliquer "localement" une stratégie mono-processeur, contre 
 	une stratégie globale multi-processeur \cite{ndoye_ordonnancement_2014}.
-	%TODO add formal def
 	
 	Concrètement, cela revient à diviser un ensemble $\Gamma$ de tâches en $n$ sous-ensembles 
 	$\gamma \in \Gamma$ et d'attribuer à chacun des $m$ processeurs un de ces sous-ensembles $\gamma$.\medskip
@@ -667,10 +658,6 @@
 	réparti selon les algorithmes heuristiques de \textit{bin-packing} \textit{Next-Fit} et \textit{First-Fit}. 
 	Afin de trier les tâches, on considère leur utilisation.
 	
-	%TODO ajouter des détails sur ces algos :
-	%todo http://www.cse.chalmers.se/edu/year/2016/course/course/EDA222_Real_Time_Systems/Documents/Slides/Slides_14.pdf
-	%todo ajouter donc les conditions de faisabilité trouvées
-	
 	Par la suite, d'autres algorithmes basés sur \textit{RM} et \textit{DM} avec 
 	heuristique de bin-packing sont proposés et leurs performances analysées. 
 	Un historique complet est proposé dans le travail de thèse de Ndoye \cite{ndoye_ordonnancement_2014}. 
@@ -709,10 +696,10 @@
 	Dans \cite{pereira_zapata_edf_2005}, Zapata et Alvarez décrivent les algorithmes 
 	EDF avec partitionnement préalable, par exemple : \medskip
 	\begin{itemize}
-		\item first-fit
-		\item next-fit
-		\item worst-fit
-		\item Earliest Deadline First Next Fit Decreasing
+		\item EDF-FF (first-fit)
+		\item EDF-NF (next-fit)
+		\item EDF-WF (worst-fit)
+		\item EDF-NFD (next fit decreasing)
 	\end{itemize}
 	et proposent une analyse de la complexité. Ils renvoient eux-mêmes vers 
 	\cite{lopez_utilization_2004} 
@@ -805,15 +792,14 @@
 	\subsection{L'Effet Dhall}
 	Dans leur article de 1978 \cite{dhall_real-time_1978}, Dhall et Liu montrent que certains ordonnanceurs 
 	initialement mono-processeurs, (\textit{RM} ou \textit{EDF}) peuvent donner lieu à une utilisation faible des 
-	processeurs, ce qui signifie qu'ils ne seraient pas utilisés de façon optimale. 
-	Ils montrent par ailleurs que pour certains algorithmes, 
+	processeurs, ce qui signifie qu'ils ne seraient pas utilisés de façon optimale.\medskip 
+	Par ailleurs, il a été montré que pour certains algorithmes, 
 	il existe des systèmes qui présentent des \textit{pathologies}.
-	%todo ah bon? La propriété dans l'article de 1978 n'est pas aussi forte --> check it
 	Cela signifie que certains systèmes ne sont pas ordonnançables malgré une 
 	utilisation totale de $1 + \epsilon$ et ce quel que soit le nombre de processeurs $m$.
 	La déduction suivante peut en être tirée : la limite de l'utilisation totale 
 	pour RM ou EDF est de $1 + \epsilon$, avec $\epsilon$ arbitrairement petit, ce 
-	quel que soit $m$.
+	quel que soit $m$. 
 	
 	Cela est connu dans la littérature comme l'"effet Dhall" (Dhall's effect) et remet en 
 	question l'intérêt de baser les tests de faisabilité sur l'utilisation totale, et 
@@ -821,12 +807,8 @@
 	cela a participé à montrer la supériorité des approches partitionnées, ce pourquoi elles ont 
 	largement été plus étudiées dans les années 80-90 \cite{davis_survey_2011}.\medskip
 	
-	%todo améliorer ce passage...
-	De plus, dans le cas global, les instants critiques ne sont plus aussi faciles à prédire 
-	que dans le cas mono-processeur : pour rappel, un instant critique se produit lorsqu'une tâche 
-	libère un job à un moment où tous jobs de priorités supérieures doivent être exécutés. 
-	Mais cela n'est plus forcément vrai dans le cas multi-processeur.\medskip
-	
+	De plus, dans le cas global, les \ref{instantcritique}{instants critiques} ne sont plus aussi faciles à prédire 
+	que dans le cas mono-processeur. \medskip
 	
 	\subsection{Anomalies}
 	Les anomalies sont décrites dans la littérature comme des changements qui intuitivement ne devraient 
@@ -846,7 +828,6 @@
 	c'est à dire, la priorité la plus élevée est accordée à la tâche qui a la période la plus faible - 
 	\textit{RM} est donc concerné par l'effet Dhall. \medskip
 	
-	%todo ref et trouver quoi dire ici...
 	
 	\subsection{Priorité fixe sur job : EDF}
 	Comme pour \textit{RM} et \textit{DM}, \textit{EDF} peut simplement être adapté à une exécution multi-processeur, 
@@ -880,21 +861,24 @@
 	\textit{"for every $m > 1$, no optimal online scheduler can exist for task systems with two or more distinct
 		deadlines."} (Pour tout $m > 1$, il n'existe pas d'ordonnanceur en ligne 
 	optimal pour les ensembles de tâches avec au moins deux échéances distinctes). 
-	Ce résultat, quoi que négatif, ne peut être généralisé à toutes les classes de tâches, il s'applique 
-	aux tâches sporadiques. 
+	Ce résultat, quoi que négatif, ne peut être généralisé à toutes les classes de tâches, il ne s'applique 
+	pas aux tâches sporadiques. 
 	
-	C'est un résultat embarrassant, car beaucoup de systèmes embarqués gèrent des tâches sporadiques :
-	en effet, bon nombre d'appareils sont des détecteurs, qui attendent un signal qui par définition 
-	ne peut pas arriver à un moment déterministe. 
-	Toutefois, de nombreuses publications ultérieures ont montré des algorithmes 
-	optimaux pour d'autres classes de tâches. Par ailleurs, ce résultat est juste dans le cas 
-	d'un ordonnanceur non-clairvoyant, mais ne peut pas être généralisé dans le cas où 
+	C'est un résultat embarrassant, toutefois, de nombreuses publications ultérieures ont montré des algorithmes 
+	optimaux pour d'autres classes de tâches, par exemple sporadiques. 
+	Par ailleurs, ce résultat est juste dans le cas d'un ordonnanceur non-clairvoyant, 
+	mais ne peut pas être généralisé dans le cas où 
 	l'algorithme a accès à des données sur les tâches au préalable \cite{fisher_optimal_2010}.
 	
 	\subsection{PFair}
-	En 1996, Baruah et al. décrivent l'algorithme \textit{PFair}.
-	L'article apporte plusieurs définitions importantes :
-	\begin{mydef} %TODO expliquer la syntaxe
+	En 1996, Baruah et al. décrivent l'algorithme \textit{PFair}. \cite{baruah_proportionate_1996}
+	L'article apporte plusieurs définitions importantes :\medskip
+	Soit $x$, une tâche. 
+	Posons que $x.w$ représente le "poids", défini de cette façon: $x.w = \frac{x.e}{x.p}$ où
+	$x.e$ représente le nombre d'unités de temps nécessaires à la réalisation de la tâche 
+	$x$	et $x.p$ la période. Ainsi, $0 < x.w < 1$.
+	
+	\begin{mydef}
 		$Lag(S, x, t) = x.w \times t - \sum_{i\in[0,t)}^{max} S(x, i)$, où 
 		$S$ est un ordonnanceur, $x$, un job, $t$ un instant, et où $S(x, t) = 1$ si 
 		le job $x$ est exécuté à l'instant $t$, $0$ sinon.
@@ -1009,7 +993,7 @@
 	Il prend en charge les systèmes périodiques à échéances implicites, et est optimal pour cette classe. 
 	Tout d'abord, la preuve de son optimalité se limite aux tâches périodiques dont on a dit plus haut qu'elles 
 	ne représentaient pas la majorité des classes e tâches des systèmes embarqués. 
-	En 2012, la preuve de son optimalité est élargie aux systèmes sporadiques par  Nelissen et al. \cite{nelissen_u-edf_2012}. Le principal but de cet algorithme est de réduire le nombre de préemptions, 
+	En 2012, la preuve de son optimalité est élargie aux systèmes sporadiques par Nelissen et al. \cite{nelissen_u-edf_2012}. Le principal but de cet algorithme est de réduire le nombre de préemptions, 
 	ce qui est un grand inconvénient de l'approche globale. \medskip
 	L'idée principale d'\textit{U-EDF} est %todo add
 	
@@ -1095,6 +1079,7 @@
 	peut ordonnancer les systèmes sporadiques à échéances arbitraires et 
 	les articles à son sujet parlent de bonnes performances concernant les migrations. \medskip
 	C'est donc vers cet algorithme que notre choix se porte.
+	%todo develop just a little bit...
 	
 	
 	\bibliographystyle{plain}
