@@ -77,43 +77,16 @@
 		\vspace*{\fill}}
 	{\vspace*{\fill}\par\pagebreak}
 	
-	%\newpage
-	%\thispagestyle{empty}
-	%\vspace*{5cm}
-	
-	%\begin{quotation}
-	%\noindent ``\emph{
-	%	%TODO choose a quotation
-	%	Vous pouvez aussi inclure une ou plusieurs citations générales en rapport avec votre sujet.
-	%}''
-	%\begin{flushright}\textbf{l'auteur (vrai ou supposé), date}\end{flushright}
-	%\end{quotation}
-	
-	%\medskip
-	%
-	%\begin{quotation}
-	%\noindent ``\emph{Il existe des compilations de telles citations.}''
-	%\begin{flushright}\textbf{autre auteur, date}\end{flushright}
-	%\end{quotation}
-	%\chapter*{Remerciements}
-	%\thispagestyle{empty} 
-	
-	%\noindent Je tiens à remercier ... 
-	
-	%\medskip
-	%sans oublier les plus importants, exercice parfois délicat
 	\thispagestyle{empty} 
 	\setcounter{page}{0}
 	\tableofcontents
-	%\mainmatter 
+	
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTRODUCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	
-	% chapitre introduction
 	
 	\chapter{Introduction}{}
 	\setcounter{page}{1}
@@ -129,26 +102,13 @@
 	Les systèmes embarqués n'ont pas toujours de grands besoins en efficacité, 
 	ils doivent principalement être sûrs, et réactifs. 
 	Toutefois, un système dont l'efficacité n'est pas maximale n'utilise pas 
-	ses ressources de façon optimale. 
-	
-	
-	
-	De nos jours où la gestion énergétique se doit d'être la plus 
-	économe possible, 
-	où l'on est de plus en plus exigeant concernant l'efficacité, 
-	il est envisageable que la solution évolue du côté des industries : 
-	%todo Parler de l'autonomie, du poids, du prix des composants
-	%durant le passé, les lois de Moore %todo add ref
-	%se sont vérifiées car il était encore possible de miniaturiser les composants, 
-	%ce qui faisait gagner en efficacité d'autant. Cela n'est actuellement plus le cas, 
-	%les composants étant déjà largement miniaturisés, de nouvelles miniaturisations 
-	%n'entraineraient plus de gain. 
-	Un souci peut être par exemple de laisser en place un composant le plus 
-	longtemps possible (difficilement atteignable), des appareils de taille très réduite 
-	devraient fournir un maximum de puissance. 
-	Dans le cas d'un pacemaker, on imagine aisément que l'on souhaite obtenir un appareil 
-	de petite taille, que l'on manipulera le moins possible, y compris pour le fournir en 
-	énergie. \medskip
+	ses ressources de façon optimale. En effet, lorsqu'un système est 
+	mal optimisé, il est sur-dimensionné, car plus de matériel est nécessaire 
+	pour réaliser les mêmes tâches. On imagine que cela représente du 
+	gaspillage tant au niveau de l'espace que du câblage. Or, la gestion énergétique 
+	est un poste coûteux qui se doit d'être le plus économe possible. 
+	Pour des installations qui possèdent beaucoup de systèmes embarqués, comme les voitures ou les avions, 
+	cette dépense peut être substantielle. \medskip
 	
 	Par ailleurs, cela fait plusieurs années que la croissance de l'efficacité des appareils n'est plus 
 	principalement due à des améliorations physiques des composants. 
@@ -160,7 +120,7 @@
 	ce qui faisait gagner en efficacité d'autant. 
 	Cela n'est actuellement plus le cas, 
 	les composants étant déjà largement miniaturisés, de nouvelles miniaturisations 
-	n'entraineraient plus de gain. La croissance doit emprunter d'autres voies. Parmi celles 
+	n'entraîneraient plus de gain. La croissance doit emprunter d'autres voies. Parmi celles 
 	empruntées, outre de nouvelles propositions technologiques, 
 	il y a l'amélioration logicielle avec notamment la parallélisation.
 	\medskip
@@ -196,8 +156,8 @@
 	d'ordonnanceurs connus dans la littérature, mais moins dans la réalité.
 	
 	C'est dans ce contexte que s'inscrit ce travail d'implémentation d'un ordonnanceur en temps réel 
-	global et multiprocesseur, dont un des objectifs est d'améliorer la connaissance pratique 
-	d'ordonnanceurs multiprocesseurs globaux, d'en apercevoir les limites. 
+	global et multi-processeur, dont un des objectifs est d'améliorer la connaissance pratique 
+	d'ordonnanceurs multi-processeurs globaux, d'en apercevoir les limites. 
 	Cette implémentation pourrait amener plusieurs résultats intéressants : \medskip
 	\begin{itemize}
 		\item Une comparaison entre des résultats théoriques et l'effet de leur mise 
@@ -209,22 +169,9 @@
 	
 	\section{Contexte et objectifs}
 	
-	%\subsection{Limites du parallélisme}
-	%Le parallélisme a montré ses limites, connues depuis longtemps dans la littérature scientifique. 
-	%Par exemple, la loi d'\href{https://en.wikipedia.org/wiki/Amdahl\%27s_law}{Amdahl} montre 
-	%l'accélération théorique que l'on peut atteindre en améliorant certains paramètres : 
-	%%TODO mettre une référence correcte
-	%\begin{itemize}
-	%    \item La portion de code exécutable en parallèle (tout un programme séquentiel ne peut pas forcément 
-	%    être parallélisable)
-	%    \item Le nombre de processeurs. 
-	%\end{itemize}
-	%On remarque alors que le nombre de processeurs n'influence la vitesse d'exécution que jusqu'à une certaine limite 
-	
-	
 	\subsection{Ordonnanceurs globaux}
 	Comme il sera expliqué plus tard dans ce document, il existe deux grandes familles d'ordonnanceurs 
-	multiprocesseur :\medskip
+	multi-processeur :\medskip
 	\begin{itemize}
 		\item Les ordonnanceurs partitionnés
 		\item Les ordonnanceurs globaux
@@ -240,7 +187,7 @@
 	En 1988, Hong and Leung \cite{hong_-line_1988} publient un article dans lequel est 
 	démontré que : \medskip
 	\textit{"For every m > 1, no optimal on-line scheduler can exist for task systems with two or more distinct deadlines"} : 
-	\textit{Il n'existe pas d'ordonnanceur multiprocesseur en ligne \ref{optimal}{optimal} pour un système de tâches 
+	\textit{Il n'existe pas d'ordonnanceur multi-processeur en ligne \ref{optimal}{optimal} pour un système de tâches 
 		avec plusieurs échéances distinctes}, donc un système de tâches dites "sporadiques".
 	
 	Or, les systèmes embarqués doivent très souvent exécuter des systèmes de tâches sporadiques, 
@@ -527,7 +474,7 @@
 	\begin{itemize}
 		\item Les mono-processeurs
 		\item Les multi-processeurs Partitionnés
-		\item Les multiprocesseurs Globaux
+		\item Les multi-processeurs Globaux
 	\end{itemize}
 	Les ordonnanceurs mono-processeurs étant plus simples à appréhender, nous commencerons 
 	par présenter cette famille.
@@ -644,7 +591,7 @@
 	Dans la partie précédente, nous avons présenté certains algorithmes mono-processeur, 
 	ainsi que quelques conditions d'ordonnançabilité.
 	De nos jours, une grande partie des architectures employées dans les systèmes embarqués 
-	est multiprocesseur. 
+	est multi-processeur. 
 	Les stratégies mises en place pour l'ordonnancement de tels 
 	systèmes sont différentes. Dans la littérature, il est habituel de présenter 
 	deux familles principales d'ordonnanceurs multi-processeurs :\medskip
@@ -755,7 +702,7 @@
 	\subsection{EDF partitionné}
 	Il a été rappelé plus tôt dans ce document qu'\textit{EDF} mono-processeur est optimal, 
 	c'est à dire qu'il peut ordonnancer tout type de système qui est ordonnançable. 
-	Malheureusement, ce résultat n'est pas valable dans le cas multiprocesseur \cite{dertouzos_multiprocessor_1989}.\medskip
+	Malheureusement, ce résultat n'est pas valable dans le cas multi-processeur \cite{dertouzos_multiprocessor_1989}.\medskip
 	
 	Cet algorithme a lui aussi été adapté à une utilisation multi-processeur en y joignant 
 	des heuristiques de bin-packing : \medskip
