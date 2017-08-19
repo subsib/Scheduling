@@ -1,6 +1,6 @@
 % !TeX spellcheck = fr_FR
 \documentclass[11pt,a4paper,oneside]{report}
-\usepackage[hmargin={1.25in,1.25in},vmargin={1.25in,1.25in}]{geometry}
+\usepackage[hmargin={1.25in,1.25in},vmargin={3cm,3cm}]{geometry}
 %%%%%%%%%%%%%%%%%%%%%%%%
 \setlength{\parindent}{0cm}
 \makeindex
@@ -15,12 +15,15 @@
 %\usepackage{natbib}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc} % pour taper les lettres accentuées
-
-
-\usepackage[francais]{babel}
+%\usepackage{charter} % change font style
+%\usepackage[sc]{mathpazo}
+\usepackage{utopia}
+\usepackage{todonotes}
+\usepackage[francais,english]{babel}
 \usepackage{url}
 \usepackage{graphicx}
-\usepackage{hyperref}
+\usepackage{breakurl}% si les refs dans la doc sont trop longues
+\usepackage[bookmarks,bookmarksnumbered,citecolor=purple,colorlinks,hyperindex,linkcolor=black,linktocpage,urlcolor=ColorLink]{hyperref}
 \usepackage{tikz}
 \usepackage{pgfgantt} %draw timechart
 \usepackage{amssymb, bm}
@@ -28,24 +31,66 @@
 \newtheorem{mytheorem}{Théorème}
 \newtheorem{mylemme}{Lemme}
 
+%\let\oldprintbibliography\printbibliography
+%\renewcommand{\printbibliography}[1]{%
+%  \let\chapter\section
+%  \oldprintbibliography{#1}}
+
+%\let\oldlistoftheorems\listoftheorems
+%\renewcommand{\listoftheorems}[1]{%
+%  \let\chapter\section
+%  \oldlistoftheorems[#1]}
+
+%\newcommand{\printsectionindex}{%
+%  \let\chapter\section
+%  \printindex}
+
+% put some text in red
+\newcommand{\redtext}[1]{{\color{red}{#1}}}
+% highlight some text
+\newcommand{\customhighlight}[1]{{\color{olive}{\textbf{#1}}}}
+\newcommand{\customItalic}[1]{\color{teal}{\textit{#1}}}
+
+\definecolor{Mail}{rgb}{0,.5,0}
+\definecolor{ColorEmphDef}{rgb}{0.7,0.2,0}
+\definecolor{ColorLink}{rgb}{0.125,0.4375,0.6875}
+\definecolor{DarkGreen}{rgb}{0, 0.5, 0}
+
+\newcommand{\emailArabella}{\href{mailto:Arabella.Brayer@ulb.ac.be?subject=[MEMO-F-403 Master Thesis]}{\path|Arabella.Brayer@ulb.ac.be|}}
+%\definecolor{email}{rgb}{0,.5,0}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\newcommand\HRule{\rule{\textwidth}{1pt}}
+
 \begin{document}
 	%%%%%%%%%%%%%%%%
 	%\frontmatter
+	
+	
 	\begin{titlepage}
-		
-		
+		\begin{tikzpicture}[remember picture, overlay]
+		\draw[line width = 1pt] ($(current page.north west) + (1in,-1in)$) rectangle ($(current page.south east) + (-1in,1in)$);
+		\end{tikzpicture}
 		\begin{center}
+			
 			\textbf{UNIVERSITÉ LIBRE DE BRUXELLES}\\
 			\textbf{Faculté des Sciences}\\
-			\textbf{Département d'Informatique}
-			\vfill{}\vfill{}
-			
+			\textbf{Département d'Informatique}\\
+			\vspace{1cm}
+			\textbf{MEMO-F-403}\\
+			\textbf{Preparatory work for the master thesis}
+			\vfill{}
 			%\begin{center}
-			{\Huge  Implementing a Dynamic and Global Scheduling Algorithm  \vspace*{.5cm}  \linebreak[4] in a Real-Time OS}
+			\noindent\hspace{-0.65cm}\rule{\textwidth + 1.25cm}{1pt}
+			\vfill{}
+			{\Huge  Implementing a Dynamic and Global Scheduling Algorithm  \linebreak[4] in a Real-Time OS}
 			%\end{center}
+			\vfill{}
+			\noindent\hspace{-0.65cm}\rule{\textwidth + 1.25cm}{1pt}
 			
 			{\Huge \par}
-			\begin{center}{\LARGE Arabella Brayer}\end{center}{\Huge \par}
+			\begin{center}{\LARGE Arabella Brayer\\ \emailArabella }\end{center}{\Huge \par}
 			
 			\vfill{}
 			
@@ -57,19 +102,24 @@
 			\end{figure}
 			\vfill{}
 			
-			
-			
-			\begin{flushright}{\large \textbf{Promoteur : Joël Goossens}}\hfill{}{\large Travail préliminaire au mémoire}\\
-				{
-					%	 \large Prof. Prénom Nom
-				}\hfill{}{\large Master 1}\medskip
-				\hfill{}{\large Science de l'informatique}\end{flushright}{\large\par}
-			\vfill{}\vfill{}\enlargethispage{3cm}
-			\textbf{Academic year 2016~-~2017}
+			\begin{flushright}{Promoteur : 
+					\large \textbf{Joël Goossens}}
+				\hfill{}
+				{\large Travail préliminaire au mémoire}\\
+				\hfill{}\large Master 1\\
+				\hfill{}{\large Science de l'informatique}{\large\par}
+				\vfill{}\vfill{}\enlargethispage{3cm}
+			\end{flushright}
+			\textbf{Academic year 2016 -- 2017}
 		\end{center}
 	\end{titlepage}
 	\newpage
-	\thispagestyle{empty} 
+	\thispagestyle{empty}
+	\null%write on the bottom
+	\vfill    
+	\begin{center}
+		Les sources de ce document se trouvent sur ce dépôt \href{https://github.com/subsib/Scheduling}{https://github.com/subsib/Scheduling}
+	\end{center}
 	\null
 	
 	\newenvironment{vcenterpage}
@@ -79,8 +129,20 @@
 	
 	\thispagestyle{empty} 
 	\setcounter{page}{0}
+	\selectlanguage{francais}
 	\tableofcontents
 	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%% ABSTRACT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\selectlanguage{english}
+	\begin{abstract}
+		abstract-text
+		\customhighlight{test de texte hightlighté}
+		\customItalic{Pis là, un peu d'italic purple}
+	\end{abstract}
+	\selectlanguage{francais}
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -94,7 +156,8 @@
 	
 	\section{Présentation générale du sujet}
 	
-	Dans le paysage quotidien des appareils informatiques, il existe toujours plus de systèmes embarqués. 
+	Dans le paysage quotidien des appareils informatiques, il existe toujours plus de systèmes embarqués.
+	\todo{change le toujours pour autre chose, c'est mal de dire toujours}
 	Parmi eux, un nombre très important de systèmes temps réel qui 
 	nécessitent des ordonnanceurs adaptés. 
 	Ce champ de recherche a été largement nourri durant les vingt dernières années par de nombreuses publications scientifiques. \medskip
@@ -105,17 +168,18 @@
 	ses ressources de façon optimale. En effet, lorsqu'un système est 
 	mal optimisé, il est sur-dimensionné, car plus de matériel est nécessaire 
 	pour réaliser les mêmes tâches. On imagine que cela représente du 
-	gaspillage tant au niveau de l'espace que du câblage. Or, la gestion énergétique 
+	gaspillage tant au niveau de l'espace que du câblage. \todo{parler weight, power, cost, ?} 
+	Or, la gestion énergétique 
 	est un poste coûteux qui se doit d'être le plus économe possible. 
 	Pour des installations qui possèdent beaucoup de systèmes embarqués, comme les voitures ou les avions, 
 	cette dépense peut être substantielle. \medskip
 	
 	Par ailleurs, cela fait plusieurs années que la croissance de l'efficacité des appareils n'est plus 
-	principalement due à des améliorations physiques des composants. 
+	principalement due à des améliorations physiques des composants. \todo{la formulation laisse entendre qu'une autre raison en est responsable...}
 	Considérant l'efficacité 
 	En effet, durant une cinquantaine d'années, dans le passé, les lois de Moore
 	se sont vérifiées : des règles empiriques qui postulent que la fréquence des processeurs 
-	double tous les dix-huit mois environ. 
+	double tous les dix-huit mois environ, à prix constant. 
 	Il était alors encore possible de miniaturiser les composants, 
 	ce qui faisait gagner en efficacité d'autant. 
 	Cela n'est actuellement plus le cas, 
@@ -139,17 +203,20 @@
 	peut s'expliquer en partie par le fait qu'il soit compliqué de gérer le partage des ressources, 
 	et que cette complexité n'apporte pas suffisamment d'avantages à l'heure qu'il est.\medskip
 	
-	Le fait que l'industrie n'implémente pas à ce jour de solutions plus "performantes" 
+	Le fait que l'industrie n'implémente pas à ce jour de solutions plus \og performantes \fg{} 
 	pour les systèmes embarqués pose plusieurs problèmes :
 	\begin{enumerate}
 		\item Le matériel n'est pas exploité de façon optimale.
-		\item Par conséquent, on utilise bien plus d'énergie que nécessaire. 
+		\item Par conséquent, la consommation en énergie des solutions déployées n'est 
+		pas optimale.
 		À l'heure actuelle, dans un monde où l'on cherche à consommer le moins possible, 
 		cela pose question. Mais au delà, cela signifie également plus de maintenance 
 		sur ces appareils parfois sans source de renouvellement d'énergie.
 		\item Certains systèmes embarqués nécessitent une très basse consommation car 
 		ils sont difficiles d'accès ou non faciles à recharger.
-		\item 
+		\item Sur de grosses installations, comme des voitures ou un avions, cela peut représenter 
+		un coût important en terme d'occupation de l'espace, de câblage entre différents systèmes, 
+		consommation d'énergie, poids, achat de composants.
 	\end{enumerate}
 	
 	Toutes ces raisons poussent à s'intéresser à une implémentation réelle et réaliste 
@@ -251,32 +318,32 @@
 	Il y a plusieurs caractéristiques 
 	et propriétés qui définissent une tâche, que nous allons définir ici : 
 	\begin{itemize}
-		\item[\textbf{Temps de réalisation}] : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
-		\item[\textbf{Temps de réponse\label{Response Time}}] : Temps maximum nécessaire à la réalisation de la tâche 
+		\item \customhighlight{Temps de réalisation}\label{tempsderealisation} : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
+		\item \customhighlight{Temps de réponse\label{Response Time}} : Temps maximum nécessaire à la réalisation de la tâche 
 		entre le temps de réalisation et Fin.
-		\item[\textbf{Worst Case Execution Time}] Afin de faciliter les calculs et l'abstraction du problème, l'on pose habituellement que le temps considéré d'exécution de 
+		\item \customhighlight{Worst Case Execution Time}\label{wcet} : Afin de faciliter les calculs et l'abstraction du problème, l'on pose habituellement que le temps considéré d'exécution de 
 		la tâche est le pire temps. Cela permet d'envisager le pire scénario, et ainsi 
 		de s'assurer que si celui-ci est possible, alors dans de meilleures conditions, 
 		la faisabilité est conservée. La notation utilisée dans le reste de ce document 
-		est  \textbf{WCET} : \textbf{W}orst \textbf{C}ase \textbf{E}xecution \textbf{T}ime
+		est  \customhighlight{WCET} : \customhighlight{W}orst \customhighlight{C}ase \customhighlight{E}xecution \customhighlight{T}ime
 		
-		\item[\textbf{Laxité}] La laxité d'une tâche est la durée entre sa réalisation et son échéance. 
+		\item \customhighlight{Laxité} : La laxité d'une tâche est la durée entre sa réalisation et son échéance. 
 		Pour une tâche $\tau_i$, la laxité est :
 		\begin{center}
 			$L_i = D_i - C_i$
 		\end{center}
 		\vspace{0.5cm}
-		\item[\textbf{Tâches périodiques}]
+		\item \customhighlight{Tâches périodiques} :
 		Une tâche périodique est une tâche qui génère régulièrement des jobs.  
 		Formellement, une tâche périodique est définie par un 4-uplet $(O, T, D, C)$ où \medskip
 		\begin{itemize}
-			\item[O] est l'"offset", c'est à dire le temps que met la tâche à générer un premier job.
-			\item[T] est la période, c'est à dire le temps qui sépare deux générations de job par la tâche. 
+			\item \customhighlight{O} : est l'"offset", c'est à dire le temps que met la tâche à générer un premier job.
+			\item \customhighlight{T} : est la période, c'est à dire le temps qui sépare deux générations de job par la tâche. 
 			Comme le premier job est généré à l'instant $O$, alors $\forall i \in \{0, \infty \} t = O + i\times T$ 
 			où $t$ est le temps où la tâche est générée la $i$ème fois.
-			\item[D] est l'échéance relative, c'est à dire le temps qui sépare au maximum la génération 
+			\item \customhighlight{D} est l'échéance relative, c'est à dire le temps qui sépare au maximum la génération 
 			d'un job et sa réalisation.
-			\item[C] est le temps de réalisation. Dans les algorithmes, on utilise -- comme expliqué précédemment -- le \textbf{WCET}.
+			\item \customhighlight{C} est le temps de réalisation. Dans les algorithmes, on utilise -- comme expliqué précédemment -- le \customhighlight{WCET}.
 		\end{itemize}	
 		Dans le cas de tâches périodiques, on distingue trois cas différents : \medskip
 		\begin{enumerate}
@@ -288,7 +355,7 @@
 		Globalement, on peut ordonner ces trois types de tâches : \medskip
 		échéance sur requêtes $\subset$ échéance contrainte $\subset$ échéance arbitraire.
 		
-		\item[\textbf{Tâche sporadique}] : Une tâche sporadique est une tâche qui génère de nouveaux jobs, 
+		\item \customhighlight{Tâche sporadique} : Une tâche sporadique est une tâche qui génère de nouveaux jobs, 
 		comme dans le cas de la tâche périodique. 
 		La différence entre ces deux types est que la tâche sporadique 
 		génère deux jobs avec un intervalle de temps au moins égal à la durée correspondant à sa période, 
@@ -296,7 +363,7 @@
 		en effet, un système qui est composé de capteur aura du mal à prévoir l'arrivée d'un signal de 
 		celui-ci. 
 		
-		\item[\textbf{Tâche apériodique}] : Pour ce type de tâches, on ignore la régularité de 
+		\item \customhighlight{Tâche apériodique} : Pour ce type de tâches, on ignore la régularité de 
 		l'arrivée de nouveaux jobs. Les propriétés du job ne sont connues que lorsqu'un job est 
 		généré dans le système.
 		
@@ -995,7 +1062,6 @@
 	ne représentaient pas la majorité des classes e tâches des systèmes embarqués. 
 	En 2012, la preuve de son optimalité est élargie aux systèmes sporadiques par Nelissen et al. \cite{nelissen_u-edf_2012}. Le principal but de cet algorithme est de réduire le nombre de préemptions, 
 	ce qui est un grand inconvénient de l'approche globale. \medskip
-	L'idée principale d'\textit{U-EDF} est %todo add
 	
 	\subsection{RUN}
 	Reduction to UNiprocessor (\textit{RUN}) est un algorithme présenté par Regnier et al. en 2013 \cite{regnier_multiprocessor_2013}. 
@@ -1006,7 +1072,7 @@
 	en suivant deux opérations :\medskip
 	\begin{itemize}
 		\item Une opération "\textit{Dual}"
-		\item Une opération \textit{Pack}
+		\item Une opération "\textit{Pack}"
 	\end{itemize}
 	Un \textit{Dual} se construit par complémentarité avec un \textit{Primal}, dont les règles de constructions sont 
 	données dans l'article.
@@ -1023,14 +1089,29 @@
 	\cite{compagnin_putting_2014} sur $LITMUS^{RT}$, et dont les résultats demandent à 
 	être confirmés mais montrent les bonnes performances sur ce système.\medskip
 	
-	\textit{RUN} -- malgré son apparition récente -- a déjà des successeurs. \textit{QPS} est un algorithme 
-	également semi-partitionné, mais à la différence de RUN, il peut ordonnancer les systèmes 
-	de tâches indépendantes sporadiques à échéances implicites. 
+	\textit{RUN} -- malgré son apparition récente -- a déjà des successeurs. \textit{QPS}
+	(Quasi Partitioned Scheduling) est un algorithme 
+	également semi-partitionné, mais à la différence de RUN, il peut ordonnancer les systèmes de tâches indépendantes sporadiques à échéances implicites. 
 	Il est décrit dans un article de Massa et al. \cite{massa_outstanding_2014} en 2014. 
 	Comme pour \textit{RUN}, \textit{QPS} génère des sous-ensembles de tâches qui seront ordonnancés 
 	selon \textit{EDF} par des serveurs. Les auteurs présentent l'avantage d'une approche semi-partitionnée, 
 	qui fait un compromis entre les avantages de l'approche partitionnée et ceux de l'approche globale 
 	mais \textit{RUN} comporte quant à lui l'inconvénient de ne pas pouvoir s'appliquer aux tâches sporadiques. C'est ce qui explique la nécessité de l'existence de \textit{QPS}.
+	L'avantage de \textit{QPS} est de pouvoir adapter sa stratégie en fonction de la
+	charge. En effet, durant le runtime, \textit{QPS} peut s'adapter, passant d'une
+	stratégie \textit{globale} à \textit{partitionnée}, ou le contraire. 
+	Pour ce faire, \textit{QPS} va diviser les tâches en sous-systèmes, classés différemment selon leur besoin en processeur :\medskip
+	\begin{itemize}
+		\item \textit{mineur}, si le sous-système a besoin d'un seul processeur
+		\item \textit{majeur}, si le sous-système a besoin de plusieurs processeurs
+	\end{itemize}
+	Par conséquent, si tous les sous-systèmes sont mineurs, \textit{QPS} fonctionne comme 
+	\textit{EDF} partitionné. Dans le cas contraire, l'exécution dépendra des besoins 
+	des sous-systèmes, et pourra être composé de plusieurs \textit{serveurs QPS} 
+	en mode multi-processeur, ou en \textit{EDF} sur simple processeur, cumulant 
+	deux modes. \medskip
+	Les résultats attendus de \textit{QPS} sont donc très prometteurs, car il permet de 
+	conjuguer les avantages des approches partitionnées ainsi que globales.
 	
 	\subsection{Tableau comparatif des algorithmes globaux et semi-globaux}
 	Afin de faire le choix de l'algorithme à implémenter, une comparaison de ces algorithmes 
@@ -1079,7 +1160,6 @@
 	peut ordonnancer les systèmes sporadiques à échéances arbitraires et 
 	les articles à son sujet parlent de bonnes performances concernant les migrations. \medskip
 	C'est donc vers cet algorithme que notre choix se porte.
-	%todo develop just a little bit...
 	
 	
 	\bibliographystyle{plain}
