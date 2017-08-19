@@ -82,7 +82,7 @@
 			\textbf{Preparatory work for the master thesis}
 			\vfill{}
 			%\begin{center}
-			\noindent\hspace{-0.65cm}\rule{\textwidth + 1.25cm}{1pt}
+			\noindent\hspace{-0.65cm}\rule{\textwidth + 1.25cm}{0.5pt}
 			\vfill{}
 			{\Huge  Implementing a Dynamic and Global Scheduling Algorithm  \linebreak[4] in a Real-Time OS}
 			%\end{center}
@@ -90,7 +90,7 @@
 			\noindent\hspace{-0.65cm}\rule{\textwidth + 1.25cm}{1pt}
 			
 			{\Huge \par}
-			\begin{center}{\LARGE Arabella Brayer\\ \emailArabella }\end{center}{\Huge \par}
+			\begin{center}{\LARGE{Arabella Brayer}\\ \vspace{0.2cm} \large\emailArabella }\end{center}{\Huge \par}
 			
 			\vfill{}
 			
@@ -138,9 +138,9 @@
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\selectlanguage{english}
 	\begin{abstract}
-		abstract-text
-		\customhighlight{test de texte hightlighté}
-		\customItalic{Pis là, un peu d'italic purple}
+		Le problème de l'ordonnancement des tâches dans un système d'exploitation est 
+		central 
+
 	\end{abstract}
 	\selectlanguage{francais}
 	
@@ -156,9 +156,9 @@
 	
 	\section{Présentation générale du sujet}
 	
-	Dans le paysage quotidien des appareils informatiques, il existe toujours plus de systèmes embarqués.
-	\todo{change le toujours pour autre chose, c'est mal de dire toujours}
-	Parmi eux, un nombre très important de systèmes temps réel qui 
+	Le paysage des appareils informatique montre un essor important du nombre de systèmes 
+	embarqués actuellement, et
+	parmi eux, un nombre très important de systèmes temps réel qui 
 	nécessitent des ordonnanceurs adaptés. 
 	Ce champ de recherche a été largement nourri durant les vingt dernières années par de nombreuses publications scientifiques. \medskip
 	
@@ -167,17 +167,20 @@
 	Toutefois, un système dont l'efficacité n'est pas maximale n'utilise pas 
 	ses ressources de façon optimale. En effet, lorsqu'un système est 
 	mal optimisé, il est sur-dimensionné, car plus de matériel est nécessaire 
-	pour réaliser les mêmes tâches. On imagine que cela représente du 
-	gaspillage tant au niveau de l'espace que du câblage. \todo{parler weight, power, cost, ?} 
+	pour réaliser les mêmes tâches. Il est facilement imaginable que cela représente du 
+	gaspillage au niveau de l'espace, de la taille des installations, 
+	de la consommation dépensée à alimenter des appareils non nécessaires, 
+	de composants, ainsi que de câblage.  
 	Or, la gestion énergétique 
 	est un poste coûteux qui se doit d'être le plus économe possible. 
 	Pour des installations qui possèdent beaucoup de systèmes embarqués, comme les voitures ou les avions, 
 	cette dépense peut être substantielle. \medskip
 	
 	Par ailleurs, cela fait plusieurs années que la croissance de l'efficacité des appareils n'est plus 
-	principalement due à des améliorations physiques des composants. \todo{la formulation laisse entendre qu'une autre raison en est responsable...}
-	Considérant l'efficacité 
-	En effet, durant une cinquantaine d'années, dans le passé, les lois de Moore
+	principalement due à la miniaturisation des composants, par exemple, des efforts
+	sont faits afin de mieux paralléliser les exécutions, ou encore, de gros progrès sont 
+	faits dans le domaine de l'architecture des composants eux-mêmes.
+	Durant une cinquantaine d'années, dans le passé, les lois de \customhighlight{Moore}
 	se sont vérifiées : des règles empiriques qui postulent que la fréquence des processeurs 
 	double tous les dix-huit mois environ, à prix constant. 
 	Il était alors encore possible de miniaturiser les composants, 
@@ -261,15 +264,15 @@
 	que des ordonnanceurs globaux optimaux existent, mais nécessitent de la clairvoyance.
 	
 	\subsection{HIPPEROS}
-	\textbf{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
-	est un \textbf{RTOS} (Real Time Operating System) développé depuis plusieurs années par une spinoff de l'ULB.
+	\customhighlight{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
+	est un \customhighlight{RTOS} (Real Time Operating System) développé depuis plusieurs années par une spinoff de l'ULB.
 	Il bénéficie des connaissances apportées par le monde de la recherche dans 
 	le domaine des systèmes critiques avec multic\oe{}urs. Une de ses particularités 
 	est sa modularité, qui permet d'adapter ses possibilités en fonction du système 
 	lors de la compilation de l'OS, ainsi peut-on différencier deux installations 
 	en fonction des particularités.
 	
-	\textbf{HIPPEROS} est un candidat idéal pour l'implémentation d'un ordonnanceur 
+	\customhighlight{HIPPEROS} est un candidat idéal pour l'implémentation d'un ordonnanceur 
 	global, mais une partie du travail consistera à tirer parti de ses particularités. 
 	Par exemple, ce système d'exploitation gère les c\oe{}urs en leur attribuant des 
 	niveaux différents. L'un est considéré comme "maître" et les autres comme "esclaves". 
@@ -286,8 +289,8 @@
 	à la connaissance générale, tant sur le plan théorique que pratique.\medskip
 	
 	Par ailleurs, certains des ordonnanceurs présentés dans l'état de l'art 
-	ont déjà bénéficié d'une implémentation sur un \textbf{RTOS}, et une nouvelle 
-	implémentation sur un \textbf{OS} différent pourrait apporter un éclairage intéressant quant 
+	ont déjà bénéficié d'une implémentation sur un \customhighlight{RTOS}, et une nouvelle 
+	implémentation sur un \customhighlight{OS} différent pourrait apporter un éclairage intéressant quant 
 	aux différences de comportements.
 	En effet, on comprend que pour réaliser l'observation pratique d'un ordonnanceur, 
 	on implémente l'algorithme et on procède à des tests dans un certain environnement. 
@@ -308,7 +311,7 @@
 	
 	La question cruciale de cette première partie de travail 
 	consiste donc à faire un tour d'horizon de la littérature afin de pouvoir 
-	sélectionner un ordonnanceur pertinent à implémenter sur le \textbf{RTOS} \textbf{HIPPEROS}.
+	sélectionner un ordonnanceur pertinent à implémenter sur le \customhighlight{RTOS} \customhighlight{HIPPEROS}.
 	
 	\section{Vocabulaire général sur les systèmes temps réel}
 	
@@ -318,32 +321,32 @@
 	Il y a plusieurs caractéristiques 
 	et propriétés qui définissent une tâche, que nous allons définir ici : 
 	\begin{itemize}
-		\item \customhighlight{Temps de réalisation}\label{tempsderealisation} : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
-		\item \customhighlight{Temps de réponse\label{Response Time}} : Temps maximum nécessaire à la réalisation de la tâche 
+		\item \textbf{Temps de réalisation}\label{tempsderealisation} : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
+		\item \textbf{Temps de réponse\label{Response Time}} : Temps maximum nécessaire à la réalisation de la tâche 
 		entre le temps de réalisation et Fin.
-		\item \customhighlight{Worst Case Execution Time}\label{wcet} : Afin de faciliter les calculs et l'abstraction du problème, l'on pose habituellement que le temps considéré d'exécution de 
+		\item \textbf{Worst Case Execution Time}\label{wcet} : Afin de faciliter les calculs et l'abstraction du problème, l'on pose habituellement que le temps considéré d'exécution de 
 		la tâche est le pire temps. Cela permet d'envisager le pire scénario, et ainsi 
 		de s'assurer que si celui-ci est possible, alors dans de meilleures conditions, 
 		la faisabilité est conservée. La notation utilisée dans le reste de ce document 
-		est  \customhighlight{WCET} : \customhighlight{W}orst \customhighlight{C}ase \customhighlight{E}xecution \customhighlight{T}ime
+		est  \textbf{WCET} : \textbf{W}orst \textbf{C}ase \textbf{E}xecution \textbf{T}ime
 		
-		\item \customhighlight{Laxité} : La laxité d'une tâche est la durée entre sa réalisation et son échéance. 
+		\item \textbf{Laxité} : La laxité d'une tâche est la durée entre sa réalisation et son échéance. 
 		Pour une tâche $\tau_i$, la laxité est :
 		\begin{center}
 			$L_i = D_i - C_i$
 		\end{center}
 		\vspace{0.5cm}
-		\item \customhighlight{Tâches périodiques} :
+		\item \textbf{Tâches périodiques} :
 		Une tâche périodique est une tâche qui génère régulièrement des jobs.  
 		Formellement, une tâche périodique est définie par un 4-uplet $(O, T, D, C)$ où \medskip
 		\begin{itemize}
-			\item \customhighlight{O} : est l'"offset", c'est à dire le temps que met la tâche à générer un premier job.
-			\item \customhighlight{T} : est la période, c'est à dire le temps qui sépare deux générations de job par la tâche. 
+			\item \textbf{O} : est l'"offset", c'est à dire le temps que met la tâche à générer un premier job.
+			\item \textbf{T} : est la période, c'est à dire le temps qui sépare deux générations de job par la tâche. 
 			Comme le premier job est généré à l'instant $O$, alors $\forall i \in \{0, \infty \} t = O + i\times T$ 
 			où $t$ est le temps où la tâche est générée la $i$ème fois.
-			\item \customhighlight{D} est l'échéance relative, c'est à dire le temps qui sépare au maximum la génération 
+			\item \textbf{D} est l'échéance relative, c'est à dire le temps qui sépare au maximum la génération 
 			d'un job et sa réalisation.
-			\item \customhighlight{C} est le temps de réalisation. Dans les algorithmes, on utilise -- comme expliqué précédemment -- le \customhighlight{WCET}.
+			\item \textbf{C} est le temps de réalisation. Dans les algorithmes, on utilise -- comme expliqué précédemment -- le \customhighlight{WCET}.
 		\end{itemize}	
 		Dans le cas de tâches périodiques, on distingue trois cas différents : \medskip
 		\begin{enumerate}
@@ -355,7 +358,7 @@
 		Globalement, on peut ordonner ces trois types de tâches : \medskip
 		échéance sur requêtes $\subset$ échéance contrainte $\subset$ échéance arbitraire.
 		
-		\item \customhighlight{Tâche sporadique} : Une tâche sporadique est une tâche qui génère de nouveaux jobs, 
+		\item \textbf{Tâche sporadique} : Une tâche sporadique est une tâche qui génère de nouveaux jobs, 
 		comme dans le cas de la tâche périodique. 
 		La différence entre ces deux types est que la tâche sporadique 
 		génère deux jobs avec un intervalle de temps au moins égal à la durée correspondant à sa période, 
@@ -363,7 +366,7 @@
 		en effet, un système qui est composé de capteur aura du mal à prévoir l'arrivée d'un signal de 
 		celui-ci. 
 		
-		\item \customhighlight{Tâche apériodique} : Pour ce type de tâches, on ignore la régularité de 
+		\item \textbf{Tâche apériodique} : Pour ce type de tâches, on ignore la régularité de 
 		l'arrivée de nouveaux jobs. Les propriétés du job ne sont connues que lorsqu'un job est 
 		généré dans le système.
 		
@@ -394,11 +397,11 @@
 	Dans certains algorithmes, certaines propriétés sont plutôt liées à la tâche, 
 	et dans d'autres, ces mêmes propriétés sont plutôt dynamiques, et donc liées au job.
 	\begin{itemize}
-		\item[\textbf{Début, Fin}] : Le moment où un job commence à être exécuté, ou termine son exécution.
-		\item[\textbf{Échéance, temps limite}] : Correspond au temps limite au delà duquel le job doit avoir été exécuté. Il existe deux types d'échéances : 
+		\item \textbf{Début, Fin} : Le moment où un job commence à être exécuté, ou termine son exécution.
+		\item \textbf{Échéance, temps limite} : Correspond au temps limite au delà duquel le job doit avoir été exécuté. Il existe deux types d'échéances : 
 		une absolue, et une relative. L'échéances relative est une valeur fixe qui 
 		est une propriété de la tâche, elle dépend donc du temps de réalisation.\medskip
-		L'échéances absolue quant à elle est calculée avant l'exécution, et correspond 
+		L'échéance absolue quant à elle est calculée avant l'exécution, et correspond 
 		à un temps $t$ absolu, elle est donc une propriété du job.
 	\end{itemize}
 	
@@ -542,7 +545,7 @@
 	\subsection{Ordonnanceurs à priorité fixe sur tâche}
 	
 	\subsubsection{Rate Monotonic}
-	L'ordonnanceur \textbf{R}ate \textbf{M}onotonic (RM) est décrit par Liu et Layland \cite{liu_scheduling_1973} en 1973. C'est 
+	L'ordonnanceur \customhighlight{R}ate \customhighlight{M}onotonic (RM) est décrit par Liu et Layland \cite{liu_scheduling_1973} en 1973. C'est 
 	donc un ordonnanceur classique, bien connu, ainsi que largement documenté \cite{kermia_ordonnancement_2009}. 
 	L'idée de base est qu'une tâche avec une période courte évolue rapidement, et 
 	doit donc être prioritaire.\medskip
@@ -597,7 +600,7 @@
 	
 	\subsection{Ordonnanceurs à priorité fixe sur job}
 	\subsection{Earliest Deadline First}
-	\textbf{E}arliest \textbf{D}eadline \textbf{F}irst (EDF) est un ordonnanceur 
+	\customhighlight{E}arliest \customhighlight{D}eadline \customhighlight{F}irst (EDF) est un ordonnanceur 
 	qui a été introduit en 1973, dans le même article que celui où est présenté Rate Monotonic 
 	par Lui et Layland \cite{liu_scheduling_1973}. C'est un ordonnanceur à départ différé ($Offset \neq 0$) 
 	et à échéance arbitraire (pas de contrainte sur l'échéance par rapport à la période), 
@@ -717,8 +720,8 @@
 	
 	Dans cet article, ils décrivent également :\medskip
 	\begin{itemize}
-		\item[RMNFS] : \textit{Rate Monotonic Next-Fit Scheduler}
-		\item[RMFFS] : \textit{Rate Monotonic First-Fit Scheduler}
+		\item \textbf{RMNFS} : \textit{Rate Monotonic Next-Fit Scheduler}
+		\item \textbf{RMFFS} : \textit{Rate Monotonic First-Fit Scheduler}
 	\end{itemize}
 	\vspace{1em}
 	qui finalement, sont des algorithmes basés sur \textit{RM} dont le système de tâche est 
@@ -1121,7 +1124,7 @@
 	
 	\begin{tabular}{|c|c|c|c|}
 		\hline
-		\textbf{Nom} & \textbf{Classe} &  \textbf{Optimal} & \textbf{Migrations}\\
+		\customhighlight{Nom} & \customhighlight{Classe} &  \customhighlight{Optimal} & \customhighlight{Migrations}\\
 		\hline
 		\hline
 		EDF-k & Sporadique, échéance implicite & Optimal (P-Fair) & Nombreuses \\
