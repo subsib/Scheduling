@@ -2,13 +2,16 @@
 # Implementing a Dynamic and Global Scheduling Algorithm in a Real-Time OS
 ## MEMO-F-403 Master Thesis
 
-* État de l'art : [Document](./memoire/memoire.pdf), [sources LaTeX](./memoire/memoire.tex), 
-[LaTeX](http://www.latex-project.org/)
+* État de l'art : [Document](./memoire/memoire.pdf), [sources LaTeX](./memoire/memoire.tex)
+
+* Présentation : [pdf](https://www.overleaf.com/read/xhdfrfzbdcsd)
 
 * __HIPPEROS__ : Actuellement en stage chez [__HIPPEROS__](http://www.hipperos.com/) 
 Je prévois d'implémenter __QPS__.
 
-* J'utilise Zotero pour ma bibliographie : [![zotero logo](https://www.zotero.org/static/images/theme/zotero-logo.svg)](https://www.zotero.org/)
+* Divers IDE, outils : 
+        * [LaTeX](http://www.latex-project.org/)
+        * Zotero pour la bibliographie : [![zotero logo](https://www.zotero.org/static/images/theme/zotero-logo.svg)](https://www.zotero.org/)
 
         Zotero is the only research tool that automatically senses content in your web browser, 
         allowing you to add it to your personal library with a single click. 
@@ -58,7 +61,9 @@ References_
 
 ### Todo-list
 
-- [x] Rédiger <del>Corriger</del> état de l'art (échéance 21/08/2017)
+- [x] Rédiger état de l'art (échéance 21/08/2017)
+- [x] Corriger état de l'art (il reste des tas de petites erreurs stupides)
+- [x] Prépaprer présentation (wip)
 - [ ] Présenter état de l'art (25/08/2017)
 - [ ] Ajouter un CMake pour compiler mes documents LaTeX
 - [ ] Implémenter __QPS__
