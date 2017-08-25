@@ -4,7 +4,7 @@
 
 * État de l'art : [Document](./memoire/memoire.pdf), [sources LaTeX](./memoire/memoire.tex)
 
-* Présentation : [pdf](https://www.overleaf.com/read/xhdfrfzbdcsd)
+* Présentation : [pdf](./presentation_prememoire/presentation.pdf) [src](./presentation_prememoire/)
 
 * __HIPPEROS__ : Actuellement en stage chez [__HIPPEROS__](http://www.hipperos.com/) 
 Je prévois d'implémenter __QPS__.
