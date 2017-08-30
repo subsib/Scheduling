@@ -1,5 +1,16 @@
-![schedule](https://www.cloudbooksapp.com/blog/wp-content/uploads/2015/06/Social-Scheduling.jpg)
-# Implementing a Dynamic and Global Scheduling Algorithm in a Real-Time OS
+<hr />
+<div align="justify">
+<img src="https://github.com/subsib/Scheduling/blob/master/presentation_prememoire/img/vinci_voiture_dessin.png" align="left" height="100" />
+<h1>Implementing a Dynamic and Global Scheduling Algorithm in a Real-Time OS</h1>
+<br />
+<br />
+<br />
+</div>
+<hr />
+
+
+
+
 ## MEMO-F-403 Master Thesis
 
 * État de l'art : [Document](./memoire/memoire.pdf), [sources LaTeX](./memoire/memoire.tex)
@@ -10,14 +21,16 @@
 Je prévois d'implémenter __QPS__.
 
 * Divers IDE, outils : 
-        * [LaTeX](http://www.latex-project.org/)
-        * Zotero pour la bibliographie : [![zotero logo](https://www.zotero.org/static/images/theme/zotero-logo.svg)](https://www.zotero.org/)
-
-        Zotero is the only research tool that automatically senses content in your web browser, 
-        allowing you to add it to your personal library with a single click. 
-        Whether you're searching for a preprint on arXiv.org, a journal article from JSTOR, 
-        a news story from the New York Times, or a book from your university library catalog, 
-        Zotero has you covered with support for thousands of sites.
+  * [LaTeX](http://www.latex-project.org/)
+  * <a href="https://www.zotero.org/"><img src="https://www.zotero.org/static/images/theme/zotero-logo.svg" align="left" height="15" /></a><br />
+  			    
+		    Zotero is the only research tool that automatically senses content in your web browser, 
+		    allowing you to add it to your personal library with a single click. 
+		    Whether you're searching for a preprint on arXiv.org, a journal article from JSTOR, 
+		    a news story from the New York Times, or a book from your university library catalog, 
+		    Zotero has you covered with support for thousands of sites.
+*  texStudio : est un éditeur LaTeX pratique, portable.
+  *  jetBrains IDE (CLion)
 
 ### Description of the subject
 
@@ -62,8 +75,7 @@ References_
 ### Todo-list
 
 - [x] Rédiger état de l'art (échéance 21/08/2017)
-- [x] Corriger état de l'art (il reste des tas de petites erreurs stupides)
-- [x] Prépaprer présentation (wip)
-- [ ] Présenter état de l'art (25/08/2017)
+- [ ] Corriger état de l'art (il reste des tas de petites erreurs stupides)
+- [x] Présenter état de l'art (25/08/2017)
 - [ ] Ajouter un CMake pour compiler mes documents LaTeX
 - [ ] Implémenter __QPS__
