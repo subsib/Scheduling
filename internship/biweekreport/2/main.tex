@@ -1,0 +1,165 @@
+%-------------------------------------------------------------------------------%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%-------------------------------------------------------------------------------
+\documentclass[12pt]{article}
+%\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{array}
+\definecolor{light-gray}{gray}{0.95}
+\usepackage{xcolor}
+\usepackage{listings}
+\setlength{\parindent}{0pt}
+
+\usepackage{path}
+\usepackage[bookmarks,bookmarksnumbered,colorlinks,hyperindex,pagebackref,urlcolor=blue,final]{hyperref}
+
+\definecolor{email}{rgb}{0,.5,0}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+
+\begin{document}
+\begin{titlepage}
+
+\def\EMAILArabella{Arabella.Brayer@ulb.ac.be}
+
+\newcommand{\imagepath}{../img}
+\newcommand{\university}{Université Libre de Bruxelles}
+\newcommand{\faculty}{Département d'informatique}
+\newcommand{\course}{TRAN-F-501 - Internship}
+\newcommand{\authors}{\bfseries{Arabella \textsc{Brayer}} -- \emailArabella}
+\newcommand{\supervisor}{Paul \textsc{Rodriguez}}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+\newcommand{\emailArabella}{\href{mailto:\EMAILArabella?subject=[TRAN-F-501 - Internship]}{\color{\EMAILArabella}\path|\EMAILArabella|}}
+\center % Center everything on the page
+ 
+%-------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%-------------------------------------------------------------------------------
+
+\textsc{\LARGE \university}\\[1.5cm] % Name of your university/college
+\textsc{\Large \faculty}\\[0.5cm] % Major heading such as course name
+\textsc{\large \course}\\[0.5cm] % Minor heading such as course title
+
+%-------------------------------------------------------------------------------%	TITLE SECTION
+%-------------------------------------------------------------------------------\HRule \\[0.4cm]
+{ \huge \bfseries Implementation of a file system service on the HIPPEROS micro-kernel}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+ 
+%-------------------------------------------------------------------------------%	AUTHOR SECTION
+%-------------------------------------------------------------------------------
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Authors:}\\
+Arabella \textsc{Brayer} -- \href{mailto:Arabella.Brayer@ulb.ac.be?subject=[TRAN-F-501 - Internship]}{email}
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Supervised by:} \\
+\supervisor % Supervisor's Name
+\end{flushright}
+\end{minipage}\\[2cm]
+
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large August, 26, 2017 }\\[2cm] % Date, change the \today to a set date if you want to be precise
+
+
+%----------------------------------------------------------------------------------------
+%	LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+\includegraphics{\imagepath/logoULB.png}\\[1cm] 
+ 
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+\newpage
+
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength\headheight{15pt}
+\fancyhead[L]{Bi-weekly report}
+\fancyhead[R]{}
+\fancyfoot[L]{\today}
+\fancyfoot[R]{\thepage}
+
+\newpage
+
+%\tableofcontents
+%-----------------------------------------------------------
+%\newpage
+\section{Presentation}
+\subsection{Recall of the subject}
+The aim of the internship is to develop and integrate a new service for the real-time operating system HIPPEROS, 
+that would provide the functionality of the FATFS library to users.
+Currently, HIPPEROS uses a FATFS library directly, the aim is to introduce an indirection in order to 
+avoid concurrent access that might occur.
+
+\subsection{Current task}
+The current task is still to implement a prototype of the service 
+executing correctly the call to open and read file using the service. 
+A task must be able to open several different files, in read mode.
+Then, the task must be able to open a file, even if it is opened 
+by another task in the system, read part by part without offset problem.
+
+As a reminder, two weeks ago, I proposed my first prototype, but 
+bugs were still there. My code was having its first review.
+
+\section{Flow description}
+\subsection{First week 13/08 to 17/08}
+At the start of the week, the work has been to make corrections 
+in line with the remarks made in the first review. 
+However, a persistent bug continued to show up intermittently. 
+By conquest, in the course of this week I was shown how to debug effectively.
+
+A series of new remarks arrived on Wednesday, so 
+I was busy to fix style-code and compliance.
+
+The persistent bug was found at the end of this first week and was I guess a 
+classical mistake for an intern with the C code. 
+To fix this bug, I had to ask for help, which allowed me to learn how to 
+better configure my IDE and use it professionally. 
+As a personal remark, I think this error taught me a lot.
+
+\subsection{Second week 20/08 to 25/08}
+For the start of this week, I have been seek during one day.
+From the second day, I undertook to complete the review by doing 
+a lot of refactoring on the code. Then, I was shown how to properly 
+maintain git deposits. 
+As a personal remark, I think that these details can not be learned 
+when developing individual projects, and difficulty in developing projects 
+for the University, although in group.
+
+Wednesday, I learned how to automate a test in order to apply this method on 
+the prototype. The test used for HIPPEROS is not usually used, it is a custom, 
+I am at this step still implementing these tests.
+A first script was produced as a test, but this test is not yet complete.
+
+\section{Next goal}
+During the next week, my internship supervisor is not by HIPPEROS, so we 
+had a meeting to organize the work. 
+The prototype is expected to pass the review soon, then the library will be 
+integrated at the kernel as a service. Then, the next step is to add 
+the write operation.
+
+\end{document}
