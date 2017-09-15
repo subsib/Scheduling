@@ -1,0 +1,151 @@
+%-------------------------------------------------------------------------------%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%-------------------------------------------------------------------------------
+\documentclass[12pt]{article}
+%\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{array}
+\definecolor{light-gray}{gray}{0.95}
+\usepackage{xcolor}
+\usepackage{listings}
+\setlength{\parindent}{0pt}
+
+\usepackage{path}
+\usepackage[bookmarks,bookmarksnumbered,colorlinks,hyperindex,pagebackref,urlcolor=blue,final]{hyperref}
+
+\definecolor{email}{rgb}{0,.5,0}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+
+\begin{document}
+\begin{titlepage}
+
+\def\EMAILArabella{Arabella.Brayer@ulb.ac.be}
+
+\newcommand{\imagepath}{../img}
+\newcommand{\university}{Université Libre de Bruxelles}
+\newcommand{\faculty}{Département d'informatique}
+\newcommand{\course}{TRAN-F-501 - Internship}
+\newcommand{\authors}{\bfseries{Arabella \textsc{Brayer}} -- \emailArabella}
+\newcommand{\supervisor}{Paul \textsc{Rodriguez}}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+\newcommand{\emailArabella}{\href{mailto:\EMAILArabella?subject=[TRAN-F-501 - Internship]}{\color{\EMAILArabella}\path|\EMAILArabella|}}
+\center % Center everything on the page
+ 
+%-------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%-------------------------------------------------------------------------------
+
+\textsc{\LARGE \university}\\[1.5cm] % Name of your university/college
+\textsc{\Large \faculty}\\[0.5cm] % Major heading such as course name
+\textsc{\large \course}\\[0.5cm] % Minor heading such as course title
+
+%-------------------------------------------------------------------------------%	TITLE SECTION
+%-------------------------------------------------------------------------------\HRule \\[0.4cm]
+{ \huge \bfseries Implementation of a file system service on the HIPPEROS micro-kernel}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+ 
+%-------------------------------------------------------------------------------%	AUTHOR SECTION
+%-------------------------------------------------------------------------------
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Authors:}\\
+Arabella \textsc{Brayer} -- \href{mailto:Arabella.Brayer@ulb.ac.be?subject=[TRAN-F-501 - Internship]}{email}
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Supervised by:} \\
+\supervisor % Supervisor's Name
+\end{flushright}
+\end{minipage}\\[2cm]
+
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large September, 25, 2017 }\\[2cm] % Date, change the \today to a set date if you want to be precise
+
+
+%----------------------------------------------------------------------------------------
+%	LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+\includegraphics{\imagepath/logoULB.png}\\[1cm] 
+ 
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+\newpage
+
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength\headheight{15pt}
+\fancyhead[L]{Bi-weekly report}
+\fancyhead[R]{}
+\fancyfoot[L]{September, 25, 2017}
+\fancyfoot[R]{\thepage}
+
+\newpage
+
+%\tableofcontents
+%-----------------------------------------------------------
+%\newpage
+\section{Presentation}
+\subsection{Recall of the subject}
+The aim of the internship is to develop and integrate a new service for the real-time operating system HIPPEROS, 
+that would provide the functionality of the FATFS library to users.
+Currently, HIPPEROS uses a FATFS library directly, the aim is to introduce an indirection in order to 
+avoid concurrent access that might occur.
+
+\subsection{Current task}
+The tasks during the first six weeks were summarized in the mid-term 
+evaluation. Generally speaking, the first part of the 
+internship consisted in the implementation of 
+the service as well as benchmarks of Open and Read operations. 
+This aim is now reached and the next tasks are to implement the Write and 
+Close operations, and also benchmarks.
+
+The current task is still to enhance the implementation of the prototype 
+in order to demonstrate the correctness of the operation and to test 
+the efficiency in comparison with the direct call of the FATFS library. 
+
+As a remainder, two weeks ago, I was waiting for a review for the library
+integration and working on the benchmarks. These tasks are now finished, 
+the library integration has been accepted and the benchmarks are now in 
+review.
+
+\section{Flow description}
+\subsection{First week 11/09 to 15/09}
+The first week, I have been working on the review for the library integration, 
+and working on the improvement of the benchmarks. 
+The second part of the week, I have been working back on the write function. 
+On Friday, the PR about the benchmark had made good progress and 
+the write and close operations were basically implemented.
+
+\subsection{Second week 18/09 to 22/09}
+
+\subsection{Next goal}
+
+At this time, the last PR on the library integration has not been reviewed.
+For the next week, the idea is to finish the benchmarks and start the work around the 
+write function even if it has not yet been done.
+
+\end{document}
