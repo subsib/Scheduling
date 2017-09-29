@@ -110,50 +110,35 @@ Arabella \textsc{Brayer} -- \href{mailto:Arabella.Brayer@ulb.ac.be?subject=[TRAN
 %\newpage
 \section{Presentation}
 \subsection{Recall of the subject}
-The aim of the internship is to develop and integrate a new service for the real-time operating system HIPPEROS, 
-that would provide the functionality of the FATFS library to users.
+The aim of the internship is to develop and integrate a new file system 
+service for the real-time operating system HIPPEROS, 
+that would provide the functionality of the libC library to users.
 Currently, HIPPEROS uses a FATFS library directly, the aim is to introduce an indirection in order to 
 avoid concurrent access that might occur.
 
 \subsection{Current task}
-The tasks during the first six weeks were summarized in the mid-term 
-evaluation. Generally speaking, the first part of the 
-internship consisted in the implementation of 
-the service as well as benchmarks of Read operations in Read-Only mod. 
-This aim is now reached and the next tasks are to implement the Write and 
-Close operations, and also benchmarks.
+The current task has a little bit changed since the last report.
+Indeed, last time, I was working on the write function, and it was planed 
+I implement benchmarks for that.
 
-The current task is still to enhance the implementation of the prototype 
-in order to demonstrate the correctness of the operation and to test 
-the efficiency in comparison with the direct call of the FATFS library. 
-
-As a remainder, two weeks ago, I was waiting for a review for the library
-integration and working on the benchmarks. These tasks are now finished, 
-the library integration has been accepted and the benchmarks are now in 
-review.
+The current task is now to modify the file system service in order to 
+make it POSIX compatible. This task has been determined on the Tuesday of the 
+first week.
 
 \section{Flow description}
-\subsection{First week 11/09 to 15/09}
-The first week, I have been working on the review for the library integration, 
-and working on the improvement of the benchmarks. 
-The second part of the week, I have been working back on the write function. 
-On Friday, the PR about the benchmark had made good progress and 
-the write and close operations were basically implemented.
+\subsection{First week 25/09 to 29/09}
+I first analyzed the POSIX requirements and stopped to work on the write 
+benchmarks. I also had to document myself on newlib. 
+After the meeting, on Tuesday, I worked on the refactoring of the 
+current implementation. 
+This consists of adding a user management in the service (with a list) 
+as well as adapting all the calls and interactions.
+
 
 \subsection{Second week 18/09 to 22/09}
-During the second week, the aim was to propose a first 
-implementation of the write function as a peer-request and close 
-properly the benchmark of read where some formatting problems persisted. 
-This has be done for wednesday. Some unit tests have been added, 
-some intergation tests also. At the second part of the week, 
-I was on sick leave for medical intervention. The PR received remarks 
-during that period.
-
+blabla
 \subsection{Next goal}
 
-The aim now is to finish properly the PR of write, and then, develop some 
-benchmarks for it. 
-As it should be on a model close enough to read, this could take less time.
-
+blabla
 
 \end{document}
