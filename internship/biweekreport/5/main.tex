@@ -77,7 +77,7 @@ Arabella \textsc{Brayer} -- \href{mailto:Arabella.Brayer@ulb.ac.be?subject=[TRAN
 %	DATE SECTION
 %----------------------------------------------------------------------------------------
 
-{\large September, 25, 2017 }\\[2cm] % Date, change the \today to a set date if you want to be precise
+{\large October, 09, 2017 }\\[2cm] % Date, change the \today to a set date if you want to be precise
 
 
 %----------------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ Arabella \textsc{Brayer} -- \href{mailto:Arabella.Brayer@ulb.ac.be?subject=[TRAN
 \setlength\headheight{15pt}
 \fancyhead[L]{Bi-weekly report}
 \fancyhead[R]{}
-\fancyfoot[L]{September, 25, 2017}
+\fancyfoot[L]{October, 9, 2017}
 \fancyfoot[R]{\thepage}
 
 \newpage
@@ -135,10 +135,20 @@ This consists of adding a user management in the service (with a list)
 as well as adapting all the calls and interactions.
 
 
-\subsection{Second week 18/09 to 22/09}
-blabla
-\subsection{Next goal}
+\subsection{Second week 02/10 to 06/10}
+The task of the start of the second week has been to add a managment of 
+FIL list in the service. This is a grat change in the design.
+During the first middle of the week, I have been working on that task, and 
+also fixing some bugs.
 
-blabla
+During the second part of the week, I have been working on the adaptation 
+of the previous benchmarks, and tests because the interfaces have changed.
+
+\subsection{Next goal}
+The next goal is to call directly \textit{hf\_open}, \textit{hf\_read},
+\textit{hf\_write}, and \textit{hf\_close} by indirection calling 
+\textit{fopen}, \textit{fread}, \textit{fwrite} and \textit{fclose} using 
+POSIX. The library Newlib must be adapted to redict calls on the service.
+Then, the Pull Request must be open to validate that great change.
 
 \end{document}
