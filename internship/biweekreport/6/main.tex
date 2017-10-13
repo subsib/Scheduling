@@ -1,0 +1,146 @@
+%-------------------------------------------------------------------------------%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%-------------------------------------------------------------------------------
+\documentclass[12pt]{article}
+%\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[top=3cm, bottom=3cm, left=3cm, right=3cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{array}
+\definecolor{light-gray}{gray}{0.95}
+\usepackage{xcolor}
+\usepackage{listings}
+\setlength{\parindent}{0pt}
+
+\usepackage{path}
+\usepackage[bookmarks,bookmarksnumbered,colorlinks,hyperindex,pagebackref,urlcolor=blue,final]{hyperref}
+
+\definecolor{email}{rgb}{0,.5,0}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+
+\begin{document}
+\begin{titlepage}
+
+\def\EMAILArabella{Arabella.Brayer@ulb.ac.be}
+
+\newcommand{\imagepath}{../img}
+\newcommand{\university}{Université Libre de Bruxelles}
+\newcommand{\faculty}{Département d'informatique}
+\newcommand{\course}{TRAN-F-501 - Internship}
+\newcommand{\authors}{\bfseries{Arabella \textsc{Brayer}} -- \emailArabella}
+\newcommand{\supervisor}{Paul \textsc{Rodriguez}}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+\newcommand{\emailArabella}{\href{mailto:\EMAILArabella?subject=[TRAN-F-501 - Internship]}{\color{\EMAILArabella}\path|\EMAILArabella|}}
+\center % Center everything on the page
+ 
+%-------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%-------------------------------------------------------------------------------
+
+\textsc{\LARGE \university}\\[1.5cm] % Name of your university/college
+\textsc{\Large \faculty}\\[0.5cm] % Major heading such as course name
+\textsc{\large \course}\\[0.5cm] % Minor heading such as course title
+
+%-------------------------------------------------------------------------------%	TITLE SECTION
+%-------------------------------------------------------------------------------\HRule \\[0.4cm]
+{ \huge \bfseries Implementation of a file system service on the HIPPEROS micro-kernel}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+ 
+%-------------------------------------------------------------------------------%	AUTHOR SECTION
+%-------------------------------------------------------------------------------
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Authors:}\\
+Arabella \textsc{Brayer} -- \href{mailto:Arabella.Brayer@ulb.ac.be?subject=[TRAN-F-501 - Internship]}{email}
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Supervised by:} \\
+\supervisor % Supervisor's Name
+\end{flushright}
+\end{minipage}\\[2cm]
+
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large October, 09, 2017 }\\[2cm] % Date, change the \today to a set date if you want to be precise
+
+
+%----------------------------------------------------------------------------------------
+%	LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+\includegraphics{\imagepath/logoULB.png}\\[1cm] 
+ 
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+\newpage
+
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength\headheight{15pt}
+\fancyhead[L]{Bi-weekly report}
+\fancyhead[R]{}
+\fancyfoot[L]{October, 9, 2017}
+\fancyfoot[R]{\thepage}
+
+\newpage
+
+%\tableofcontents
+%-----------------------------------------------------------
+%\newpage
+\section{Presentation}
+\subsection{Recall of the subject}
+The aim of the internship is to develop and integrate a new file system 
+service for the real-time operating system HIPPEROS, 
+that would provide the functionality of the libC library to users.
+Currently, HIPPEROS uses a FATFS library directly, the aim is to introduce an indirection in order to 
+avoid concurrent access that might occur.
+
+\subsection{Current task}
+// todo rewrite
+The next goal is to call directly \textit{hf\_open}, \textit{hf\_read},
+\textit{hf\_write}, and \textit{hf\_close} by indirection calling 
+\textit{fopen}, \textit{fread}, \textit{fwrite} and \textit{fclose} using 
+POSIX. The library Newlib must be adapted to redict calls on the service.
+Then, the Pull Request must be open to validate that great change.
+
+\section{Flow description}
+\subsection{First week 09/10 to 13/10}
+Monday : finish to move library :
+
+A lib in hapi
+A service in service path
+Start working on newlib adaptation
+
+Fix PR first remarks and read documentation to override fopen etc.
+
+Tried to implement newlib, complicated, malloc error (malloc isn't supported 
+by HIPPEROS). 
+Found solutions with help of my supervisor
+
+\subsection{Second week 16/10 to 20/10}
+
+\subsection{Next goal}
+
+
+\end{document}
