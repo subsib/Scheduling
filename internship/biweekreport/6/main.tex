@@ -111,36 +111,57 @@ Arabella \textsc{Brayer} -- \href{mailto:Arabella.Brayer@ulb.ac.be?subject=[TRAN
 \section{Presentation}
 \subsection{Recall of the subject}
 The aim of the internship is to develop and integrate a new file system 
-service for the real-time operating system HIPPEROS, 
+service for the real-time operating system \textbf{HIPPEROS}, 
 that would provide the functionality of the libC library to users.
-Currently, HIPPEROS uses a FATFS library directly, the aim is to introduce an indirection in order to 
+Currently, \textbf{HIPPEROS} uses a FATFS library directly, the aim is to introduce an indirection in order to 
 avoid concurrent access that might occur.
 
 \subsection{Current task}
-// todo rewrite
-The next goal is to call directly \textit{hf\_open}, \textit{hf\_read},
-\textit{hf\_write}, and \textit{hf\_close} by indirection calling 
-\textit{fopen}, \textit{fread}, \textit{fwrite} and \textit{fclose} using 
-POSIX. The library Newlib must be adapted to redict calls on the service.
-Then, the Pull Request must be open to validate that great change.
+This report is the last one. In the previous report, it was told that the 
+remaining task was to integrate the service and library into \textbf{Newlib}.
+Note that \textbf{Newlib} is a common library used to re-implement c 
+libraries into alternative OS.
+
+Concretely, it means that a \textbf{HIPPEROS} user should be able to use 
+the file system including <stdio.h> header. The new interface has to be :\\
+\textit{fopen}, \textit{fread}, \textit{fwrite}, \textit{fclose}.
+Finally, the aim is to validate a last Pull Request with these changes.
 
 \section{Flow description}
 \subsection{First week 09/10 to 13/10}
-Monday : finish to move library :
+The start of the first week was dedicated to the end of migration of the 
+library. The lib has been moved into hapi, the "Hipperos" API.
+The service has been mived into the service path. 
+A first job of documentation has been done in order to understand how to 
+port \textbf{Newlib}. 
 
-A lib in hapi
-A service in service path
-Start working on newlib adaptation
+Then, a first Pull Request has been opened to validate these first changes.
 
-Fix PR first remarks and read documentation to override fopen etc.
-
-Tried to implement newlib, complicated, malloc error (malloc isn't supported 
-by HIPPEROS). 
-Found solutions with help of my supervisor
+In the second part of the week, the work was to found difficulties by trying to 
+port \textbf{Newlib}, step by step. First difficulties were discovered :\\
+As \textbf{Newlib} makes a pre-treatment before to come in our implementation, 
+then the buffer mode is automatically set, and the malloc function is called. 
+There is no malloc support in \textbf{HIPPEROS}, so that is impossible. 
+My advisor helped me to found solutions to disable the buffer mode.
 
 \subsection{Second week 16/10 to 20/10}
+It has been decided that my work would be cut in parts to reach goals 
+step by step, because the whole aim was heavy to implement in one time.
+Then the first step (in the beginning of the week) was to add a list 
+of opened files in the service, then to port \textbf{Newlib}.
+Some of difficulties has been found, like this one :\\
+\textbf{Newlib} manages a list of opened files. When the task quit, it will 
+close the opened files. But in statically linked, when a task quit, 
+all the files are closed. That can lead to concurrency problems because
+if two tasks are reading the same task and one is finished, the second 
+task cannot read the file anymore. It is mandatory to call the \_Exit() 
+function to quit. 
 
-\subsection{Next goal}
+Finally, when this job was made, we had to rebase my 
+branch to be synchronized with the current version of \textbf{HIPPEROS}.
 
+\subsection{Conclusion}
+The main goal of the second part of the internship has been reached. 
+The library is integrated in \textbf{Newlib}. 
 
 \end{document}
