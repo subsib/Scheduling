@@ -72,10 +72,20 @@ References_
 >en situation réelle, cet état de l'art permet de motiver le choix de 
 >l'ordonnanceur étudié : il s'agira de __QPS__.
 
+### News
+
+J'ai décidé de changer de scheduler. J'implémente u-edf. Je me base sur 3 documents pour 
+le moment afin de voir comment procéder :
+La thèse de G. Nelissen, avec la description de l'algo, 
+plus un papier où il est annoncé, 
+plus un papier où il est prouvé comme optimal.
+
+Je propose un emploi du temps pour organiser mon travail.
+
 ### Todo-list
 
 - [x] Rédiger état de l'art (échéance 21/08/2017)
 - [ ] Corriger état de l'art (il reste des tas de petites erreurs stupides)
 - [x] Présenter état de l'art (25/08/2017)
 - [ ] Ajouter un CMake pour compiler mes documents LaTeX
-- [ ] Implémenter __QPS__
+- [ ] Implémenter __U-EDF__
