@@ -13,8 +13,8 @@ deadlines : j1 : 6, j2 : 3-6, j3: 10. égalité j1, j2, arbitrairement, on déci
 
   1    2    3    4    5    6    7    8   9    10
 ------------------------------------------------------------
- j1 | j1 | j3 | j3 | j3 | j3 | j3 | j3 | j3 | j3 | Argh...
- j2 | j2 | j2 | ..........................................
+ j1 | j1 | j3 | j3 | j3 | j3 | j3 | j3 | j3 | j3 | X Argh...
+ j2 | j2 | j2 | .. | .. | .. | .. | .. | .. | .. | _______
  -----------------------------------------------------------
 
  La version verticale ne marche pas avec cet exemple.
@@ -37,4 +37,5 @@ En fait, il s'agit de réserver une portion de capacité de calcul sur le systè
 afin de s'assurer qu'il y ait une chance d'avoir la place pour le job.
 2. Allot, EDF-D, D comme Delay : see p.198
 
-
+L'appel à l'ago se fait sur event, pas à chaque instant.
+Donc quand un job est terminé, ou arrive 
