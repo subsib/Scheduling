@@ -33,4 +33,8 @@ deadlines : j1 : 6, j2 : 3-6, j3: 10. égalité j1, j2, arbitrairement, on déci
 En résumé, U-EDF fait ça :
 1. Pré.schedule avec EDF horizontal
 > histoire de réservation ?! Un peu comme DP-Wrap ou EKG, zone un peu obscure (see p.197)
-2. Allot, EDF-D : see p.198
+En fait, il s'agit de réserver une portion de capacité de calcul sur le système, 
+afin de s'assurer qu'il y ait une chance d'avoir la place pour le job.
+2. Allot, EDF-D, D comme Delay : see p.198
+
+
