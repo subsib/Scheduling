@@ -39,3 +39,31 @@ afin de s'assurer qu'il y ait une chance d'avoir la place pour le job.
 
 L'appel à l'ago se fait sur event, pas à chaque instant.
 Donc quand un job est terminé, ou arrive 
+
+
+Définitions : 
+
+budget : 
+
+Le calcul du budget dépend de hp, qui n'est pas HyperPeriod, mais 
+Higher Priority task set : 
+
+see p.184
+	> hp_i = {tau_j : d_j(t) > 0 and d_j(t) < d_i(t) ou d_j(t) = d_ i(t) AND j < i}
+
+En français, ça veut dire :
+higherPrioritySetTask de la tâche i = l'ensemble de tâches tau_j telles que y a une deadline, 
+que la deadline est avant celle de i, 
+ou alors que la deadline de j soit égale à di et que j < i.
+
+En gros, c'est juste l'ensemble des tâches avec priorité plus élevée... 
+
+Sur HIPPEROS, ça correspond aux tâches avant la tâche i dans le HEAP.
+
+Mais c'est QUOI le budget ?
+---------------------------
+
+	> bdg_i,j_(t1,t2) = allot_i,j(t1) + res_i,j(di(t1),t2)
+
+Donc c'est qoi res_i,J(di(t1), t2) maintenant ?
+-----------------------------------------------
