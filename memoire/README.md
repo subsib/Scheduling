@@ -13,8 +13,9 @@ deadlines : j1 : 6, j2 : 3-6, j3: 10. égalité j1, j2, arbitrairement, on déci
 
   1    2    3    4    5    6    7    8   9    10
 ------------------------------------------------------------
- j1 | j1 | j3 | j3 | j3 | j3 | j3 | j3 | j3 | j3 | X Argh...
 
+ j1 | j1 | j3 | j3 | j3 | j3 | j3 | j3 | j3 | j3 | X Argh...
+-----------------------------------------------------------
  j2 | j2 | j2 | .. | .. | .. | .. | .. | .. | .. | ________
  -----------------------------------------------------------
 
@@ -25,9 +26,9 @@ deadlines : j1 : 6, j2 : 3-6, j3: 10. égalité j1, j2, arbitrairement, on déci
   1    2    3    4    5    6    7    8   9    10
 ------------------------------------------------------------
  j1 | j1 | j2 | j2 | j2 | .. | .. | .. | .. | .. |
-
+-----------------------------------------------------------
  j3 | j3 | j3 | j3 | j3 | j3 | j3 | j3 | j3 | j3 |
- -----------------------------------------------------------
+-----------------------------------------------------------
  En résumé, on essaie de mettre séquentiellement les tâches prioritaires sur le premier CPU 
  jusqu'à ce qu'il n'y ait plus de place, et on descend. Comme ça, 
  on s'assure que les jobs les plus prioritaires seront traités.
