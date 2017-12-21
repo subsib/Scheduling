@@ -80,7 +80,7 @@ J'imagine qu'on s'attent à ce que le budget soit >= à exec_time de la tâche i
 
 	> bdg_i,j_(t1,t2) = allot_i,j(t1) + res_i,j(di(t1),t2)
 
-Donc c'est qoi res_i,J(di(t1), t2) maintenant ?
+Donc c'est quoi res_i,J(di(t1), t2) maintenant ?
 -----------------------------------------------
 
 futur job reservation (p. 194)
@@ -110,3 +110,6 @@ En gros, faut appliquer bêtement la formule :
 	[x]a_b = max{a, min{b, x}}
 	et faut remarquer que x est borné. Si x < a, x = a, si x > b, x = b.
 
+Au final, si je veux calculer allot
+
+Question : pourquoi le heap est-il plutôt une macro ?
