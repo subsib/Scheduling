@@ -18,7 +18,7 @@
 * Présentation : [pdf](./presentation_prememoire/presentation.pdf) [src](./presentation_prememoire/)
 
 * __HIPPEROS__ : Actuellement en stage chez [__HIPPEROS__](http://www.hipperos.com/) 
-Je prévois d'implémenter __QPS__.
+Je prévois d'implémenter [update : changement de scheduler]__U-EDF__.
 
 * Divers IDE, outils : 
   * [LaTeX](http://www.latex-project.org/)
@@ -70,7 +70,7 @@ References_
 >Le projet final étant d'implémenter un ordonnanceur au sein du système 
 >d'exploitation temps réel __HIPPEROS__, pour analyser ses performances 
 >en situation réelle, cet état de l'art permet de motiver le choix de 
->l'ordonnanceur étudié : il s'agira de __QPS__.
+>l'ordonnanceur étudié : il s'agira de __U-EDF__.
 
 ### News
 
