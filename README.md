@@ -80,7 +80,8 @@ La thèse de G. Nelissen, avec la description de l'algo,
 plus un papier où il est annoncé, 
 plus un papier où il est prouvé comme optimal.
 
-Je propose un emploi du temps pour organiser mon travail.
+Actuellement, en suivant le papier, je pense avoir une meilleure compréhension de l'algo. Il me reste à l'étudier avec des exemples afin de trouver les optimisations/adaptations possibles en utilisation.
+Je dois noter une remarque importante : je considère le multiproc en mode single thread. Pas de multithread pour le moment. Donc une tâche créé des jobs qui sont une instance de la tâche, pas un set de threads rattachés à la tâche/au processus. Cela diffère de la taxonomie HIPPEROS actuelle.
 
 ### Todo-list
 
@@ -88,4 +89,10 @@ Je propose un emploi du temps pour organiser mon travail.
 - [ ] Corriger état de l'art (il reste des tas de petites erreurs stupides)
 - [x] Présenter état de l'art (25/08/2017)
 - [ ] Ajouter un CMake pour compiler mes documents LaTeX
-- [ ] Implémenter __U-EDF__
+- [ ] Faire des exemples manuels d'__UEDF__ pour finir par avoir une compréhension fine des endroits optimisables sur __HIPPEROS__.
+- [ ] Trouver des exemples pertinents à utiliser pour des tests
+- [ ] Trouver des invariants pertinents à tester à certains moments de l'algo
+- [ ] Implémenter __U-EDF__ 
+- [ ] Automatiser la création de set de tâches pour organiser des benchmarks
+- [ ] Trouver des points importants à comparer
+
