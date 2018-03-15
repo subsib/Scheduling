@@ -226,7 +226,7 @@ allotMax_i_j = (100 - 0) - 20 - 27.3333 - 0 = 52.6666
 allot_i_j = min{52.666, ret(tau_2) - 0} = 40
 /!\ allot_i_j > 0
 ready_threads[tau_2].scheduled = True
-ready_threads[tau_2].resProc = 1 // idCore                                                            | RES[0:2] = {27.3333; 0}
+ready_threads[tau_2].resProc = 1 // idCore
                                                             | RES[0:2] = {20; 40}
                                                             | PREV[1] = 40
                                                             |ALLOT[0:2] = {20;40}
@@ -285,18 +285,46 @@ allotMax_i_j = (90 - 20) - 20 - 34.666 - 0 = 15.3333
 allot_i_j = min{15.333, ret(tau_1) - 0} = 15.333
 /!\ allot_i_j > 0
 ready_threads[tau_1].scheduled = True
-ready_threads[tau_1].resProc = 0 // idCore                                                            | RES[0:2] = {27.3333; 0}
-                                                            | RES[0:2] = {20; 40}
-                                                            | PREV[1] = 40
-                                                            |ALLOT[0:2] = {20;40}
+ready_threads[tau_1].resProc = 0 // idCore
+                                                            | RES[0:2] = {35.333; 0}
+                                                            | PREV[1] = 15.333
+                                                            |ALLOT[0:2] = {35.333;20}
+
+
+j = 1 // proc_id = 1, tau_1 sélectionnée
+RES[1] = RES[1] + Max{1, min{2, 0.7333} - 1}*(deadline(tau_1)-deadline(tau_3) = 
+		 35.333 + 0*40 = 35.333
+allotMax_i_j = (90 - 20) - 20 - 0 - 15.333 = 34.666
+allot_i_j = min{34.666, ret(tau_1) - 15.333} = 0
+/!\ allot_i_j <= 0 ...
+
+
+i = 2 // tau_2 sélectionnée
+PREV[2] = 0
+W = 1.13333333
+
+j = 0 // proc_id = 0
+RES[0] = RES[0] + (Max{0, min{1, 1.133}})*(deadline(tau_2) - deadline(tau_1) = 
+		35.333 + 1 * (100 - 90) = 45.333
+allotMax_i_j = (100 - 20) - 35.333 - 45.333 - 0 = 0
+allot_i_j = min{0, ret(tau_2) - 0} = 0
+/!\ allot_i_j <= 0
+                                                            | RES[0:2] = {35.333; 0}
+                                                            | PREV[2] = 0
+                                                            |ALLOT[0:2] = {35.333;20}
 
 
 j = 1 // proc_id = 1, tau_2 sélectionnée
-RES[1] = RES[1] + Max{1, min{2, 0.7333} - 1}*(deadline(tau_2)-deadline(tau_1) = 
-		 40 + 0*40 = 40
-allotMax_i_j = (100 - 0) - 40 - 40 - 40 = 0
-allot_i_j = min{0, ret(tau_2) - 40} = 0
-/!\ allot_i_j <= 0 ...
+RES[1] = RES[1] + Max{1, min{2, 1.133} - 1}*(deadline(tau_2)-deadline(tau_1) = 
+		 35.333 + 0.133*10 = 36.666
+allotMax_i_j = (100 - 20) - 20 - 0 - 0 = 60
+allot_i_j = min{60, ret(tau_2) - 0} = 20
+/!\ allot_i_j > 0 ...
 
-0 |tau_1
+ready_threads[tau_2].scheduled = True
+ready_threads[tau_2].resProc = 1 // idCore
+
+
+0 |tau_3 tau_1
 1 |tau_2
+
