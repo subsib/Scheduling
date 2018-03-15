@@ -177,3 +177,126 @@ ready_threads[tau_1].resProc = 1 // idCore
 
 Question : comment attribuer le proc 1 à tau_1 quand tau_3 est terminé ?
 ------------------------------------------------------------------------
+
+Example 2:
+
+tau_1  = {30; 90}
+tau_2 = {40; 100}
+
+at 20 add
+tau_3 = {20; 50}
+
+
+
+à t = 0, on ajoute 2 tâches : tau_1 et tau_2
+
+readyThreads = [tau_1, tau_2] car deadline(tau_1) < deadline(tau_2)
+
+PREV[0] = 0;
+W = 0.333333
+
+j = 0
+RES[0] = RES[0] + Max{0, min{1, 0.33333}}*deadline(tau_1) = 0 + 0.33333*90 = 30
+allotMax_i_j = (90 - 0) - 0 - 30 - 0 = 60
+allot_i_j = min{60, ret(tau_1) - 0} = 30
+/!\ allot_i_j > 0 donc on passe l'état du thread à "schedulé" avec l'id de son proc
+ready_threads[tau_1].scheduled = True
+ready_threads[tau_1].resProc = 0 // idCore
+                                                            | RES[0:2] = {30; 0}
+                                                            | PREV[0] = 30
+                                                            |ALLOT[0:2] = {30;0}
+j = 1
+RES[1] = RES[1] + {Max{1, min(2, 0.3333)} - 1}*deadline(tau_1) = 0 + 0 = la tête à toto
+allotMax_i_j =  100 - 0 - 0 - 30 = 70
+allot_i_j = min{70, ret(tau_1) - PREV[0]} = 10
+                                                            | RES[0:2] = {20; 0}
+                                                            | PREV[0] = 30
+                                                            |ALLOT[0:2] = {20;10}
+pourrait être exécuté sur proc_id = 1 car allot > 0. Mais comme 
+ready_threads[tau_1].scheduled = True, y a pas besoin.
+
+i = 1 // tau_2 sélectionnée
+PREV[1] = 0
+W = 0.73333
+
+j = 0 // proc_id = 0
+RES[0] = RES[0] + (Max{0, min{1, 0.73333}})*(deadline(tau_2) - deadline(tau_1) = 
+		20 + 0.73333 * (10) = 27.3333
+allotMax_i_j = (100 - 0) - 20 - 27.3333 - 0 = 52.6666
+allot_i_j = min{52.666, ret(tau_2) - 0} = 40
+/!\ allot_i_j > 0
+ready_threads[tau_2].scheduled = True
+ready_threads[tau_2].resProc = 1 // idCore                                                            | RES[0:2] = {27.3333; 0}
+                                                            | RES[0:2] = {20; 40}
+                                                            | PREV[1] = 40
+                                                            |ALLOT[0:2] = {20;40}
+
+
+j = 1 // proc_id = 1, tau_2 sélectionnée
+RES[1] = RES[1] + Max{1, min{2, 0.7333} - 1}*(deadline(tau_2)-deadline(tau_1) = 
+		 40 + 0*40 = 40
+allotMax_i_j = (100 - 0) - 40 - 40 - 40 = 0
+allot_i_j = min{0, ret(tau_2) - 40} = 0
+/!\ allot_i_j <= 0 ...
+
+0 |tau_1
+1 |tau_2
+
+
+et le temps passa... et on arriva à t = 20 et une troisième tâche relâcha un job
+(absolute deadline)
+tau_3 = {20; 70}
+tau_1  = {30; 90}
+tau_2 = {40; 100}
+
+readyThreads = [tau_3, tau_1, tau_2]
+
+PREV[0] = 0;
+W = 0.4
+
+j = 0
+RES[0] = RES[0] + Max{0, min{1, 0.4}}*deadline(tau_3) = 0 + 0.4*50 = 20
+allotMax_i_j = (70 - 20) - 0 - 20 - 0 = 30
+allot_i_j = min{30, ret(tau_3) - 0} = 20
+/!\ allot_i_j > 0 donc on passe l'état du thread à "schedulé" avec l'id de son proc
+ready_threads[tau_3].scheduled = True
+ready_threads[tau_3].resProc = 0 // idCore
+                                                            | RES[0:2] = {20; 0}
+                                                            | PREV[0] = 20
+                                                            |ALLOT[0:2] = {20;0}
+j = 1
+RES[1] = RES[1] + {Max{1, min(2, 0.4)} - 1}*deadline(tau_3) = 0
+allotMax_i_j =  50 - 0 - 0 - 20 = 30
+allot_i_j = min{30, ret(tau_3) - PREV[0]} = 20
+                                                            | RES[0:2] = {20; 0}
+                                                            | PREV[0] = 20
+                                                            |ALLOT[0:2] = {20;20}
+pourrait être exécuté sur proc_id = 1 car allot > 0. Mais comme 
+ready_threads[tau_3].scheduled = True, y a pas besoin.
+
+i = 1 // tau_1 sélectionnée
+PREV[1] = 0
+W = 0.73333
+
+j = 0 // proc_id = 0
+RES[0] = RES[0] + (Max{0, min{1, 0.73333}})*(deadline(tau_1) - deadline(tau_3) = 
+		20 + 0.73333 * (90 - 70) = 34.6666
+allotMax_i_j = (90 - 20) - 20 - 34.666 - 0 = 15.3333
+allot_i_j = min{15.333, ret(tau_1) - 0} = 15.333
+/!\ allot_i_j > 0
+ready_threads[tau_1].scheduled = True
+ready_threads[tau_1].resProc = 0 // idCore                                                            | RES[0:2] = {27.3333; 0}
+                                                            | RES[0:2] = {20; 40}
+                                                            | PREV[1] = 40
+                                                            |ALLOT[0:2] = {20;40}
+
+
+j = 1 // proc_id = 1, tau_2 sélectionnée
+RES[1] = RES[1] + Max{1, min{2, 0.7333} - 1}*(deadline(tau_2)-deadline(tau_1) = 
+		 40 + 0*40 = 40
+allotMax_i_j = (100 - 0) - 40 - 40 - 40 = 0
+allot_i_j = min{0, ret(tau_2) - 40} = 0
+/!\ allot_i_j <= 0 ...
+
+0 |tau_1
+1 |tau_2
