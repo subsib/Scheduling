@@ -124,11 +124,11 @@ PREV[1] = 0
 W = 0.875
 
 j = 0 // proc_id = 0
-RES[0] = RES[0] + Max{0, min{1, 0.875}}*deadline(tau_3) = 20 + 0.875*50 = 63.75
-allotMax_i_j = (40 - 0) - 20 - 63.75 - 0 = -25 = 0
+RES[0] = RES[0] + Max{0, min{1, 0.875}}*(absolute_deadline(tau_3) - absolute_deadline(tau_2)) = 20 + 0.875*10 = 28.75
+allotMax_i_j = (40 - 0) - 20 - 20 - 0 = 0
 allot_i_j = min{0, ret(tau_3) - 0} = 0
 /!\ allot_i_j < 0 ...
-                                                            | RES[0:2] = {63.75; 0}
+                                                            | RES[0:2] = {28.75; 0}
                                                             | PREV[1] = 0
                                                             |ALLOT[0:2] = {20;0}
 
@@ -140,7 +140,7 @@ allot_i_j = min{40, ret(tau_3) - 0} = 15
 /!\ allot_i_j > 0 ...
 ready_threads[tau_3].scheduled = True
 ready_threads[tau_3].resProc = 1 // idCore
-                                                            | RES[0:2] = {63.75; 0}
+                                                            | RES[0:2] = {28.75; 0}
                                                             | PREV[1] = 15
                                                             |ALLOT[0:2] = {20;15}
 
@@ -152,11 +152,13 @@ PREV[2] = 0
 W = 1.075
 
 j = 0 // proc_id = 0
-RES[0] = RES[0] + Max{0, min{1, 1.075}}*deadline(tau_1) = 63.75 + 1*50 = 113.75
-allotMax_i_j = (40 - 0) - 20 - 113.75 - 0 = -73.75 = 0
+RES[0] = RES[0] + Max{0, min{1, 1.075}}*(deadline(tau_1) - deadline(tau_3)) = 
+       = 28.75 + 1 * (50 - 40)
+       = 38.75
+allotMax_i_j = (40 - 0) - 20 - 38.75 - 0 = -18.75 = 0
 allot_i_j = min{0, ret(tau_1) - 0} = 0
 /!\ allot_i_j < 0 ...
-                                                            | RES[0:2] = {113.75; 0}
+                                                            | RES[0:2] = {38.75; 0}
                                                             | PREV[2] = 0
                                                             |ALLOT[0:2] = {20;0}
 
