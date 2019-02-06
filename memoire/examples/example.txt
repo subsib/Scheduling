@@ -152,7 +152,7 @@ PREV[2] = 0
 W = 1.075
 
 j = 0 // proc_id = 0
-RES[0] = RES[0] + Max{0, min{1, 1.075}}*(deadline(tau_1) - deadline(tau_3)) = 
+RES[0] = RES[0] + Max{0, min{1, 1.075}}*(deadline(tau_1) - deadline(tau_3)) =
        = 28.75 + 1 * (50 - 40)
        = 38.75
 allotMax_i_j = (40 - 0) - 20 - 38.75 - 0 = -18.75 = 0
@@ -214,7 +214,7 @@ allot_i_j = min{70, ret(tau_1) - PREV[0]} = 10
                                                             | RES[0:2] = {20; 0}
                                                             | PREV[0] = 30
                                                             |ALLOT[0:2] = {20;10}
-pourrait être exécuté sur proc_id = 1 car allot > 0. Mais comme 
+pourrait être exécuté sur proc_id = 1 car allot > 0. Mais comme
 ready_threads[tau_1].scheduled = True, y a pas besoin.
 
 i = 1 // tau_2 sélectionnée
@@ -222,7 +222,7 @@ PREV[1] = 0
 W = 0.73333
 
 j = 0 // proc_id = 0
-RES[0] = RES[0] + (Max{0, min{1, 0.73333}})*(deadline(tau_2) - deadline(tau_1) = 
+RES[0] = RES[0] + (Max{0, min{1, 0.73333}})*(deadline(tau_2) - deadline(tau_1) =
 		20 + 0.73333 * (10) = 27.3333
 allotMax_i_j = (100 - 0) - 20 - 27.3333 - 0 = 52.6666
 allot_i_j = min{52.666, ret(tau_2) - 0} = 40
@@ -235,7 +235,7 @@ ready_threads[tau_2].resProc = 1 // idCore
 
 
 j = 1 // proc_id = 1, tau_2 sélectionnée
-RES[1] = RES[1] + Max{1, min{2, 0.7333} - 1}*(deadline(tau_2)-deadline(tau_1) = 
+RES[1] = RES[1] + Max{1, min{2, 0.7333} - 1}*(deadline(tau_2)-deadline(tau_1) =
 		 40 + 0*40 = 40
 allotMax_i_j = (100 - 0) - 40 - 40 - 40 = 0
 allot_i_j = min{0, ret(tau_2) - 40} = 0
@@ -273,7 +273,7 @@ allot_i_j = min{30, ret(tau_3) - PREV[0]} = 20
                                                             | RES[0:2] = {20; 0}
                                                             | PREV[0] = 20
                                                             |ALLOT[0:2] = {20;20}
-pourrait être exécuté sur proc_id = 1 car allot > 0. Mais comme 
+pourrait être exécuté sur proc_id = 1 car allot > 0. Mais comme
 ready_threads[tau_3].scheduled = True, y a pas besoin.
 
 i = 1 // tau_1 sélectionnée
@@ -281,7 +281,7 @@ PREV[1] = 0
 W = 0.73333
 
 j = 0 // proc_id = 0
-RES[0] = RES[0] + (Max{0, min{1, 0.73333}})*(deadline(tau_1) - deadline(tau_3) = 
+RES[0] = RES[0] + (Max{0, min{1, 0.73333}})*(deadline(tau_1) - deadline(tau_3) =
 		20 + 0.73333 * (90 - 70) = 34.6666
 allotMax_i_j = (90 - 20) - 20 - 34.666 - 0 = 15.3333
 allot_i_j = min{15.333, ret(tau_1) - 0} = 15.333
@@ -294,7 +294,7 @@ ready_threads[tau_1].resProc = 0 // idCore
 
 
 j = 1 // proc_id = 1, tau_1 sélectionnée
-RES[1] = RES[1] + Max{1, min{2, 0.7333} - 1}*(deadline(tau_1)-deadline(tau_3) = 
+RES[1] = RES[1] + Max{1, min{2, 0.7333} - 1}*(deadline(tau_1)-deadline(tau_3) =
 		 35.333 + 0*40 = 35.333
 allotMax_i_j = (90 - 20) - 20 - 0 - 15.333 = 34.666
 allot_i_j = min{34.666, ret(tau_1) - 15.333} = 0
@@ -306,7 +306,7 @@ PREV[2] = 0
 W = 1.13333333
 
 j = 0 // proc_id = 0
-RES[0] = RES[0] + (Max{0, min{1, 1.133}})*(deadline(tau_2) - deadline(tau_1) = 
+RES[0] = RES[0] + (Max{0, min{1, 1.133}})*(deadline(tau_2) - deadline(tau_1) =
 		35.333 + 1 * (100 - 90) = 45.333
 allotMax_i_j = (100 - 20) - 35.333 - 45.333 - 0 = 0
 allot_i_j = min{0, ret(tau_2) - 0} = 0
@@ -317,7 +317,7 @@ allot_i_j = min{0, ret(tau_2) - 0} = 0
 
 
 j = 1 // proc_id = 1, tau_2 sélectionnée
-RES[1] = RES[1] + Max{1, min{2, 1.133} - 1}*(deadline(tau_2)-deadline(tau_1) = 
+RES[1] = RES[1] + Max{1, min{2, 1.133} - 1}*(deadline(tau_2)-deadline(tau_1) =
 		 35.333 + 0.133*10 = 36.666
 allotMax_i_j = (100 - 20) - 20 - 0 - 0 = 60
 allot_i_j = min{60, ret(tau_2) - 0} = 20
@@ -330,3 +330,44 @@ ready_threads[tau_2].resProc = 1 // idCore
 0 |tau_3 tau_1
 1 |tau_2
 
+================================================================================
+================================================================================
+
+RES = [7, 7, 3,941666666, 0]
+
+tasklist = {[3,10], [3,9], [3,8], [3,7]}
+w = 4 - (3/10+3/9+3/8+3/7) = 4 - 1,436904762 = 2,563095238
+i = 0 [3,7]
+prev = 0 => 3
+
+  j = 0
+  res[0] = res[0] + (max(0, min(1, 2.563095238)) - 0) * 7 = 1 * 7 = 7
+  allotmax = 7 - 0 - 0 - 7 = 0
+  allot = min (0, max(3 - 0))
+  prev = 0
+  ALLOT[0] = 0
+
+  j = 1
+  res[1] = res[1] + (max(1, min(2, 2.5)) - 1) * 7 = 7
+  allotmax = 7 - 7 = 0
+  allot = 0
+  prev = 0
+  ALLOT[1] = 0
+
+  j = 2
+  res[2] = res[2] + (max(2, min(3, 2.563095238)) - 2) * 7 = 3,941666666
+  allotmax = 7 - 0 - 3,941666666 - 0 = 3,058333334
+  allot = min(3.058333334, 3 - 0) = 3
+  prev = 3
+
+  j = 3
+  res[3] = res[3] + max(3, min(4, 2.563095238) - 3) * 7 = 0
+  allotmax = 7 - 0 - 0 - 0 = 4
+  allot = min(4, 3 - 3) = 0
+
+i = 1 [3,8]
+w = 2,563095238 + 3/7 = 2,991666667
+prev = 0
+
+  j = 0
+  res[0] = 7 + max(0, min(1,  2,991666667) - 0) * 1 = 7 + 1 = 8
