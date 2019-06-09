@@ -1,0 +1,128 @@
+	
+	\section{Présentation générale du sujet}
+	
+	Le secteur des appareils à équipement informatisé montre un essor important du 
+	nombre de systèmes embarqués actuellement, et
+	parmi eux, d'un nombre très important de systèmes temps réel qui 
+	nécessitent des ordonnanceurs adaptés. 
+	Ce champ de recherche a été largement nourri durant les vingt dernières années par de nombreuses publications scientifiques. \medskip
+	
+	Les systèmes embarqués n'ont pas toujours de grands besoins en efficacité, 
+	ils doivent prioritairement être sûrs, et réactifs. 
+	Toutefois, un système dont l'efficacité n'est pas maximale n'utilise pas 
+	ses ressources de façon optimale, ce qui conduit à avoir recours à 
+	plus de ressources que nécessaire. En effet, lorsqu'un système est 
+	mal optimisé, il est sur-dimensionné, car plus de matériel est nécessaire 
+	pour réaliser les mêmes tâches. Il est facilement imaginable que cela représente du 
+	gaspillage d'espace (plus de volume occupé), 
+	d'énergie électrique dédiée à l'alimentation des appareils surnuméraires, 
+	de composants, ainsi que de matériaux de câblage.
+	Or, la gestion énergétique 
+	est un poste coûteux qui se doit d'être le plus réduit possible. 
+	En l'occurrence, pour des installations équipées de beaucoup de systèmes embarqués, 
+	comme les voitures ou les avions, cette dépense peut être substantielle. \medskip
+	
+	Par ailleurs, cela fait plusieurs années que la croissance de l'efficacité des 
+	appareils n'est plus principalement due à la miniaturisation des composants. 
+	Actuellement, les progrès engrangés portent sur la parallélisation, 
+	ou encore, dans le domaine de l'architecture des composants eux-mêmes.
+	Durant une cinquantaine d'années, dans le passé, les lois de \customhighlight{Moore}
+	se sont vérifiées : des règles empiriques qui postulent que la fréquence des processeurs 
+	double tous les dix-huit mois environ, à prix constant. 
+	Il était alors encore possible de miniaturiser les composants, 
+	ce qui faisait gagner en efficacité d'autant. 
+	Cela n'est actuellement plus le cas, 
+	les composants étant déjà largement miniaturisés, de nouvelles miniaturisations 
+	n'entraîneraient plus de gain. La croissance doit emprunter d'autres voies. Parmi celles 
+	empruntées, outre de nouvelles propositions technologiques, 
+	il y a l'amélioration logicielle avec notamment la parallélisation.
+	\medskip
+	
+	Le monde des systèmes embarqués en temps réel a bénéficié de ces améliorations, 
+	et dispose également de processeurs multi-c\oe{}urs. Cependant, leur gestion n'est 
+	à l'heure actuelle pas optimale, la plupart des systèmes sont  
+	gérés soit comme des systèmes mono-processeurs, soit avec des algorithmes partitionnés \cite{paolillo_new_nodate}. 
+	Dans le premier cas, les ressources ne sont pas utilisées de façon optimale, 
+	et dans le second, des implémentations et tests ont montré empiriquement 
+	que les algorithmes globaux pouvaient présenter des avantages intéressants, comme 
+	une meilleure répartition de l'utilisation des processeurs \cite{baker_analysis_2005}. 
+	\medskip
+	
+	Le décalage entre la connaissance scientifique et les implémentations réelles 
+	peut s'expliquer en partie par le fait qu'il soit compliqué de gérer le partage des ressources, 
+	et que cette complexité n'apporte pas suffisamment d'avantages à l'heure qu'il est.\medskip
+	
+	Le fait que l'industrie n'implémente pas à ce jour de solutions plus \og performantes \fg{} 
+	pour les systèmes embarqués pose plusieurs problèmes :
+	\begin{enumerate}
+		\item Le matériel n'est pas exploité de façon optimale.
+		\item Par conséquent, la consommation en énergie des solutions déployées n'est 
+		pas optimale.
+		À l'heure actuelle, dans un monde où l'on cherche à consommer le moins possible, 
+		cela pose question. Mais au delà, cela signifie également plus de maintenance 
+		sur ces appareils parfois sans source de renouvellement d'énergie.
+		\item Certains systèmes embarqués nécessitent une très basse consommation car 
+		ils sont difficiles d'accès ou non faciles à recharger.
+		\item Sur de grosses installations, comme des voitures ou un avions, cela peut représenter 
+		un coût important en terme d'occupation de l'espace, de câblage entre différents systèmes, 
+		consommation d'énergie, poids, achat de composants.
+	\end{enumerate}
+	
+	Toutes ces raisons poussent à s'intéresser à une implémentation réelle et réaliste 
+	d'ordonnanceurs connus dans la littérature, mais moins dans la réalité.
+	
+	C'est dans ce contexte que s'inscrit ce travail d'implémentation d'un ordonnanceur en temps réel 
+	global et multi-processeur, dont un des objectifs est d'améliorer la connaissance pratique 
+	d'ordonnanceurs multi-processeurs globaux, d'en apercevoir les limites. 
+	Cette implémentation pourrait amener plusieurs résultats intéressants : \medskip
+	\begin{itemize}
+		\item Une comparaison entre des résultats théoriques et l'effet de leur mise 
+		en \oe{}uvre
+		\item L'origine de ces différences
+		\item Vérifier les avantages, inconvénients ou obstacles à la 
+		commercialisation de telles solutions.
+	\end{itemize}
+	
+	\section{Contexte et objectifs}
+	
+	\subsection{Ordonnanceurs globaux}
+	Comme il sera expliqué plus tard dans ce document, il existe deux grandes familles d'ordonnanceurs 
+	multi-processeur :\medskip
+	\begin{itemize}
+		\item Les ordonnanceurs partitionnés
+		\item Les ordonnanceurs globaux
+	\end{itemize}
+	Si parmi ces deux familles d'ordonnanceurs, les systèmes mono-processeurs, voire 
+	partitionnés ont le plus de succès auprès de l'industrie, 
+	ce n'est pas la famille la plus efficace pour tout type de classe de tâches. 
+	Les algorithmes globaux répartissent habituellement mieux l'utilisation des processeurs, 
+	les migrations sont possibles et donc les temps de réponse sont généralement moins grands.
+	\medskip
+	
+	
+	En 1988, Hong and Leung \cite{hong_-line_1988} publient un article dans lequel est 
+	démontré que :\\
+	\textit{\og Il n'existe pas d'ordonnanceur multi-processeur en ligne optimal pour un système de tâches 
+		avec plusieurs échéances distinctes\fg{}}.
+	
+	Toutefois, des publications ultérieures viennent compléter cette preuve, et démontrent 
+	que des ordonnanceurs globaux optimaux existent, mais nécessitent de la clairvoyance.
+	
+	\subsection{HIPPEROS}
+	\customhighlight{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
+	est un \customhighlight{RTOS} (Real-Time Operating System) développé depuis plusieurs années par une spinoff de l'ULB.
+	Il bénéficie des connaissances apportées par le monde de la recherche dans 
+	le domaine des systèmes critiques avec multic\oe{}urs. Une de ses particularités 
+	est sa modularité, qui permet d'adapter ses possibilités en fonction du système 
+	lors de la compilation de l'OS, ainsi peut-on différencier principalement 
+	deux installations en fonction des particularités.
+	
+	\customhighlight{HIPPEROS} est un candidat idéal pour l'implémentation d'un ordonnanceur 
+	global, mais une partie du travail consistera à tirer parti de ses particularités. 
+	Par exemple, ce système d'exploitation gère les c\oe{}urs en leur attribuant des 
+	niveaux différents. L'un est considéré comme \og maître \fg{} et les autres comme \og esclaves\fg{}. 
+	Ceci peut apporter un comportement particulier, ce auquel il convient d'apporter 
+	l'attention nécessaire. En résumé, une nouvelle implémentation sur un OS différent 
+	peut elle-aussi apporter à la connaissance générale des détails importants.
+	
+	

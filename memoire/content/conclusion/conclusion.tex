@@ -1,0 +1,21 @@
+	Nous avons exploré une partie de la littérature scientifique au sujet des ordonnanceurs 
+	globaux ou semi-partitionnés afin d'en sélectionner un pour implémentation et tests. 
+	Il ressort de cette étude que plusieurs candidats présentent des intérêts, sont mieux 
+	connus dans la littérature que dans la pratique, et gagneraient à être mieux analysés. 
+	Notre choix sera influencé par ces paramètres : \medskip
+	\begin{itemize}
+		\item L'ordonnanceur est-il optimal ?
+		\item Quels systèmes de tâche peut-il ordonnancer ?
+		\item Des efforts ont-ils été fournis afin d'éviter les migrations ?
+		\item A-t-il déjà bénéficié d'implémentations ?
+	\end{itemize}
+	De ces paramètres, il ressort que l'algorithme \textit{U-EDF} est optimal pour la classe périodique, 
+	semi-partitionné, peut également ordonnancer les systèmes sporadiques à échéances arbitraires. 
+	
+	En outre, G. Nelissen est accessible par e-mail, intéressé par une implémentation réelle, 
+	et son travail montre une très bonne connaissance des ordonnanceurs et des systèmes d'exploitation. En 
+	effet, dans sa thèse, on trouve une progression qui mène à une implémentation qui soit faisable. 
+	\todo{developper : il fait gaffe à ce que ce soit faisable, et on voit, quand on le lit, qu'il 
+	comprend les enjeux, le fonctionnement d'un RTOS}
+	
+	C'est donc vers cet algorithme que notre choix se porte.

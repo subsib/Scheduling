@@ -126,28 +126,12 @@
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\selectlanguage{english}
 	
-	\begin{abstract}
-		Le problème de l'ordonnancement des tâches dans un système d'exploitation est 
-		central : il a un impact majeur dans la gestion des ressources. 
-		En effet, même si les applications sont sobres individuellement, dans le cas où 
-		l'ordonnanceur n'offre pas une utilisation optimisée des ressources, alors 
-		il en résultera un gaspillage tant d'énergie que d'infrastructure.    
-		Malgré l'existence d'ordonnanceurs multi-processeurs globaux optimaux décrits 
-		dans la littérature scientifique, l'industrie continue à ce jour à préférer des 
-		solutions mono-processeurs voire multi-processeurs partitionnées plus simples, 
-		éprouvées mais moins efficaces. 
-		Ainsi, les conditions, les contraintes, et les 
-		effets de la mise en œuvre pratique de tels ordonnanceurs restent mal connus. 
-		
-		Le présent document expose cette problématique, puis propose un état de l'art 
-		embrassant l'éventail des ordonnanceurs mono-processeurs, multiprocesseurs 
-		partitionnés jusqu'aux multi-processeurs globaux connus. 
-		
-		Le projet final étant d'implémenter un ordonnanceur au sein du système 
-		d'exploitation temps réel \textbf{HIPPEROS}, pour analyser ses performances 
-		en situation réelle, cet état de l'art permet de motiver le choix de 
-		l'ordonnanceur étudié : il s'agira de \textbf{UEDF}.
-	\end{abstract}
+%	\include{content/abstract}
+\begin{abstract}
+
+\input{content/intro/abstract}
+\end{abstract}
+
 	\selectlanguage{french}
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -158,167 +142,38 @@
 	
 	\chapter{Introduction}{}
 	\setcounter{page}{1}
-	
-	
-	\section{Présentation générale du sujet}
-	
-	Le secteur des appareils à équipement informatisé montre un essor important du 
-	nombre de systèmes embarqués actuellement, et
-	parmi eux, d'un nombre très important de systèmes temps réel qui 
-	nécessitent des ordonnanceurs adaptés. 
-	Ce champ de recherche a été largement nourri durant les vingt dernières années par de nombreuses publications scientifiques. \medskip
-	
-	Les systèmes embarqués n'ont pas toujours de grands besoins en efficacité, 
-	ils doivent prioritairement être sûrs, et réactifs. 
-	Toutefois, un système dont l'efficacité n'est pas maximale n'utilise pas 
-	ses ressources de façon optimale, ce qui conduit à avoir recours à 
-	plus de ressources que nécessaire. En effet, lorsqu'un système est 
-	mal optimisé, il est sur-dimensionné, car plus de matériel est nécessaire 
-	pour réaliser les mêmes tâches. Il est facilement imaginable que cela représente du 
-	gaspillage d'espace (plus de volume occupé), 
-	d'énergie électrique dédiée à l'alimentation des appareils surnuméraires, 
-	de composants, ainsi que de matériaux de câblage.
-	Or, la gestion énergétique 
-	est un poste coûteux qui se doit d'être le plus réduit possible. 
-	En l'occurrence, pour des installations équipées de beaucoup de systèmes embarqués, 
-	comme les voitures ou les avions, cette dépense peut être substantielle. \medskip
-	
-	Par ailleurs, cela fait plusieurs années que la croissance de l'efficacité des 
-	appareils n'est plus principalement due à la miniaturisation des composants. 
-	Actuellement, les progrès engrangés portent sur la parallélisation, 
-	ou encore, dans le domaine de l'architecture des composants eux-mêmes.
-	Durant une cinquantaine d'années, dans le passé, les lois de \customhighlight{Moore}
-	se sont vérifiées : des règles empiriques qui postulent que la fréquence des processeurs 
-	double tous les dix-huit mois environ, à prix constant. 
-	Il était alors encore possible de miniaturiser les composants, 
-	ce qui faisait gagner en efficacité d'autant. 
-	Cela n'est actuellement plus le cas, 
-	les composants étant déjà largement miniaturisés, de nouvelles miniaturisations 
-	n'entraîneraient plus de gain. La croissance doit emprunter d'autres voies. Parmi celles 
-	empruntées, outre de nouvelles propositions technologiques, 
-	il y a l'amélioration logicielle avec notamment la parallélisation.
-	\medskip
-	
-	Le monde des systèmes embarqués en temps réel a bénéficié de ces améliorations, 
-	et dispose également de processeurs multi-c\oe{}urs. Cependant, leur gestion n'est 
-	à l'heure actuelle pas optimale, la plupart des systèmes sont  
-	gérés soit comme des systèmes mono-processeurs, soit avec des algorithmes partitionnés \cite{paolillo_new_nodate}. 
-	Dans le premier cas, les ressources ne sont pas utilisées de façon optimale, 
-	et dans le second, des implémentations et tests ont montré empiriquement 
-	que les algorithmes globaux pouvaient présenter des avantages intéressants, comme 
-	une meilleure répartition de l'utilisation des processeurs \cite{baker_analysis_2005}. 
-	\medskip
-	
-	Le décalage entre la connaissance scientifique et les implémentations réelles 
-	peut s'expliquer en partie par le fait qu'il soit compliqué de gérer le partage des ressources, 
-	et que cette complexité n'apporte pas suffisamment d'avantages à l'heure qu'il est.\medskip
-	
-	Le fait que l'industrie n'implémente pas à ce jour de solutions plus \og performantes \fg{} 
-	pour les systèmes embarqués pose plusieurs problèmes :
-	\begin{enumerate}
-		\item Le matériel n'est pas exploité de façon optimale.
-		\item Par conséquent, la consommation en énergie des solutions déployées n'est 
-		pas optimale.
-		À l'heure actuelle, dans un monde où l'on cherche à consommer le moins possible, 
-		cela pose question. Mais au delà, cela signifie également plus de maintenance 
-		sur ces appareils parfois sans source de renouvellement d'énergie.
-		\item Certains systèmes embarqués nécessitent une très basse consommation car 
-		ils sont difficiles d'accès ou non faciles à recharger.
-		\item Sur de grosses installations, comme des voitures ou un avions, cela peut représenter 
-		un coût important en terme d'occupation de l'espace, de câblage entre différents systèmes, 
-		consommation d'énergie, poids, achat de composants.
-	\end{enumerate}
-	
-	Toutes ces raisons poussent à s'intéresser à une implémentation réelle et réaliste 
-	d'ordonnanceurs connus dans la littérature, mais moins dans la réalité.
-	
-	C'est dans ce contexte que s'inscrit ce travail d'implémentation d'un ordonnanceur en temps réel 
-	global et multi-processeur, dont un des objectifs est d'améliorer la connaissance pratique 
-	d'ordonnanceurs multi-processeurs globaux, d'en apercevoir les limites. 
-	Cette implémentation pourrait amener plusieurs résultats intéressants : \medskip
-	\begin{itemize}
-		\item Une comparaison entre des résultats théoriques et l'effet de leur mise 
-		en \oe{}uvre
-		\item L'origine de ces différences
-		\item Vérifier les avantages, inconvénients ou obstacles à la 
-		commercialisation de telles solutions.
-	\end{itemize}
-	
-	\section{Contexte et objectifs}
-	
-	\subsection{Ordonnanceurs globaux}
-	Comme il sera expliqué plus tard dans ce document, il existe deux grandes familles d'ordonnanceurs 
-	multi-processeur :\medskip
-	\begin{itemize}
-		\item Les ordonnanceurs partitionnés
-		\item Les ordonnanceurs globaux
-	\end{itemize}
-	Si parmi ces deux familles d'ordonnanceurs, les systèmes mono-processeurs, voire 
-	partitionnés ont le plus de succès auprès de l'industrie, 
-	ce n'est pas la famille la plus efficace pour tout type de classe de tâches. 
-	Les algorithmes globaux répartissent habituellement mieux l'utilisation des processeurs, 
-	les migrations sont possibles et donc les temps de réponse sont généralement moins grands.
-	\medskip
-	
-	
-	En 1988, Hong and Leung \cite{hong_-line_1988} publient un article dans lequel est 
-	démontré que :\\
-	\textit{\og Il n'existe pas d'ordonnanceur multi-processeur en ligne optimal pour un système de tâches 
-		avec plusieurs échéances distinctes\fg{}}.
-	
-	Toutefois, des publications ultérieures viennent compléter cette preuve, et démontrent 
-	que des ordonnanceurs globaux optimaux existent, mais nécessitent de la clairvoyance.
-	
-	\subsection{HIPPEROS}
-	\customhighlight{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
-	est un \customhighlight{RTOS} (Real-Time Operating System) développé depuis plusieurs années par une spinoff de l'ULB.
-	Il bénéficie des connaissances apportées par le monde de la recherche dans 
-	le domaine des systèmes critiques avec multic\oe{}urs. Une de ses particularités 
-	est sa modularité, qui permet d'adapter ses possibilités en fonction du système 
-	lors de la compilation de l'OS, ainsi peut-on différencier principalement 
-	deux installations en fonction des particularités.
-	
-	\customhighlight{HIPPEROS} est un candidat idéal pour l'implémentation d'un ordonnanceur 
-	global, mais une partie du travail consistera à tirer parti de ses particularités. 
-	Par exemple, ce système d'exploitation gère les c\oe{}urs en leur attribuant des 
-	niveaux différents. L'un est considéré comme \og maître \fg{} et les autres comme \og esclaves\fg{}. 
-	Ceci peut apporter un comportement particulier, ce auquel il convient d'apporter 
-	l'attention nécessaire. En résumé, une nouvelle implémentation sur un OS différent 
-	peut elle-aussi apporter à la connaissance générale des détails importants.
-	
-	
-	\section{Problématique}
+
+\input{content/intro/presentation_subject}	
+	\section{Problématique : Choix de l'ordonnanceur}
 	L'ordonnanceur idéal -- c'est-à-dire optimal pour toute classe de tâches et 
 	qui ne fasse pas de multiples migrations coûteuses n'existant pas, 
 	notre sujet est de sélectionner l'un d'eux parmi une liste 
 	d'ordonnanceurs connus (ne serait-ce que dans la littérature) afin que cela apporte 
 	à la connaissance générale, tant sur le plan théorique que pratique.\medskip
 	
-	Par ailleurs, certains des ordonnanceurs présentés dans l'état de l'art 
-	ont déjà bénéficié d'une implémentation sur un \customhighlight{RTOS}, et une nouvelle 
-	implémentation sur un \customhighlight{OS} différent pourrait apporter un éclairage intéressant quant 
-	aux différences de comportements.
-	En effet, on comprend que pour réaliser l'observation pratique d'un ordonnanceur, 
-	on implémente l'algorithme et on procède à des tests dans un certain environnement. 
-	Il serait -- dans ce cadre -- intéressant de voir si la modification de l'environnement 
-	pourrait permettre de confirmer, ou au contraire, infirmer, les premières observations faites.
+	La littérature scientifique -- comme nous le verrons dans l'état de l'art -- 
+	est rarement explicite quant à l'implémentation. Les ordonnanceurs proposés sont 
+	généralement présentés de façon très théorique et sans aide pour la mise en œuvre. 
+	Il est important de choisir un ordonnanceur qui pourra nous permettre de tirer 
+	des conclusions utiles. Par exemple : 
+	Que devrait comporter la littérature scientifique afin de permettre l'implémentation 
+	de ses algorithmes ? À quels détails un chercheur souhaitant proposer un nouvel algorithme 
+	devrait-il penser pour faciliter le passage de son travail théorique à une implémentation 
+	usuelle ?
 	
-	
-	D'autres articles citent des avantages d'un algorithme, comme par exemple 
-	le nombre réduit de migration, ou de préemptions attendues. Pour la même raison, 
-	il pourrait être intéressant de confronter une implémentation pratique avec ses attentes 
-	théoriques.\medskip
+	En outre, certains articles citent des avantages d'un algorithme, comme par exemple 
+	le nombre réduit de migration, ou de préemptions attendues. Ces attentes étant théoriques, il est intéressant 
+	de confronter les résultats observés avec ceux attendus. La mise en oeuvre nécessitant parfois quelques 
+	accommodements voire choix stratégiques dans le choix des structures de données, boucles, etc. peut 
+	modifier les attentes que l'on a "en théorie".
 	
 	Pour finir, dans la littérature, l'hypothèse que le temps de préemption est nul 
 	est souvent faite. Celle-ci permet de simplifier la question théorique. 
 	Cette hypothèse est bien entendu fausse, et il faudra en tenir compte, 
 	particulièrement dans ce travail où l'on tente de faire 
 	le lien entre la théorie et la mise en pratique.\medskip
-	
-	La question cruciale de cette première partie de travail 
-	consiste donc à faire un tour d'horizon de la littérature afin de pouvoir 
-	sélectionner un ordonnanceur pertinent à implémenter sur le \customhighlight{RTOS} \customhighlight{HIPPEROS}.
-	
+	\todo{là bah faudra avoir des chiffres ... :/}
+		
 	\section{Vocabulaire général sur les systèmes temps réel}
 	
 	\subsection{Tâche (temps réel)}
@@ -377,6 +232,8 @@
 		\item \textbf{Tâche apériodique} : Pour ce type de tâches, on ignore la régularité de 
 		l'arrivée de nouveaux travaux. Les propriétés du travail ne sont connues que lorsqu'un travail est 
 		généré dans le système.
+		
+		\item \textbf{Domaine système} : \todo{une bonne def doit se trouver}
 		
 	\end{itemize}
 	
@@ -1146,23 +1003,10 @@
 	\bigskip
 	
 	\section{Conclusion}
-	Nous avons exploré une partie de la littérature scientifique au sujet des ordonnanceurs 
-	globaux ou semi-partitionnés afin d'en sélectionner un pour implémentation et tests. 
-	Il ressort de cette étude que plusieurs candidats présentent des intérêts, sont mieux 
-	connus dans la littérature que dans la pratique, et gagneraient à être mieux analysés. 
-	Notre choix sera influencé par ces paramètres : \medskip
-	\begin{itemize}
-		\item L'ordonnanceur est-il optimal ?
-		\item Quels systèmes de tâche peut-il ordonnancer ?
-		\item Des efforts ont-ils été fournis afin d'éviter les migrations ?
-		\item A-t-il déjà bénéficié d'implémentations ?
-	\end{itemize}
-	De ces paramètres, il ressort que l'algorithme \textit{QPS} est optimal, semi-partitionné, 
-	peut ordonnancer les systèmes sporadiques à échéances arbitraires et 
-	les articles à son sujet parlent de bonnes performances concernant les migrations.
+	\input{content/conclusion/conclusion}
 	
-	
-	C'est donc vers cet algorithme que notre choix se porte.
+	\section{Implémentation}
+	\input{content/chapter/implementation}	
 	
 	
 	\bibliographystyle{plain}
