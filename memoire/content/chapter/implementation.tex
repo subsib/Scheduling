@@ -1,5 +1,15 @@
 \section{Introduction}
 
+Le travail d'implémentation a commencé au sortir d'un stage chez HIPPEROS. 
+Cette étape a permis la connaissance nécessaire de l'OS afin de retoucher les fichiers, 
+être capable d'ajouter un ordonnanceur, créer des tests d'intégration supplémentaires, etc.
+Aussi d'apprendre les règles de codage au sein de l'entreprise. 
+
+Ceci dans le but d'apporter un ordonnanceur supplémentaire à RTOS, mais également de la 
+l'expérience scientifique.
+
+
+
 
 \section{Description}
 	\subsection{Du papier au script (généralité)}
@@ -7,11 +17,58 @@
 	Cette étape du choix peut être cruciale pour la suite car il faut que l'algorithme soit 
 	intéressant \todo{décire intéressant},
 	optimal \todo{rappel optimal ou renvoi}
-	applicable en pratique \todo{expliquer ça}
+	applicable en pratique \todo{expliquer ça}.
+	
+	Au moment où l'on choisit un algorithme, on ne sait pas encore si sa réalisation va être faisable, 
+	ne serait-ce que parce que la description donnée est mathématique, donne des démonstrations, 
+	basées sur des valeurs sans se soucier de comment on les a obtenues.
+	
+	En pratique, le WCET -- on en reparlera -- est une valeur on ne peut plus théorique, par exemple, 
+	et on ne peut pas facilement la déterminer. 
+	Aussi, le déroulement séquentiel de l'ordonnanceur nécessite que les autres tâches cessent d'être exécutées 
+	à ce moment-là, ce qui ne correspond pas forcément à la réalité.
+	On imagine aussi qu'à chaque événement, l'ordonnanceur est immédiatement appelé, 
+	en pratique, cela n'est pas forcément le cas, en tout cas pas pour tous les 
+	\textbf{RTOS}. Ce n'est pas le cas d'HIPPEROS, par exemple.
+
+	Les objectifs d'un tel travail ont été énoncés plus tôt. 
+	Pour résumer, on souhaite faciliter le passage de la connaissance théorique vers la pratique.
+	Cela consiste à essayer d'implémenter un ordonnanceur décrit sur le papier, voir s'il est 
+	possible de l'implémenter, décrire ce qui facilite la mise en œuvre ou la complique. 
+	
 	
 	\subsection{UEDF : pas d'implémentation connue}
+	UEDF n'a à ce jour pas d'implémentation connue au sein d'un RTOS. HIPPEROS est le seul OS à en 
+	avoir une implémentation à ce jour. Des simulations existent, mais comme on en reparlera, une simulation diffère 
+	en bien des points d'un véritable OS. C'est une des difficultés de ce travail, qui est de ne pas pouvoir 
+	s'appuyer sur d'autres implémentations. Par ailleurs, il n'y a pas non plus de jeu de données que l'on 
+	pourrait comparer. On reparlera de ce point. Initialement, notre choix portait sur QPS, un 
+	successeur de RUN, décrit dans l'état de l'art. Cependant, les détails des papiers n'ont pas donné 
+	assez confiance quant à la possibilité d'implémentation et nous avons préféré nous tourner vers UEDF, finalement.
+	
+	
+	L'algorithme UEDF est décrit très précisément dans le papier de G. Nelissen. La thèse y énonce 
+	des démonstration, mais également, dans un déroulement logique, des cas d'utilisation avec 
+	plusieurs types de RTOS. 
+	
+	Par exemple : un RTOS à temps discret, ou continu. 
+	Évidemment, tous les ordonnanceurs implémentés sont en temps discret, au final, car on travaille avec 
+	un ordinateur, qui compte en binaire. Toutefois, l'implémentation de UEDF dépend en fonction du type 
+	d'ordonnanceur, et certains, \todo{aller chercher la def dans le papier} sont définis comme continus 
+	contre discret. Nous avons considéré qu'HIPPEROS était à temps continu.
+	
+	Ensuite, dans son papier, G. Nelissen explique au fur et à mesure comment éviter des calculs 
+	redondants qui empêcheraient purement et simplement le fonctionnement d'UEDF en cas d'utilisation réel.
+	
+	
 	
 	\subsection{Essai/erreurs}
+	La première implémentation faite a été réalisée sur une version d'HIPPEROS qui a grandement été revue par la suite. Par conséquent, mon implémentation a dû être entièrement revue. C'est aussi une des choses à prendre en
+	 considération quand on fait une implémentation de ce genre, on travaille sur un outil en développement, 
+	 dont les méthodes d'accès aux variables peuvent changer etc.
+	 
+	 Ma première implémentation était fort complexe.
+	 
 	
 	\subsection{Mes choix}
 		\subsubsection{choix d'implémentation : data-structures}
