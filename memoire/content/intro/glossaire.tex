@@ -1,0 +1,213 @@
+	\subsection{Tâche (temps réel)}
+	Une tâche correspond à une sorte de programme, c'est-à-dire une série d'instructions 
+	qui doivent être exécutées par un processeur. 
+	Il y a plusieurs caractéristiques 
+	et propriétés qui définissent une tâche, que nous allons définir ici : 
+	\begin{itemize}
+		\item \textbf{Temps de réalisation}\label{tempsderealisation} : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
+		\item \textbf{Temps de réponse\label{Response Time}} : Temps maximum nécessaire à la réalisation de la tâche 
+		entre le temps de réalisation et Fin.
+		\item \textbf{Worst Case Execution Time}\label{wcet} : Afin de faciliter les calculs et l'abstraction du problème, l'on pose habituellement que le temps considéré d'exécution de 
+		la tâche est le pire temps. Cela permet d'envisager le pire scénario, et ainsi 
+		de s'assurer que si celui-ci est possible, alors dans de meilleures conditions, 
+		la faisabilité est conservée. La notation utilisée dans le reste de ce document 
+		est  \customhighlight{WCET} : \textbf{W}orst \textbf{C}ase \textbf{E}xecution \textbf{T}ime
+		
+		\item \textbf{Tâches périodiques} :
+		Une tâche périodique est une tâche qui génère régulièrement des travaux.  
+		Formellement, une tâche périodique est définie par un 4-uplet $(O, T, D, C)$ où \medskip
+		\begin{itemize}
+			\item \textbf{$O$} : est l'\og offset\fg{}, c'est-à-dire le temps que met la tâche à générer un premier travail.
+			\item \textbf{$T$} : est la période, c'est-à-dire le temps qui sépare deux générations de travaux par la tâche. 
+			Le premier travail est généré à l'instant $O$. Soit $i$, le nombre de fois que la tâche a été générée depuis le temps $0$,			
+			 alors pour $i \in \mathbb{N}$, $\forall i \in \{0, \infty \}$,  $t = O + i\times T$ 
+			où $t$ est le temps où la tâche est générée la $i$ème fois.
+			\item \textbf{$D$} est l'échéance relative, c'est-à-dire le temps qui sépare au maximum la génération 
+			d'un travail et sa réalisation.
+			\item \textbf{$C$} est le temps de réalisation. Dans les algorithmes, on utilise -- comme expliqué précédemment -- le \customhighlight{WCET}.
+		\end{itemize}	
+		Dans le cas de tâches périodiques, on distingue trois cas différents : \medskip
+		\begin{enumerate}
+			\item si l'échéance est égale à la période $\forall \tau_i, D_i = T_i$ : tâche à \label{echeancesurrequete}échéance sur requête
+			\item si l'échéance est inférieure ou égale à la période $\forall \tau_i, D_i \leq T_i $ , on dit que la tâche est à \label{echeancecontrainte} échéance contrainte
+			\item s'il n'y a pas de contrainte particulière, la tâche est dite \og à échéance arbitraire\fg{}\label{echeancearbitraire}.
+		\end{enumerate}
+		Les solutions d'ordonnancement pour ces trois types de tâches diffèrent donc. 
+		Globalement, on peut ordonner ces trois types de tâches : \medskip
+		échéance sur requêtes $\subset$ échéance contrainte $\subset$ échéance arbitraire.
+		
+		\item \textbf{Laxité} : La laxité d'une tâche est la durée entre sa réalisation et son échéance. 
+		Pour une tâche $\tau_i$, soit $D_i$ son échéance et $C_i$ son temps d'exécution, la laxité est définie comme :
+		\vspace{-0.5cm}
+		\begin{center}
+			$L_i = D_i - C_i$
+		\end{center}
+		
+		\item \textbf{Tâche sporadique} : Une tâche sporadique est une tâche qui génère de nouveaux travaux, 
+		comme dans le cas de la tâche périodique. 
+		La différence entre ces deux types est que la tâche sporadique 
+		génère deux travaux avec un intervalle de temps au moins égal à la durée correspondant à sa période, 
+		et pas exactement égal. Les systèmes embarqués ont souvent des tâches sporadiques à gérer : 
+		en effet, un système qui est composé de capteur aura du mal à prévoir l'arrivée d'un signal de 
+		celui-ci. 
+		
+		\item \textbf{Tâche apériodique} : Pour ce type de tâches, on ignore la régularité de 
+		l'arrivée de nouveaux travaux. Les propriétés du travail ne sont connues que lorsqu'un travail est 
+		généré dans le système.
+		
+		\item \textbf{Domaine système} : \todo{une bonne def doit se trouver}
+		
+	\end{itemize}
+	
+	\subsection{Migration}\label{migration}
+	Une migration est le transfert d'une tâche ou d'un travail d’un processeur vers un autre.
+	
+	\subsection{Système de tâches}
+	Un système de tâches et un ensemble de tâches devant être exécutées conjointement. 
+	
+	\subsection{Faisabilité}
+	Un système de tâches est dit faisable si un ordonnancement existe.
+	
+	\subsection{Synchrone/asynchrone}
+	Une tâche est définie par son offset, et lorsque toutes les tâches ont un \textit{offset} égal à 0, 
+	elles sont dites \og à départ simultané\fg, et on parle de système synchrone. 
+	Lorsque les \textit{offset} ne sont pas tous de 0, le système est dit à départs \og différés\fg{}, 
+	on parle également de système asynchrone.
+	
+	\subsection{Hyperpériode}
+	L'hyperpériode est un intervalle de temps qui est défini de façon formelle comme suit :\medskip
+	$P = ppcm\{T_i\} \in \{1,... m\}\}$
+	
+	Cette notion est souvent utilisée afin d'obtenir l'intervalle de temps 
+	minimal durant lequel tester l'ordonnançabilité d'un système par un ordonnanceur.
+	
+	\subsection{Travail}
+	Un travail est une instance d'une tâche. 
+	Il peut avoir des propriétés. 
+	Dans certains algorithmes, certaines propriétés sont plutôt liées à la tâche, 
+	et dans d'autres, ces mêmes propriétés sont plutôt dynamiques, et donc liées au travail.
+	\begin{itemize}
+		\item \textbf{Début, Fin} : Le moment où un travail commence à être exécuté, ou termine son exécution.
+		\item \textbf{Échéance, temps limite} : Correspond au temps limite au delà duquel le travail doit avoir été exécuté. Il existe deux types d'échéances : 
+		une absolue, et une relative. L'échéances relative est une valeur fixe qui 
+		est une propriété de la tâche, elle dépend donc du temps de réalisation.\medskip
+		L'échéance absolue quant à elle est calculée avant l'exécution, et correspond 
+		à un temps $t$ absolu, elle est donc une propriété du travail.
+	\end{itemize}
+	
+	\subsection{RTOS}
+	(Real-Time Operating System) Système d'Exploitation Temps Réel.\medskip
+	Un système d'exploitation Temps Réel un système d'exploitation implémenté pour les systèmes 
+	à temps réel, c'est-à-dire dont l'objectif est d'assurer le respect de certaines échéances. 
+	
+	Cela concerne pour beaucoup les systèmes dits \og critiques\fg{} , c'est-à-dire dont la fiabilité 
+	est primordiale (avions, centrales nucléaires, pacemakers, etc.). Ce type de dispositifs 
+	est actuellement très répandu, notamment dans les voitures.
+	
+	
+	Les contraintes sont différentes de celles des systèmes d'exploitations des ordinateurs 
+	de bureau puisque l'on doit garantir le respect des échéances associées à chacune des tâches. 
+	
+	Cependant, si les systèmes d'exploitation temps réel ont des besoins de respect des échéances, 
+	cela ne signifie pas qu'ils aient forcément de grands besoins en efficacité ou en rapidité, ce qui 
+	est primordial est que les échéances soient respectées. 
+	En effet, dans un système dit \og critique\fg{} , une défaillance du système pourrait entraîner des dégâts 
+	très importants. 
+	Dans ce cadre, l'on a besoin de garanties que le système soit fiable, et c'est là une priorité absolue.
+	L'efficacité en elle-même n'est pas le besoin le plus fondamental de ce type de système.\medskip
+	
+	\subsection{Contraintes strictes, contraintes relatives} 
+	Dans le cas strict, le système doit impérativement respecter tous les temps limites. Aucun dépassement n'est toléré. Dans le cas des contraintes relatives, ce respect 
+	est moins impératif, et on pourra dépasser les délais occasionnellement. \medskip
+	Dans la littérature scientifique, on parle de \customhighlight{hard real-time} dans le cas d'un ordonnanceur 
+	qui ne tolère aucun dépassement, et de \customhighlight{soft real-time} dans le cas contraire.
+	
+	\subsection{Ordonnanceur}
+	Un ordonnanceur (\textit{Scheduler}) est la partie logicielle de 
+	l'\textit{OS} chargée d'orchestrer l'ordre d'exécution des tâches du système 
+	selon des priorités fixées à l'avance ou durant l'exécution. 
+	On distingue trois types d'assignation de priorités des ordonnanceurs :
+	
+	
+	\begin{enumerate}
+		\item Priorité fixée au niveau des tâches : Ce type d'ordonnanceur fixe la priorité 
+		avant l'exécution, et celle-ci dépend donc des attributs de la tâche. 
+		Deux exemples d'ordonnanceurs de ce type seront présentés plus loin : Rate Monotonic et 
+		Deadline Monotonic.
+		\item Priorité fixe au niveau des travaux : La priorité est fixée par l'ordonnanceur à l'arrivée du travail 
+		dans l'exécution, et elle ne peut pas changer jusqu'à la réalisation du travail. Un exemple sera présenté plus loin : Earliest Deadline First.
+		\item Priorité dynamique : L'ordonnanceur peut recalculer à tout moment de l'exécution 
+		la priorité du travail avec un exemple connu, Least Laxity First.
+	\end{enumerate}
+	
+	Selon les cas, l'ordonnanceur peut avoir à gérer un seul processeur. Dans ce 
+	document, on parlera dans ce cas d'ordonnanceur mono-processeur. Toutefois, de plus en 
+	plus de systèmes possèdent plusieurs processeurs, et il existe deux grandes familles 
+	d'ordonnanceurs associés à ces systèmes : les partitionnés, ou les globaux. \medskip
+	
+	\subsection{Optimalité}\label{optimal}
+	Un ordonnanceur est dit optimal si pour un système de tâche pour lequel un ordonnancement 
+	existe, l'ordonnanceur permet de l'ordonnancer.
+	
+	\subsection{Économe} 
+	Un ordonnanceur peut-être \og économe\fg{} , ou \og non-économe\fg{} . Dans le premier cas, si le processeur est libre, 
+	et qu'une tâche est prête à être exécutée, l'ordonnanceur donnera l'instance : cela signifie 
+	qu'on évite les temps d'inactivité du processeur. Dans le second cas, une tâche ne sera pas toujours ordonnancée.
+	Dans le reste de ce document, les ordonnanceurs présentés sont tous économes selon cette définition.
+	
+	\subsection{En ligne, hors ligne}
+	Un ordonnanceur peut faire ses opérations d'ordonnancement de deux façons : \medskip
+	\begin{itemize}
+		\item Durant le runtime, on parlera d'opérations en ligne
+		\item Avant l'exécution, on parlera d'opérations hors ligne
+	\end{itemize}	
+	
+	\subsubsection{Ordonnanceur multi-processeur Partitionné}
+	Un ordonnanceur partitionné composé de $n$ tâches et de $m$ processeurs divise 
+	le système en $m$ sous-systèmes qui seront ensuite ordonnancés par autant d'ordonnanceurs 
+	mono-processeurs. Le problème principal consiste à découper efficacement le système de tâches.
+	
+	\subsubsection{Ordonnanceur multi-processeur Global}
+	Un ordonnanceur global ne sépare pas le système en sous-systèmes mais gère une 
+	queue de tâches prêtes à être exécutées. Ainsi à chaque instant où il devra prendre une décision 
+	d'ordonnancement, il devra ordonnancer toute la liste des $m$ processeurs.\medskip
+	Contrairement aux ordonnanceurs partitionnés, les migrations [\ref{migration}] sont possibles. Le problème 
+	est donc de réduire leur nombre pour ne pas faire de mouvements inutilement.
+	
+	\subsection{Clairvoyance}
+	Un ordonnanceur est dit \og clairvoyant\fg{}  s'il peut prédire des éléments (le début d'un travail) des tâches du système qu'il ordonnance.
+	
+	\subsection{Préemption} 
+	Un système est dit préemptif s'il a la capacité 
+	de mettre l'exécution d'un travail en pause et d'exécuter un autre à la place. 
+	
+	\subsection{Utilisation}
+	Le facteur d'utilisation $U_i$ d'une tâche périodique $\tau_i$ est le rapport entre 
+	son temps d'exécution et sa période. Par exemple, pour une tâche $\tau_i$ tel que 
+	$WCET = 30 ms$ et $T = 50 ms$, le processeur doit allouer $\frac{30}{50}$ du temps 
+	total d'exécution à cette tâche.\medskip
+	
+	L'utilisation (ou le facteur d'utilisation) d'un système périodique est la proportion de temps 
+	passée par le processeur à l'exécution de tâches d'un système donné. En pratique, l'utilisation 
+	est calculée avec le WCET, qui est la borne supérieure du temps d'exécution réel, on 
+	peut donc penser que l'utilisation réelle sera inférieure à ce nombre.
+	Le calcul de l'utilisation permet dans certains cas et certaines conditions de donner une indication 
+	à propos de la faisabilité du système par un certain ordonnanceur. 
+	\medskip
+	
+	Liu et Layland \cite{liu_scheduling_1973} en donnent une définition formelle.\medskip 
+	
+	Soit $C_i$ le temps d'exécution d'une tâche $\tau_i$, et soit $T_i$ sa période, voici la définition de 
+	l'utilisation pour un système de $m$ tâches :\medskip
+	\begin{center}
+		$U_{tot} = \sum_{i = 1}^{m}(\frac{C_i}{T_i})$
+	\end{center}
+	
+	\subsection{Laxité}
+	\label{laxite}
+	La laxité d'un travail est définie par la différence entre le temps de réponse et l'échéance 
+	d'une tâche. Sa définition formelle varie en fonction de l'ordonnanceur dont il est question.
+	
+	\subsection{Instant critique}
+	\label{instantcritique}
+	Un instant critique est le moment où le temps de réponse d'une tâche est le plus long.

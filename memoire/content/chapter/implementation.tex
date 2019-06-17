@@ -18,6 +18,10 @@ l'expérience scientifique.
 	intéressant \todo{décire intéressant},
 	optimal \todo{rappel optimal ou renvoi}
 	applicable en pratique \todo{expliquer ça}.
+	Initialement, notre choix portait sur QPS, un 
+	successeur de RUN, décrit dans l'état de l'art. Cependant, les détails des papiers n'ont pas donné 
+	assez confiance quant à la possibilité d'implémentation et nous avons préféré nous tourner vers UEDF, finalement.
+	
 	
 	Au moment où l'on choisit un algorithme, on ne sait pas encore si sa réalisation va être faisable, 
 	ne serait-ce que parce que la description donnée est mathématique, donne des démonstrations, 
@@ -42,12 +46,9 @@ l'expérience scientifique.
 	avoir une implémentation à ce jour. Des simulations existent, mais comme on en reparlera, une simulation diffère 
 	en bien des points d'un véritable OS. C'est une des difficultés de ce travail, qui est de ne pas pouvoir 
 	s'appuyer sur d'autres implémentations. Par ailleurs, il n'y a pas non plus de jeu de données que l'on 
-	pourrait comparer. On reparlera de ce point. Initialement, notre choix portait sur QPS, un 
-	successeur de RUN, décrit dans l'état de l'art. Cependant, les détails des papiers n'ont pas donné 
-	assez confiance quant à la possibilité d'implémentation et nous avons préféré nous tourner vers UEDF, finalement.
+	pourrait comparer. On reparlera de ce point. 
 	
-	
-	L'algorithme UEDF est décrit très précisément dans le papier de G. Nelissen. La thèse y énonce 
+	Toutefois, l'algorithme UEDF est décrit très précisément dans le papier de G. Nelissen. La thèse y énonce 
 	des démonstration, mais également, dans un déroulement logique, des cas d'utilisation avec 
 	plusieurs types de RTOS. 
 	
@@ -55,26 +56,128 @@ l'expérience scientifique.
 	Évidemment, tous les ordonnanceurs implémentés sont en temps discret, au final, car on travaille avec 
 	un ordinateur, qui compte en binaire. Toutefois, l'implémentation de UEDF dépend en fonction du type 
 	d'ordonnanceur, et certains, \todo{aller chercher la def dans le papier} sont définis comme continus 
-	contre discret. Nous avons considéré qu'HIPPEROS était à temps continu.
+	contre discret. Nous avons considéré qu'HIPPEROS était à temps continu, et donc avons procédé à une implémentation incrémentielle, allant du plus simple vers le plus complexe, comme dans le papier.
 	
-	Ensuite, dans son papier, G. Nelissen explique au fur et à mesure comment éviter des calculs 
+	
+	Dans son papier encore, G. Nelissen explique au fur et à mesure comment éviter des calculs 
 	redondants qui empêcheraient purement et simplement le fonctionnement d'UEDF en cas d'utilisation réel.
+	\todo{dev allot computation} En effet, UEDF demande le calcul de plusieurs variables incrémentielles, 
+	qui demandent de parcourir tout le set de tâches, pour tous les coeurs. Cela induit une complexité computationnelle 
+	élevée, qui pourrait le rendre non pratiquable.
+	
+	Comment son implémentation est-elle rendue possible ? Pour chaque événement, un algorithme de calcul va être appelé.
+	Cela rend l'algorithme très gourmand. La faisabilité d'un tel algorithme dépend donc du fait que l'on fasse ce calcul souvent ou non, et de s'il est possible de conserver les données de façon persistante. 
+	
+	Nous avons choisi de post poser ces questions, afin de nous lancer dans une implémentation, quitte à 
+	ce qu'elle ne soit pas réalisable, dans un premier temps. Cela a mené à des tests unitaires qui 
+	passaient, en partie, et à une très mauvaise efficacité. 
+	
+	
+	\subsection{UEDF : description détaillée}
 	
 	
 	
-	\subsection{Essai/erreurs}
+	\subsection{Essai/Erreurs (méthode d'implémentation)}
 	La première implémentation faite a été réalisée sur une version d'HIPPEROS qui a grandement été revue par la suite. Par conséquent, mon implémentation a dû être entièrement revue. C'est aussi une des choses à prendre en
 	 considération quand on fait une implémentation de ce genre, on travaille sur un outil en développement, 
 	 dont les méthodes d'accès aux variables peuvent changer etc.
 	 
-	 Ma première implémentation était fort complexe.
+	 Ma première implémentation était fort complexe, avec des datastructures simples pour me permettre d'obtenir
+	 quelque chose de fonctionnel. Toutefois, l'implémentation ne fonctionnait pas réellement, 
+	 mais seulement par unitTest.
 	 
+	 \subsubsection{UnitTests}
+	 Pour développer UEDF, j'ai écrit des tests unitaires, puis implémenté l'algorithme. 
+	 
+	 Pourquoi les tests unitaires ?
+	 
+	 Ça permet de tester chacune des fonctionnalités isolément, en théorie, si les tests unitaires passent, 
+	 il ne doit pas y avoir trop de surprise en passant au cas réel.
+	 
+	 On peut procéder de deux façons qui comportent chacune des avantages et inconvénients.
+	 
+	 \paragraph{Avantages} 
 	
-	\subsection{Mes choix}
+	\subsection{Choix d'implémentation (datastructures, système domaine)}
 		\subsubsection{choix d'implémentation : data-structures}
 		\subsubsection{Domaine système}
 		
-	\subsection{tests}
+	\subsection{tests unitaires}
+	Le sujet des tests unitaires est largement documenté. \todo{inclure sources} Différentes méthodes 
+	proposent des approches afin de choisir pour quel type de couverture de tests on opte.
+	Les méthodes Agile par exemple abordent systématiquement la question. Dans la méthode XP (Xtreme Programing),
+	il est recommandé de faire écrire les tests par d'autres, et au préalable. Cela permet d'éviter les biais 
+	psychologiques humains qui peuvent largement fausser les résultats. En effet, 
+	la connaissance du code peut induire une façon de tester. Si je ne connais pas son fonctionnement, 
+	je ne vais pas être tentée de le tester d'une manière plutôt que d'une autre, en évitant de mettre 
+	le code en échec.
+	
+	\todo{see Test Driven Development}
+	
+	Pour l'implémentation d'UEDF, dans ce travail solitaire, il n'a pas été possible de mettre cela en place.
+	J'ai plutôt opté pour une couverture large du code, et de façon itérative. 	
+	mon implémentation, ce qui a rendu le développement lent et fastidieux mais m'a permis de me rendre compte des 
+	erreurs assez vite sur les fonctions.
+	
+	
+	\todo{décrire mon ordinateur utilisé pour les tests}
+	L'ensemble des scripts et tests réalisés pour ce travail ont été faits sur un 
+	Lenovo Z51, doté d'un processeur I5-5200 cadencé à 2.20GHz 4 cœurs. 
+	Le système d'exploitation était GNU/Linux, Ubuntu 18.04.2 LTS. 
+	
+	Afin de procéder à la compilation croisée, j'ai utilisé les scripts mis à disposition par HIPPEROS, 
+	qui permettent également de générer une machine virtuelle afin de vérifier l'exécution du code. 
+	Cela a permis la compilation de l'ordonnanceur au sein d'HIPPEROS sans l'exécution.
+	
+	Cette étape se rapproche assez de la simulation dans le sens où on va ajouter des cas seulement 
+	en fonction de ce qui a été implémenté et de ce que l'on souhaite tester. Cette partie-là n'apporte pas 
+	à proprement parler de renseignements sur l'efficacité du code, mais sur la correction de l'ensemble de tâches.
+	Concrètement, on vérifie qu'à chaque instant, l'ordonnanceur a réservé du temps sur l'ensemble des cœurs 
+	pour chaque job. 
+	
+	\paragraph{Quels cas tester ?}
+	Afin de s'assurer de la correction de l'algorithme, il faut vérifier si on arrive à le mettre en échec quand 
+	il doit l'être, ou le contraire. Cela nécessite de trouver des jeux de données intéressants. 
+	Typiquement, on pourra tester qu'en ajoutant des tâches de priorités différentes, 
+	l'ordonnancement change. 
+	
+	Prenons Global-EDF. Cet algorithme, décrit précédemment, 
+	
+	
+	\todo{vertical / horizontal}
+	
+	Malheureusement, il n'en existe pas à ma connaissance. Aussi une partie du travail a consisté 
+	à construire des ensembles de tâches intéressants. Cela nécessite d'avoir une bonne 
+	compréhension de comment l'algorithme est censé fonctionner, afin de voir ses faiblesses.
+	
+	Cette étape est difficile, pour plusieurs raisons :
+	\begin{itemize}
+		\item Trouver des ensembles de tâches
+		\item Construire des tests sans être influencé par la connaissance que l'on a de son code
+	\end{itemize}
+	
+	
+	Comme 
+	
+	
+	Pour procéder à cette partie, j'ai d'abord implémenté un invariant, reprenant celui donné dans la 
+	thèse de G. Nelissen : 
+	
+	\todo{aller chercher l'invariant}
+	
+	Cet invariant -- comme son nom l'indique, doit être vrai tout le temps. Néanmoins, il ne permet pas 
+	dans le cas de tests unitaires vraiment de vérifier s'il y a une erreur avec l'ordonnanceur, mais bien avec 
+	la logique.
+	
+	C'est un test nécessaire, mais totalement insuffisant.
+	
+	D'autres tests peuvent vérifier 
+	
+	
+	\todo{UEDF fait pas comme d'autres, il utilise le wcet, il schedule pas quand c'est pas possible}
+	
 		
 	\subsubsection{tests sur board}	
+	
+	
 
