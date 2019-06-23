@@ -1,46 +1,33 @@
 	
+	\section{Introduction générale}
 	Le monde du système embarqué est actuellement en plein foisonnement. 
 	Tous ces systèmes n'ont cependant pas les mêmes contraintes. 
 	Certains doivent respecter des échéances afin de garantir mathématiquement
 	un fonctionnement conforme. Typiquement, on peut tolérer 
 	un retard d'affichage de la page de son navigateur, il n'est cependant pas 
 	concevable qu'un ABS de voiture soit en retard à cause d'une autre tâche 
-	qui prendrait trop de temps.
-	Une proportion de ces systèmes en temps réel nécessitent des 
-	ordonnanceurs adaptés. 
-	Ce champ de recherche a été largement nourri durant les vingt dernières années par de nombreuses publications scientifiques. \medskip
+	qui prendrait du de temps, mettant en péril la sécurité des passagers.
+	Une proportion des systèmes embarqués est dite "en temps réel" et nécessite des 
+	ordonnanceurs adaptés afin de prouver que les échéances seront toujours respectées.
+	Ce champ de recherche -- temps réel -- a été largement nourri durant les vingt dernières années par de nombreuses publications scientifiques. \medskip
 	
-	Les systèmes embarqués n'ont pas toujours de grands besoins en efficacité, 
-	ils doivent prioritairement être sûrs, et réactifs.
-	Toutefois, un système dont l'efficacité n'est pas maximale n'utilise pas 
-	ses ressources de façon optimale, ce qui conduit à du gaspillage. 
-	En effet, lorsqu'un système est 
-	mal optimisé, il est sur-dimensionné, car plus de matériel est nécessaire 
-	pour réaliser les mêmes tâches. Il est facilement imaginable que cela représente plus de volume occupé, 
-	d'énergie électrique dédiée à l'alimentation des appareils surnuméraires, 
-	de composants, ainsi que de matériaux de câblage.
-	Or, la gestion énergétique 
-	est un poste coûteux qui se doit d'être le plus réduit possible. 
-	En l'occurrence, pour des installations comprenant beaucoup de systèmes embarqués, 
-	comme les voitures ou les avions, cette dépense peut être substantielle. \medskip
-	
-	Par ailleurs, cela fait plusieurs années que la croissance de l'efficacité des 
-	appareils n'est plus principalement due à la miniaturisation des composants. 
-	Actuellement, les progrès engrangés portent sur la parallélisation, 
-	ou encore, dans le domaine de l'architecture des composants eux-mêmes.
-	La croissance emprunte d'autres voies, comme  
-	l'amélioration logicielle avec notamment la parallélisation.
-	\medskip
-	
-	Le monde des systèmes embarqués en temps réel a bénéficié de ces améliorations, 
-	et dispose également de processeurs multi-c\oe{}urs. Cependant, leur gestion n'est 
-	à l'heure actuelle pas optimale, la plupart des systèmes sont  
+	Toutefois, il demeure un décalage important entre la connaissance scientifique et 
+	la mise en pratique de celle-ci. 
+	Par exemple, les systèmes embarqués disposent bien souvent de processeurs multi-c\oe{}urs.
+	Cependant, leur gestion n'est à l'heure actuelle pas optimale, la plupart des systèmes sont  
 	gérés soit comme des systèmes mono-processeurs, soit avec des algorithmes partitionnés \cite{paolillo_new_nodate}. 
 	Dans le premier cas, les ressources ne sont pas utilisées de façon optimale, 
 	et dans le second, des implémentations et tests ont montré empiriquement 
 	que les algorithmes globaux pouvaient présenter des avantages intéressants, comme 
 	une meilleure répartition de l'utilisation des processeurs \cite{baker_analysis_2005}. 
-	\medskip
+	\medskip	
+	
+	Si les systèmes embarqués n'ont pas toujours de grands 
+	besoins en efficacité, un système dont l'efficacité n'est pas maximale n'utilise pas 
+	ses ressources de façon optimale, ce qui conduit à du gaspillage. 
+	Or, la gestion énergétique est un poste coûteux qui se doit d'être le plus réduit possible. 
+	En l'occurrence, pour des installations comprenant beaucoup de systèmes embarqués, 
+	comme les voitures ou les avions, cette dépense peut être substantielle. \medskip
 	
 	Le décalage entre la connaissance scientifique et les implémentations réelles 
 	peut s'expliquer en partie par le fait qu'il soit compliqué de gérer le partage des ressources, 
@@ -63,48 +50,35 @@
 	\end{enumerate}
 	
 	Toutes ces raisons poussent à s'intéresser à une implémentation réelle et réaliste 
-	d'ordonnanceurs connus dans la littérature, mais moins dans la réalité.
+	d'ordonnanceurs connus dans la littérature, mais moins dans la réalité. Pour ce faire, c'est 
+	l'ordonnanceur \textbf{UEDF} qui a été choisi et implémenté. 
 	
-	C'est dans ce contexte que s'inscrit ce travail d'implémentation d'un ordonnanceur en temps réel 
-	global et multi-processeur, dont un des objectifs est d'améliorer la connaissance pratique 
-	d'ordonnanceurs multi-processeurs globaux, d'en apercevoir les limites. 
-	
-	Cette implémentation pourrait amener plusieurs résultats intéressants : \medskip
+Dans ce travail, on se propose d’analyser plusieurs éléments, outre d’exposer les choix d’implémentation et d’en expliquer les raisons : \medskip
 	\begin{itemize}
-		\item Une comparaison entre des résultats théoriques et l'effet de leur mise 
-		en \oe{}uvre
-		\item Des propositions pour améliorer le passage d'un papier à l'implémentation, pour permettre ultérieurement à des chercheurs de 
-		faciliter l'implémentation et donc l'utilisation, et donc la connaissance de leur algorithme.
-		\item Analyser les avantages, inconvénients ou obstacles à la 
-		commercialisation d'une telle implémentation.
+		\item Comparer les performances attendues théoriquement et des résultats mesurés en pratique
+		\item Comparer pour des mêmes ensembles de tâches les performances d’UEDF avec Global-EDF, tous les deux implémentés
+		dans \textbf{HIPPEROS}
+		\item Proposer des éléments afin de faciliter le passage de la littérature à la pratique, pour permettre
+		ultérieurement à des chercheurs d'y travailler et rendre ces implémentations 
+		faisables, voire moins fastidieuses.
 	\end{itemize}
 	
-	\section{Contexte et objectifs}
-	
-	\subsection{Ordonnanceurs globaux}
-	Comme il sera expliqué plus tard dans ce document, il existe deux grandes familles d'ordonnanceurs 
-	multi-processeur :\medskip
+	\section{Choix de l'ordonnanceur}
+	Le choix de l'ordonnanceur \textbf{UEDF} s'explique par plusieurs raisons :\medskip
 	\begin{itemize}
-		\item Les ordonnanceurs partitionnés
-		\item Les ordonnanceurs globaux
+		\item C'est un ordonnanceur global, qui minimise le nombre de processeurs utilisés et donc 
+		optimise en théorie l'utilisation. Théoriquement, il minimise le nombre de 
+		migrations.
+		\item Son fonctionnement est particulier. Il prend par exemple en considération le \textbf{WCET} de la tâche 
+		afin de calculer l'ordonnancement. Il n'a jamais été implémenté sur un véritable \textbf{RTOS}, 
+		aussi cela constitue un résultat important de pouvoir affirmer s'il est implémentable 
+		ou non (un simulateur ne remplace pas une implémentation réelle).
+		\item La documentation autour de lui est détaillée et très bien écrite. Il apparaît que si des 
+		difficultés à l'implémenter en découlent, cela ne pourra être reproché à la qualité du 
+		travail initial.
 	\end{itemize}
-	Si parmi ces deux familles d'ordonnanceurs, les systèmes mono-processeurs, voire 
-	partitionnés ont le plus de succès auprès de l'industrie, 
-	ce n'est pas la famille la plus efficace pour tout type de classe de tâches. 
-	Les algorithmes globaux répartissent habituellement mieux l'utilisation des processeurs, 
-	les migrations sont possibles et donc les temps de réponse sont généralement moins grands.
-	\medskip
 	
-	
-	En 1988, Hong and Leung \cite{hong_-line_1988} publient un article dans lequel est 
-	démontré que :\\
-	\textit{\og Il n'existe pas d'ordonnanceur multi-processeur en ligne optimal pour un système de tâches 
-		avec plusieurs échéances distinctes\fg{}}.
-	
-	Toutefois, des publications ultérieures viennent compléter cette preuve, et démontrent 
-	que des ordonnanceurs globaux optimaux existent, mais nécessitent de la clairvoyance.
-	
-	\subsection{HIPPEROS}
+	\section{HIPPEROS}
 	\customhighlight{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
 	est un \customhighlight{RTOS} (Real-Time Operating System) développé depuis plusieurs années par une spinoff de l'ULB.
 	Il bénéficie des connaissances apportées par le monde de la recherche dans 
@@ -114,11 +88,8 @@
 	deux installations en fonction des particularités.
 	
 	\customhighlight{HIPPEROS} est un candidat idéal pour l'implémentation d'un ordonnanceur 
-	global, mais une partie du travail consistera à tirer parti de ses particularités. 
-	Par exemple, ce système d'exploitation gère les c\oe{}urs en leur attribuant des 
-	niveaux différents. L'un est considéré comme \og maître \fg{} et les autres comme \og esclaves\fg{}. 
-	Ceci peut apporter un comportement particulier, ce auquel il convient d'apporter 
-	l'attention nécessaire. En résumé, une nouvelle implémentation sur un OS différent 
+	global. Il a cependant un fonctionnement propre qui pourra rendre l'implémentation 
+	plus ou moins facile, et poser un certain nombre de problèmes. 
+	En résumé, une nouvelle implémentation sur un OS différent 
 	peut elle-aussi apporter à la connaissance générale des détails importants.
-	
 	
