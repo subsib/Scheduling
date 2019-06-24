@@ -1,12 +1,24 @@
 \section{Introduction}
 
-Le travail d'implémentation a commencé au sortir d'un stage chez HIPPEROS. 
-Cette étape a permis la connaissance nécessaire de l'OS afin de retoucher les fichiers, 
-être capable d'ajouter un ordonnanceur, créer des tests d'intégration supplémentaires, etc.
-Aussi d'apprendre les règles de codage au sein de l'entreprise. 
+L'implémentation d'un algorithme d'ordonnanceur décrit dans un papier théorique 
+est une étape importante. 
+Ce moyen va en effet permettre de valider la faisabilité d'un modèle 
+mathématique.
+Ce n'est pas parce qu'un algorithme est prouvé mathématiquement 
+qu'il est implémentable dans un \textbf{RTOS}, aussi cette étape va permettre de le vérifier.
+Il y a également un autre avantage à implémenter un ordonnanceur décrit uniquement 
+de façon théorique et uniquement simulé
+Par exemple, il n'est pas rare de voir des papiers évoquer des proportions 
+dans leurs calculs, notamment pour le calcul de l'utilisation \todo{renvoi}.
+Or, chacun sait que les ordinateurs ne peuvent 
+pas représenter des fractions avec une précision infinie. 
+Dans d'autres cas, on se figurera un appel à l'ordonnanceur à des étapes 
+précises, mais en pratique, cela peut se passer de façon différente, 
+l'ordonnanceur étant finalement une tâche également, et devant recevoir 
+lui-même la main afin de pouvoir être exécuté. Cela dépendra donc des 
+différences entre un algorithme théorique et l'informatique discrète, de 
+façon générale, mais également en fonction du RTOS choisi pour l'implémentation.
 
-Ceci dans le but d'apporter un ordonnanceur supplémentaire à RTOS, mais également de la 
-l'expérience scientifique.
 
 
 
@@ -27,13 +39,13 @@ l'expérience scientifique.
 	ne serait-ce que parce que la description donnée est mathématique, donne des démonstrations, 
 	basées sur des valeurs sans se soucier de comment on les a obtenues.
 	
-	En pratique, le WCET -- on en reparlera -- est une valeur on ne peut plus théorique, par exemple, 
+	En pratique, le \textbf{WCET} -- on en reparlera -- est une valeur on ne peut plus théorique, par exemple, 
 	et on ne peut pas facilement la déterminer. 
 	Aussi, le déroulement séquentiel de l'ordonnanceur nécessite que les autres tâches cessent d'être exécutées 
 	à ce moment-là, ce qui ne correspond pas forcément à la réalité.
 	On imagine aussi qu'à chaque événement, l'ordonnanceur est immédiatement appelé, 
 	en pratique, cela n'est pas forcément le cas, en tout cas pas pour tous les 
-	\textbf{RTOS}. Ce n'est pas le cas d'HIPPEROS, par exemple.
+	\textbf{RTOS}. Ce n'est pas le cas d'\textbf{HIPPEROS}, par exemple.
 
 	Les objectifs d'un tel travail ont été énoncés plus tôt. 
 	Pour résumer, on souhaite faciliter le passage de la connaissance théorique vers la pratique.
