@@ -1,12 +1,44 @@
+\section{Choix de l'ordonnanceur}
 
-% pour répondre à la question, il faut :
-
-\section{Choix de l'ordonnanceur à implémenter}
-
-	\subsection{Présentation UEDF}
+	\subsection{Pourquoi UEDF}
+	
+	L'état de l'art nous a montré un vaste choix d'algorithmes intéressants pour différentes 
+	raisons et n'étant pas encore implémentés. La première étape du travail consiste donc 
+	à départager ces algorithmes pour arrêter notre choix sur l'un d'entre eux.
+	
+	Le choix le plus rationnel vis à vis des objectifs devrait se faire en fonction des 
+	promesses théoriques de performance et de stabilité. 
+	En effet, pour faire avancer la connaissance et permettre d'augmenter la confiance des utilisateurs 
+	potentiels, il est judicieux de choisir un algorithme dont on attend au moins ceci :
+	\begin{itemize}
+		\item Un algorithme global qui minimise le nombre de migrations
+		\item L'ordonnanceur est en ligne, optimal pour la classe périodique
+		\item Il n'a pas bénéficié d'une implémentation sur un \textbf{RTOS}
+		\item Il promet des performances intéressantes
+	\end{itemize}
+	
+	Le premier choix a été \textbf{RUN}, puis finalement, son descendant, \textbf{QPS}. 
+	Toutefois, les papiers disponibles étaient assez théoriques et nous n'avons pas réussi à 
+	entrer en contact avec les créateurs de ces algorithmes. Aussi nos questions restaient sans réponses.
+	Et ceci est peut-être une première remarque à faire à propos de la possibilité d'implémenter 
+	un ordonnanceur : avoir un contact possible avec une personne à son origine, voire qui a déjà 
+	réussi une implémentation, rend le travail bien plus simple, voire possible , en fonction des 
+	papiers d'origine.\newline
+	
+	
+	
+	Finalement, c'est donc un argument quant à la communication (clarté, possibilité de poser des questions) 
+	qui a fixé le choix. Par conséquent, c'est \textbf{UEDF} qui a été choisi, car il respectait 
+	les promesses énoncées auparavant en plus d'être très bien documenté, et nous pouvions 
+	poser nos questions directement à son créateur. Néanmoins, ses paramètres sont moins idéaux, 
+	et nous avons revu nos attentes quant à l'efficacité à la baisse. Cela n'a en rien 
+	modifié l'objet scientifique, à savoir le regard critique et la proposition d'améliorations 
+	afin de stimuler et faciliter des implémentations futures.\newline
+	
+	
 	
 	Nous avons déjà présenté précédemment \textbf{UEDF}, de façon globale et succincte. 
-	Dans cette partie, nous allons un peu plus en profondeur 
+	Dans cette partie, nous allons un peu plus en profondeur.
 	
 	\textbf{UEDF} est un ordonnanceur qui comporte plusieurs intérêts pour une implémentation.
 	Tout d'abord, il est principalement \textit{en ligne}\todo{verif glossaire}, ce qui n'est pas le cas de 
@@ -16,27 +48,33 @@
 	raison exposée au préalable dans ce travail : il est nécessaire d'avoir de la clairvoyance, 
 	c'est à dire une connaissance relative du futur.
 	
-	\textbf{UEDF} fait face à ce problème en ayant une vision non pas verticale, mais horizontale 
-	de l'ordonnancement des tâches. 
+	\textbf{UEDF} fait face à ce problème en ayant un traitement non pas vertical, mais horizontal
+	de l'ordonnancement des tâches.
 
 		\subsubsection{Global EDF}
 		Afin de montrer la particularité d'\textbf{UEDF}, nous commençons par rappeler le fonctionnement 
 		d'un ordonnanceur bien connu et que l'on peut considérer comme "vertical" : \textbf{Global EDF}. \todo{link état de l'art}
 		
-		L'algorithme est extrêmement simple. On conserve une structure de données 
-		ordonnée, comme un \textbf{Heap} \todo{glossaire} qui contient tous les jobs 
+		L'algorithme est extrêmement simple. 
+		À un moment \textit{t}, l'ordonnanceur prend sa décision de cette façon :
+		si un processeur est libre, il se voit attribué le travail de priorité supérieure parmi 
+		tous les travaux actifs. Cela permet d'avoir un algorithme extrêmement simple :\newline
+		
+		
+		On conserve une structure de données 
+		ordonnée, comme un \textbf{Heap} \todo{glossaire} qui contient tous les travaux
 		devant être exécutés. À chaque fois que l'ordonnanceur doit prendre 
-		une décision, il lui suffit de prendre le job de priorité supérieure et 
+		une décision, il lui suffit de prendre le travail de priorité supérieure et 
 		de l'exécuter sur le processeur libre.
 		
-		L'algorithme ne calcule rien à propos de l'avenir, sa décision au moment t
+		L'algorithme ne calcule rien à propos de l'avenir, sa décision au moment \textit{t}
 		n'est prise qu'en considérant les jobs à exécuter et la liberté d'un 
 		processeur. Il se peut qu'un autre ordonnancement plus efficace 
-		réussisse à ordonnancer un système que Global EDF ne puisse pas résoudre...
+		réussisse à ordonnancer un système que \textbf{Global EDF} ne puisse pas résoudre...
 		Cela rend tout de même l'ordonnanceur "efficace" en terme de calculs, 
-		puisqu'il comporte un Heap (nlogn) persistant, qui sera mis à jour 
+		puisqu'il comporte un Heap, de complexité $O(n\log n)$, qui sera mis à jour 
 		à chaque changement d'état du job (relâché -> inséré, 
-		exécuté -> retiré du heap).
+		exécuté -> retiré du Heap).
 		
 		En revanche, ce fonctionnement ne permet pas à cet ordonnanceur d'atteindre 
 		l'optimalité pour la classe de systèmes périodiques, comme on peut le voir 
@@ -44,30 +82,41 @@
 		\todo{montrer un exemple qui rende Global EDF non efficace pour un job}
 
 		\subsubsection{UEDF}
-		UEDF -- quant à lui -- résout ce problème en effectuant un pré-calcul 
-		que l'on pourrait comparer à un partitionnement, mais en ligne.
-		En résumé, à chaque fois qu'un job est activé, un calcul va permettre 
+		UEDF -- quant à lui -- résout le problème de l'ordonnancement en effectuant un pré-calcul 
+		que l'on pourrait comparer à un partitionnement. Ce calcul est toutefois en ligne et 
+		effectué à chaque fois qu'une tâche relâche un job dans le système.
+		
+		En résumé, à chaque fois qu'un travail est activé, un calcul va permettre 
 		de réserver des portions de temps pour toutes les tâches actives 
 		actuellement dans le système. Au lieu de ne prendre en considération que 
-		les priorités et les processeurs libres, UEDF vérifie donc à 
+		les priorités et les processeurs libres, \textbf{UEDF }vérifie donc à 
 		chaque nouvelle libération de tâche que l'ordonnancement peut se faire. 
-		En théorie, on devrait donc savoir immédiatement si un système est ordonnançable, avant même de croiser un dépassement d'échéance. 
-		
+		En théorie, on devrait donc savoir immédiatement si un système est ordonnançable, 
+		avant même de croiser un dépassement d'échéance. 
 		
 		Ainsi, la décision n'est pas réellement prise à ce moment, 
-		mais on sait déjà qu'un job peut-être effectué sur un 
+		mais on sait déjà qu'un travail peut-être effectué sur un 
 		processeur, en garantissant le respect de l'échéance.
 		
 		La décision est ensuite prise à chaque événement de ce type :
 		\begin{enumerate}
-			\item Relâchement de tâche
-			\item Job terminé
+			\item Relâchement de travail
+			\item Travail terminé
 		\end{enumerate}
 
-		En l'occurrence, à ce moment, il suffit de procéder comme pour \textbf{GlobalEDF} et de sélectionner le job le plus prioritaire, en respectant 
+		En l'occurrence, à ce moment, il suffit de procéder comme pour \textbf{Global EDF} et de sélectionner le job le plus prioritaire, en respectant 
 		une règle simple : effectuer le job de priorité supérieure, sauf s'il 
 		est déjà en train d'être exécuté sur un autre processeur. Auquel cas, on ne 
-		fait pas de migration, on prend simplement le job suivant sur la liste.
+		fait pas de migration, on prend simplement le travail suivant sur la liste.\newline
+		
+		On peut conclure par une explication imagée afin d'avoir une compréhension du fonctionnement d'\textbf{UEDF}. À chaque nouveau travail ajouté dans l'ensemble de travaux, 
+		il fait un calcul afin de créer des sortes de partitionnements des travaux. 
+		Ensuite, chacun de ces sous-systèmes applique EDF avec une règle ajoutée qui consiste 
+		à vérifier si le travail de priorité supérieure n'est pas déjà en cours d'exécution.
+		
+		On peut dire qu'\textbf{UEDF} sur un processeur revient à appliquer \textbf{EDF}. Il 
+		demeure très différent dès lors qu'il y a plusieurs processeurs.
+		
 		
 		\todo{cette explication serait même incompréhensible pour quelqu'un connaissant bien UEDF... REFORMULER !! }
 		\todo{illustration simple avec dessin}
@@ -78,11 +127,49 @@
 		on n'aura besoin que d'un seul processeur. Pour 200, 2 processeurs, bref, 
 		pour une utilisation de m * 100 \%, on utilisera m processeurs.
 		
+\section{HIPPEROS}
+	\customhighlight{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
+	est un \customhighlight{RTOS} (Real-Time Operating System) développé depuis plusieurs années par une spinoff de l'ULB.
+	Il bénéficie des connaissances apportées par le monde de la recherche dans 
+	le domaine des systèmes critiques avec multic\oe{}urs. Une de ses particularités 
+	est sa modularité, qui permet d'adapter ses possibilités en fonction du système 
+	lors de la compilation de l'OS, ainsi peut-on différencier principalement 
+	deux installations en fonction des particularités. 
+	
+	\customhighlight{HIPPEROS} est un candidat idéal pour l'implémentation d'un ordonnanceur 
+	global. Il a cependant un fonctionnement propre qui pourra rendre l'implémentation 
+	plus ou moins facile, et poser un certain nombre de problèmes. 
+	En résumé, une nouvelle implémentation sur un OS différent 
+	peut elle-aussi apporter à la connaissance générale des détails importants.
 		
 		
 
-\subsection{Difficultés liées à l'implémentation}
-	\subsubsection{datastructure}
+\section{Difficultés liées à l'implémentation}
+
+	Dans cette partie, nous allons analyser les difficultés rencontrées lors de l'implémentation en elle-même, 
+	en nous concentrant sur celles liées aux aspects théoriques d'origine. 
+
+	\subsubsection{Structure de données}
+	
+		Dans \textbf{HIPPEROS}, il existe d'autres ordonnanceurs déjà implémentés. Il convenait donc 
+		de s'adapter à l'implémentation existante. Cela signifie des accès parfois compliqués afin d'accéder 
+		aux informations de la tâche.\newline
+		
+		\textbf{HIPPEROS} 
+	
+		Une des critiques que l'on peut adresser à l'algorithme \textbf{UEDF} est sa complexité. 
+		Pour rappel, à chaque ajout de travail dans l'ensemble des tâches actives, il faut 
+		parcourir la liste entièrement, et ce plusieurs fois, ce qui mène à 
+		une complexité de \todo{chercher... $O(m \times n)$ ?}. 
+		Certes, avec une astuce, proposée par G. Nelissen dans sa thèse, il est possible de réduire 
+		la complexité du calcul, néanmoins pas sa fréquence. Il est donc primordial de réussir à 
+		minimiser la complexité des structures de données utilisées par l'algorithme.\newline
+		
+		En théorie, lorsqu'on doit parcourir une liste ordonnée et supprimer des éléments régulièrement, 
+		qui ne sont forcément la tête de la liste, le Heap est assez mal adapté. En premier lieu, 
+		nous avons donc implémenté une liste liée. 
+		
+	
 	\subsubsection{Complexité/persistance}
 	\subsubsection{WCET}
 	\subsubsection{S'arrête à chaque event}

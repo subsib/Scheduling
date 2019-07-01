@@ -63,33 +63,3 @@ Dans ce travail, on se propose d’analyser plusieurs éléments, outre d’expo
 		faisables, voire moins fastidieuses.
 	\end{itemize}
 	
-	\section{Choix de l'ordonnanceur}
-	Le choix de l'ordonnanceur \textbf{UEDF} s'explique par plusieurs raisons :\medskip
-	\begin{itemize}
-		\item C'est un ordonnanceur global, qui minimise le nombre de processeurs utilisés et donc 
-		optimise en théorie l'utilisation. Théoriquement, il minimise le nombre de 
-		migrations.
-		\item Son fonctionnement est particulier. Il prend par exemple en considération le \textbf{WCET} de la tâche 
-		afin de calculer l'ordonnancement. Il n'a jamais été implémenté sur un véritable \textbf{RTOS}, 
-		aussi cela constitue un résultat important de pouvoir affirmer s'il est implémentable 
-		ou non (un simulateur ne remplace pas une implémentation réelle).
-		\item La documentation autour de lui est détaillée et très bien écrite. Il apparaît que si des 
-		difficultés à l'implémenter en découlent, cela ne pourra être reproché à la qualité du 
-		travail initial.
-	\end{itemize}
-	
-	\section{HIPPEROS}
-	\customhighlight{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
-	est un \customhighlight{RTOS} (Real-Time Operating System) développé depuis plusieurs années par une spinoff de l'ULB.
-	Il bénéficie des connaissances apportées par le monde de la recherche dans 
-	le domaine des systèmes critiques avec multic\oe{}urs. Une de ses particularités 
-	est sa modularité, qui permet d'adapter ses possibilités en fonction du système 
-	lors de la compilation de l'OS, ainsi peut-on différencier principalement 
-	deux installations en fonction des particularités.
-	
-	\customhighlight{HIPPEROS} est un candidat idéal pour l'implémentation d'un ordonnanceur 
-	global. Il a cependant un fonctionnement propre qui pourra rendre l'implémentation 
-	plus ou moins facile, et poser un certain nombre de problèmes. 
-	En résumé, une nouvelle implémentation sur un OS différent 
-	peut elle-aussi apporter à la connaissance générale des détails importants.
-	
