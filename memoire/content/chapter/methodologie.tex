@@ -149,25 +149,56 @@
 	Dans cette partie, nous allons analyser les difficultés rencontrées lors de l'implémentation en elle-même, 
 	en nous concentrant sur celles liées aux aspects théoriques d'origine. 
 
-	\subsubsection{Structure de données}
+	\subsubsection{Accès aux données nécessaires}
 	
 		Dans \textbf{HIPPEROS}, il existe d'autres ordonnanceurs déjà implémentés. Il convenait donc 
 		de s'adapter à l'implémentation existante. Cela signifie des accès parfois compliqués afin d'accéder 
 		aux informations de la tâche.\newline
 		
-		\textbf{HIPPEROS} 
+		\textbf{HIPPEROS} ordonne les tâches de cette façon : 
+		\begin{itemize}
+			\item Les données concernant les tâches sont accessibles via un objet \textit{task}. Ces 
+			données sont statiques.
+			\item Certaines données concernent une autre structure, appelée \textit{process}. L'accès 
+			à cette structure ne se fait pas de la même façon. 
+			\item Les données concernant le travail sont dans la structure \todo{je saisplus}.
+		\end{itemize}
+		Une première chose à laquelle il faut être attentif est de rendre possible les accès 
+		à ces données, par exemple en conservant des tableaux de références, afin de minimiser les temps 
+		d'accès. Cela nécessite de faire un choix : on optimise le temps d'accès en conservant plus de données.\newline
 	
+		Les autres ordonnanceurs n'utilisent pas vraiment les données concernant le temps 
+		d'exécution de la tâche. Pour \textbf{UEDF}, nous avons besoin d'un accès efficace et 
+		correctement mis à jour à ces données. Typiquement, le \textbf{RET} est utilisé en plein 
+		milieu du calcul \textbf{Allot}, ce qui signifie que lors du calcul, il doit être possible 
+		de récupérer ces données. Or, cela n'est pas tout à fait possible, ou du moins, pas idéalement. 
+		En fait, \textbf{HIPPEROS} met à jour le temps exécuté d'une tâche lors d'un changement d'état de celle-ci. 
+		Ainsi, si un travail est effectué, on note dans ses états le moment auquel il a été dispatché.
+		Au temps \textit{t}, si l'on veut savoir combien de temps il a été effectué, s'il n'a pas changé 
+		d'état, il faudra calculer ce temps dans \textbf{UEDF} car \textbf{HIPPEROS} n'aura pas encore mis à 
+		jour cette donnée.\newline
+		Si en terme de temps d'accès, cette requête n'est pas très compliquée, il n'en demeure pas moins 
+		que le résultat sera un peu approximatif.
+		
+		
 		Une des critiques que l'on peut adresser à l'algorithme \textbf{UEDF} est sa complexité. 
 		Pour rappel, à chaque ajout de travail dans l'ensemble des tâches actives, il faut 
 		parcourir la liste entièrement, et ce plusieurs fois, ce qui mène à 
 		une complexité de \todo{chercher... $O(m \times n)$ ?}. 
 		Certes, avec une astuce, proposée par G. Nelissen dans sa thèse, il est possible de réduire 
 		la complexité du calcul, néanmoins pas sa fréquence. Il est donc primordial de réussir à 
-		minimiser la complexité des structures de données utilisées par l'algorithme.\newline
+		minimiser la complexité, et maximiser l'efficacité des structures de données utilisées par l'algorithme.\newline
+		
 		
 		En théorie, lorsqu'on doit parcourir une liste ordonnée et supprimer des éléments régulièrement, 
 		qui ne sont forcément la tête de la liste, le Heap est assez mal adapté. En premier lieu, 
-		nous avons donc implémenté une liste liée. 
+		nous avons donc implémenté une liste liée. Ces listes sont connues pour avoir de mauvaises 
+		performances, et elles impactaient énormément le temps de calcul d'\textbf{UEDF}. 
+		Nous verrons que par la modification de cette structure, nous avons déjà réduit drastiquement 
+		le temps d'exécution du calcul. Est-ce suffisant pour permettre à \textbf{UEDF} d'être utilisé dans la réalité est 
+		une question à laquelle nous répondrons dans le prochain chapitre.
+		
+		
 		
 	
 	\subsubsection{Complexité/persistance}
