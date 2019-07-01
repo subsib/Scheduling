@@ -127,6 +127,8 @@
 		on n'aura besoin que d'un seul processeur. Pour 200, 2 processeurs, bref, 
 		pour une utilisation de m * 100 \%, on utilisera m processeurs.
 		
+		\todo{ajouter une description plus détaillée, avec pseudo code}
+		
 \section{HIPPEROS}
 	\customhighlight{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
 	est un \customhighlight{RTOS} (Real-Time Operating System) développé depuis plusieurs années par une spinoff de l'ULB.
@@ -165,11 +167,11 @@
 		\end{itemize}
 		Une première chose à laquelle il faut être attentif est de rendre possible les accès 
 		à ces données, par exemple en conservant des tableaux de références, afin de minimiser les temps 
-		d'accès. Cela nécessite de faire un choix : on optimise le temps d'accès en conservant plus de données.\newline
+		d'accès. Cela nécessite de faire un choix : on optimise le temps d'accès en conservant plus de données. \newline
 	
 		Les autres ordonnanceurs n'utilisent pas vraiment les données concernant le temps 
 		d'exécution de la tâche. Pour \textbf{UEDF}, nous avons besoin d'un accès efficace et 
-		correctement mis à jour à ces données. Typiquement, le \textbf{RET} est utilisé en plein 
+		correctement mis à jour à ces données. Typiquement, le \textbf{Resting Execution Task} est utilisé en plein 
 		milieu du calcul \textbf{Allot}, ce qui signifie que lors du calcul, il doit être possible 
 		de récupérer ces données. Or, cela n'est pas tout à fait possible, ou du moins, pas idéalement. 
 		En fait, \textbf{HIPPEROS} met à jour le temps exécuté d'une tâche lors d'un changement d'état de celle-ci. 
@@ -178,7 +180,9 @@
 		d'état, il faudra calculer ce temps dans \textbf{UEDF} car \textbf{HIPPEROS} n'aura pas encore mis à 
 		jour cette donnée.\newline
 		Si en terme de temps d'accès, cette requête n'est pas très compliquée, il n'en demeure pas moins 
-		que le résultat sera un peu approximatif.
+		que le résultat sera un peu approximatif, puisque l'ordonnanceur n'arrête pas l'exécution des tâches pendant 
+		son exécution. Cela ne change pas fondamentalement le calcul car cela change des valeurs très faibles, 
+		mais cela constitue une adaptation de la théorie en pratique.\newline
 		
 		
 		Une des critiques que l'on peut adresser à l'algorithme \textbf{UEDF} est sa complexité. 
@@ -192,18 +196,50 @@
 		
 		En théorie, lorsqu'on doit parcourir une liste ordonnée et supprimer des éléments régulièrement, 
 		qui ne sont forcément la tête de la liste, le Heap est assez mal adapté. En premier lieu, 
-		nous avons donc implémenté une liste liée. Ces listes sont connues pour avoir de mauvaises 
+		nous avons donc implémenté une liste liée, laissant à une étape ultérieure l'optimisation. 
+		Pour citer cette phrase bien connue de T. Khuhn \todo{citation sur optimisation}.
+		
+		Ces listes sont connues pour avoir de mauvaises 
 		performances, et elles impactaient énormément le temps de calcul d'\textbf{UEDF}. 
 		Nous verrons que par la modification de cette structure, nous avons déjà réduit drastiquement 
-		le temps d'exécution du calcul. Est-ce suffisant pour permettre à \textbf{UEDF} d'être utilisé dans la réalité est 
-		une question à laquelle nous répondrons dans le prochain chapitre.
+		le temps d'exécution du calcul. Est-ce suffisant pour permettre à \textbf{UEDF} d'être utilisé dans la réalité est une question à laquelle nous répondrons dans le prochain chapitre.
 		
-		
-		
+	\subsubsection{Modèle séquentiel}
 	
-	\subsubsection{Complexité/persistance}
+		Le problème que nous venons d'évoquer plus haut concernant le \textbf{RET}. On a besoin de données 
+		à un certain moment qui ne sont pas encore disponibles et qu'\textbf{UEDF} doit calculer lui-même. 
+		
+		Dans l'exposé idéal d'un ordonnanceur, l'exécution s'arrête, l'ordonnanceur fait ses calculs, créé son 
+		ordonnancement, et dispatche les travaux selon les règles qui lui sont propres avant que l'exécution reprenne. 
+		Un ordonnanceur fait bien souvent partie des tâches lui-même, et il faut qu'il soit lui-même ordonnancé, 
+		afin de pouvoir changer l'exécution en cours. Toujours est-il qu'en attendant, l'exécution sur les autres cœurs 
+		n'est pas stoppée, et les données continuent d'évoluer. 
+		
+		Un cas de figure peut se produire, par exemple : au lieu de n'avoir qu'un seul travail à ajouter dans 
+		l'ensemble de tâches actives, on peut très bien avoir ajouté plusieurs travaux ainsi que terminé un travail.
+		Cela ne change pas fondamentalement le calcul : dans le cas de multiples travaux terminés et pas de travaux nouveaux, 
+		il suffit de prendre une décision pour chaque processeur libre (on créé une liste).
+		Dans le cas de multiples ajouts de nouveaux travaux, c'est également simple, puisque l'on 
+		doit de toute façon recalculer Allot pour tout l'ensemble, on fait la même chose. 
+		
+		Ce qui est plus compliqué, c'est s'il y a les deux. Mais s'il y a les deux, on doit 
+		de toute façon recalculer un nouvel ordonnanceur, donc on obtient ce fonctionnement :
+		
+		Si un ou des nouveaux travaux : un booléen indique qu'il faut recalculer Allot. Puis, 
+		on fait l'assignation ensuite.
+		S'il n'y a pas de nouveaux travaux mais qu'il y a un ou des travaux terminés :
+		pour chaque processeur libre, prendre une décision pour la suite.\newline
+		
+		C'est aussi simple que ça, mais cela n'est pas décrit dans le papier et représente une 
+		adaptation du modèle.
+	
+	
+		
 	\subsubsection{WCET}
-	\subsubsection{S'arrête à chaque event}
+		\textbf{UEDF} est assez original par rapport aux autres algorithmes implémentés dans \textbf{HIPPEROS}
+		puisque c'est le seul à utiliser le \textbf{WCET} dans son calcul. En effet, 
+		outre que l'utilisation instantanée 
+	
 	\subsubsection{Utilisation de 100\%, mais et les interruptions alors ?}
 
 \section{La vérification de l'implémentation : tests unitaires simulés avec des sets créés}
