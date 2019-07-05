@@ -46,16 +46,28 @@
 	Ensuite, il est global.\todo{include lien vers glossaire} Or, la plupart des ordonnanceurs 
 	globaux connus et implémentés ne sont pas optimaux (pour la classe périodique), pour la
 	raison exposée au préalable dans ce travail : il est nécessaire d'avoir de la clairvoyance, 
-	c'est à dire une connaissance relative du futur.
+	c'est à dire une connaissance relative du futur.\newline
+	
+	Globalement, \textbf{UEDF} va réserver du temps sur les processeurs pour toutes les tâches actives.
+	Rappelons que pour \textbf{UEDF}, une tâche est considérée comme active entre le moment où la tâche 
+	a relâché un travail, et l'échéance, même si l'exécution de cette tâche a déjà été effectuée.
+	Pour ce faire, un calcul va permettre de réserver du temps sur chaque processeur.
 	
 	\textbf{UEDF} fait face à ce problème en ayant un traitement non pas vertical, mais horizontal
-	de l'ordonnancement des tâches.
+de l'ordonnancement des tâches.	
+
+	\todo{inclure image de slice}
+	À ce stade, aucune décision n'est prise, mais on dispose d'un ensemble de sous-systèmes qui peuvent 
+	être exécutés sur les processeurs à condition qu'$Allot_{ij} > 0$ où $i$ est une tâche, 
+	et $j$ le processeur.
+	
 
 		\subsubsection{Global EDF}
 		Afin de montrer la particularité d'\textbf{UEDF}, nous commençons par rappeler le fonctionnement 
 		d'un ordonnanceur bien connu et que l'on peut considérer comme "vertical" : \textbf{Global EDF}. \todo{link état de l'art}
 		
-		L'algorithme est extrêmement simple. 
+		L'algorithme est extrêmement simple, et pour les besoins de la comparaison, nous rappelons 
+		ici son fonctionnement de façon très résumée.\\
 		À un moment \textit{t}, l'ordonnanceur prend sa décision de cette façon :
 		si un processeur est libre, il se voit attribué le travail de priorité supérieure parmi 
 		tous les travaux actifs. Cela permet d'avoir un algorithme extrêmement simple :\newline
@@ -236,9 +248,26 @@
 	
 		
 	\subsubsection{WCET}
-		\textbf{UEDF} est assez original par rapport aux autres algorithmes implémentés dans \textbf{HIPPEROS}
-		puisque c'est le seul à utiliser le \textbf{WCET} dans son calcul. En effet, 
-		outre que l'utilisation instantanée 
+		\textbf{UEDF} est assez original par rapport aux autres algorithmes implémentés dans \textbf{HIPPEROS} 
+		par rapport à l'utilisation des données. Par exemple, pour le calcul d'\textbf{Allot}, il faut accéder 
+		au \textbf{RET}, qui dépend du \textbf{WCET}, et du temps déjà exécuté. Le \textbf{WCET} n'est pas 
+		utilisé que pour le calcul de l'utilisation, comme par exemple pour Global EDF, qui utilise 
+		le \textbf{WCET }pour ordonner les tâches. Or, cette donnée n'est pas évidente à produire. \newline
+		
+		Notre travail nous amène à nous pencher sur ce sujet, qui dépasse largement la portée de ce travail. 
+		Néanmoins, voici ce que l'on peut retenir pour nos besoins :\\
+		Ce sujet est documenté dans la littérature scientifique. Il n'est pas évident de déterminer le 
+		\textbf{WCET} pour toutes les tâches. Mettons qu'une tâche doive faire des lectures/écritures, 
+		ce temps-là devra être considéré. Il est possible de déterminer le nombre d'instructions, 
+		et donc un temps théorique en fonction de la machine utilisée pour l'exécuter, mais cela dépend 
+		parfois de l'exécution. En effet, certaines opérations, en fonction des données, ne vont pas prendre 
+		le même temps, or, ce que l'on cherche à déterminer et le pire des cas.\newline
+	
+		Pour les besoins de ce travail, nous avons simplifié la question, considérant des tâches 
+		non dépendantes les unes des autres, avons fait un calcul à la main pour évaluer le 
+		nombre d'opérations, et avons vérifié le temps d'exécution des tâches en exécutant un grand nombre 
+		de fois les tâches et pris le pire temps comme valeur de \textbf{WCET}. Cela ne garantit en fait 
+		pas que le \textbf{WCET} soit réellement le pire des cas, mais cela est suffisant pour nos besoins ici.
 	
 	\subsubsection{Utilisation de 100\%, mais et les interruptions alors ?}
 
