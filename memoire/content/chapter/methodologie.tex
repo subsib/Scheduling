@@ -17,29 +17,35 @@
 		\item Il promet des performances intéressantes
 	\end{itemize}
 	
-	Le premier choix a été \textbf{RUN}, puis finalement, son descendant, \textbf{QPS}. 
-	Toutefois, les papiers disponibles étaient assez théoriques et nous n'avons pas réussi à 
-	entrer en contact avec les créateurs de ces algorithmes. Aussi nos questions restaient sans réponses.
-	Et ceci est peut-être une première remarque à faire à propos de la possibilité d'implémenter 
-	un ordonnanceur : avoir un contact possible avec une personne à son origine, voire qui a déjà 
-	réussi une implémentation, rend le travail bien plus simple, voire possible , en fonction des 
-	papiers d'origine.\newline
+	Le premier choix a été \textbf{RUN}, puis finalement, son descendant, \textbf{QPS}. Ces choix étant guidés 
+	sur leur intérêt en tant qu'ordonnanceurs en tant que tels.
+	Toutefois, les papiers disponibles étaient assez théoriques. En outre, nous n'avons pas 
+	trouvé d'implémentation ou de simulation malgré nos recherches.
+	Finalement, nous n'avons pas réussi à entrer en contact avec les créateurs de ces algorithmes. 
 	
+	Aussi nos questions restaient sans réponses, ce qui aurait pu permettre une implémentation 
+	malgré les obstacles précédemment cités.\newline
+	
+	Ceci est peut-être une première remarque à faire à propos de la possibilité d'implémenter 
+	un ordonnanceur : avoir un contact possible avec une personne à son origine -- voire qui a déjà 
+	réussi une implémentation -- rend le travail bien plus simple, en fonction des 
+	explications disponibles à l'origine.\newline
 	
 	
 	Finalement, c'est donc un argument quant à la communication (clarté, possibilité de poser des questions) 
-	qui a fixé le choix. Par conséquent, c'est \textbf{UEDF} qui a été choisi, car il respectait 
+	qui a fixé le choix. Par conséquent, c'est \textbf{UEDF} qui a été sélectionné, car il respectait 
 	les promesses énoncées auparavant en plus d'être très bien documenté, et nous pouvions 
-	poser nos questions directement à son créateur. Néanmoins, ses paramètres sont moins idéaux, 
+	poser nos questions directement à l'un de ses créateurs. Néanmoins, ses paramètres sont moins idéaux, 
 	et nous avons revu nos attentes quant à l'efficacité à la baisse. Cela n'a en rien 
 	modifié l'objet scientifique, à savoir le regard critique et la proposition d'améliorations 
 	afin de stimuler et faciliter des implémentations futures.\newline
 	
 	
-	
 	Nous avons déjà présenté précédemment \textbf{UEDF}, de façon globale et succincte. 
 	Dans cette partie, nous allons un peu plus en profondeur.
 	
+	
+	\subsection{Présentation UEDF}
 	\textbf{UEDF} est un ordonnanceur qui comporte plusieurs intérêts pour une implémentation.
 	Tout d'abord, il est principalement \textit{en ligne}\todo{verif glossaire}, ce qui n'est pas le cas de 
 	la plupart des ordonnanceurs utilisés dans l'industrie.
@@ -62,7 +68,7 @@ de l'ordonnancement des tâches.
 	et $j$ le processeur.
 	
 
-		\subsubsection{Global EDF}
+		\subsubsection{Fonctionnement très général de Global EDF}
 		Afin de montrer la particularité d'\textbf{UEDF}, nous commençons par rappeler le fonctionnement 
 		d'un ordonnanceur bien connu et que l'on peut considérer comme "vertical" : \textbf{Global EDF}. \todo{link état de l'art}
 		
@@ -93,7 +99,7 @@ de l'ordonnancement des tâches.
 		avec cet exemple :
 		\todo{montrer un exemple qui rende Global EDF non efficace pour un job}
 
-		\subsubsection{UEDF}
+		\subsubsection{Fonctionnement détaillé de UEDF}
 		UEDF -- quant à lui -- résout le problème de l'ordonnancement en effectuant un pré-calcul 
 		que l'on pourrait comparer à un partitionnement. Ce calcul est toutefois en ligne et 
 		effectué à chaque fois qu'une tâche relâche un job dans le système.
@@ -142,7 +148,7 @@ de l'ordonnancement des tâches.
 		\todo{ajouter une description plus détaillée, avec pseudo code}
 		
 \section{HIPPEROS}
-	\customhighlight{HIPPEROS} (High Performance Parallel Embedded Real-time Operating Systems)
+	\customhighlight{HIPPEROS} (\textbf{HI}gh \textbf{P}erformance \textbf{P}arallel \textbf{E}mbedded \textbf{R}eal-time \textbf{O}perating \textbf{S}ystems)
 	est un \customhighlight{RTOS} (Real-Time Operating System) développé depuis plusieurs années par une spinoff de l'ULB.
 	Il bénéficie des connaissances apportées par le monde de la recherche dans 
 	le domaine des systèmes critiques avec multic\oe{}urs. Une de ses particularités 
@@ -155,7 +161,6 @@ de l'ordonnancement des tâches.
 	plus ou moins facile, et poser un certain nombre de problèmes. 
 	En résumé, une nouvelle implémentation sur un OS différent 
 	peut elle-aussi apporter à la connaissance générale des détails importants.
-		
 		
 
 \section{Difficultés liées à l'implémentation}
@@ -269,9 +274,24 @@ de l'ordonnancement des tâches.
 		de fois les tâches et pris le pire temps comme valeur de \textbf{WCET}. Cela ne garantit en fait 
 		pas que le \textbf{WCET} soit réellement le pire des cas, mais cela est suffisant pour nos besoins ici.
 	
-	\subsubsection{Utilisation de 100\%, mais et les interruptions alors ?}
+	\subsubsection{Utilisation instantanée et correction}
+
+	
 
 \section{La vérification de l'implémentation : tests unitaires simulés avec des sets créés}
+
+	Une des difficultés rencontrée lors de l'implémentation d'\textbf{UEDF} a été de s'assurer de la correction de l'algorithme. 
+	Aucune autre implémentation n'était accessible sur un autre \textbf{RTOS}, de fait, et donc il n'y avait pas de 
+	comparaison possible. En outre, nous trouvons bien un invariant dans la thèse de G. Nelissen, ce qui assure 
+	que l'algorithme a bien réservé du temps pour toutes les tâches présentes dans l'ensemble 
+	(ce qui doit être vrai pour tout système où $instant\_utilisation <= m$), mais ne garantit pas 
+	qu'il n'y a pas d'erreurs ensuite dans la répartition des sous-systèmes, etc. Pour cela, il faut encadrer 
+	l'exécution d'autres tests. \newline
+
+	Avant de nous lancer dans l'exécution réelle de l'algorithme, une grande partie du travail a consisté 
+	à simuler l'exécution du programme à l'aide de tests unitaires. Ceux-ci ont été pensés de sorte à avoir 
+	une couverture relativement élevée du code (50 \% environ) afin d'éviter les surprises lors du passage 
+	
 
 \section{Tests globaux}
 
