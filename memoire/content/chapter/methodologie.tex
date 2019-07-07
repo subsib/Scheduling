@@ -23,7 +23,7 @@
 	trouvé d'implémentation ou de simulation malgré nos recherches.
 	Finalement, nous n'avons pas réussi à entrer en contact avec les créateurs de ces algorithmes. 
 	
-	Aussi nos questions restaient sans réponses, ce qui aurait pu permettre une implémentation 
+	Aussi nos questions restaient sans réponses, or, elles auraient pu permettre une implémentation 
 	malgré les obstacles précédemment cités.\newline
 	
 	Ceci est peut-être une première remarque à faire à propos de la possibilité d'implémenter 
@@ -33,9 +33,10 @@
 	
 	
 	Finalement, c'est donc un argument quant à la communication (clarté, possibilité de poser des questions) 
-	qui a fixé le choix. Par conséquent, c'est \textbf{UEDF} qui a été sélectionné, car il respectait 
-	les promesses énoncées auparavant en plus d'être très bien documenté, et nous pouvions 
-	poser nos questions directement à l'un de ses créateurs. Néanmoins, ses paramètres sont moins idéaux, 
+	qui a fixé le choix. Par conséquent, c'est \textbf{UEDF} qui a été sélectionné, car 
+	non seulement il respectait 
+	les promesses énoncées auparavant, mais aussi, en plus d'être très bien documenté, 
+	 nous pouvions poser nos questions directement à l'un de ses créateurs. Néanmoins, ses paramètres sont moins idéaux, 
 	et nous avons revu nos attentes quant à l'efficacité à la baisse. Cela n'a en rien 
 	modifié l'objet scientifique, à savoir le regard critique et la proposition d'améliorations 
 	afin de stimuler et faciliter des implémentations futures.\newline
@@ -294,8 +295,29 @@
 	https://hal.archives-ouvertes.fr/hal-01295194/document  sur le scheduler linux
 	\todo{développer cette partie et sourcer}
 	
+
+	L'ordonnanceur n'est pas compté dans les tâches, c'est un module du kernel. Par conséquent, il n'est pas comptabilisé 
+	dans l'utilisation instantanée. Il fait partie de ce tas que l'on nomme "overhead" et dans lequel 
+	on met tout ce qui prend du temps sans être régulier. 
+	Migrations, ordonnanceur, interruptions... Ces temps ne font pas partie du système, mais ils occupent
+	pourtant du temps.
 	
+	Ce n'est pas la seule tâche qui n'est pas comptabilisée dans l'ensemble, puisqu'on peut définir des 
+	interruptions côté utilisateur. 
+	Concrètement, on imagine une sonde qui envoie très rarement des données. On ne réserve 
+	pas de temps, on vérifie régulièrement qu'elle a des données à traiter, et si c'est le cas, on les traite.\\
+	C'est un cas d'utilisation du system domain : garantir que les données seront traitées vite, dès qu'elles arrivent, 
+	mais ne pas attribuer une tâche pour le faire régulièrement.
+	Dans un système d'exploitation, l'ordonnanceur est chargé d'ordonnancer les tâches selon leurs priorités. 
+	Pour ce faire, la norme \textbf{POSIX} définit des niveaux de priorité pour les threads. 
+	\textbf{HIPPEROS }se base sur la même approche, et définit plusieurs niveaux également. C'est ainsi 
+	qu'un thread peut être de scope system, et dans ce cas, sa priorité est haute, ou de priorité 
+	moindre, et il sera ordonnancé par \textbf{UEDF}.\newline
 	
+	Tout ceci montre les limites d'un modèle où l'on charge l'utilisation des processeurs à 100\% avant de 
+	passer au suivant. Certes, l'utilisation sera optimisée, dans le sens où l'on 
+	pourra utiliser moins de processeurs, mais en revanche, on 
+	répartir moins bien la somme de travail, et atteint très vite une somme critique pour les processeurs utilisés.
 
 \section{La vérification de l'implémentation : tests unitaires simulés avec des sets créés}
 
