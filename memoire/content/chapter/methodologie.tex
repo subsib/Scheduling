@@ -1,10 +1,28 @@
 \section{Choix de l'ordonnanceur}
 
-	\subsection{Pourquoi UEDF}
+	\subsection{Enjeux du choix de l'ordonnanceur}
+
+	L'état de l'art nous a montré un vaste choix d'algorithmes qui présentent 
+	des intérêts différents, et pour un certain nombre, 
+	n'ayant pas pas encore été implémentés. \newline
 	
-	L'état de l'art nous a montré un vaste choix d'algorithmes intéressants pour différentes 
-	raisons et n'étant pas encore implémentés. La première étape du travail consiste donc 
-	à départager ces algorithmes pour arrêter notre choix sur l'un d'entre eux.
+	La première étape du travail consiste donc à départager ces algorithmes pour arrêter notre choix sur l'un d'entre eux. Ceci nécessite de clarifier nos attentes concernant le choix de l'ordonnanceur.\newline
+	
+	Pour rappel, les objectifs de ce travail sont de procéder à une implémentation dans 
+	un \textbf{RTOS} dans plusieurs buts. 
+	D'abord, en implémentant un algorithme qui n'a pas d'implémentation connue, nous 
+	pouvons vérifier que ce passage de la théorie à la pratique est possible (car cela n'est pas 
+	toujours évident), nous pouvons également mesurer ses performances, et plus largement, nous 
+	pouvons émettre des analyses afin que des chercheurs puissent envisager certains points à l'avenir 
+	lorsqu'ils proposent de nouveaux algorithmes. \newline
+	 
+	Il est donc primordial de se tourner vers un algorithme qui pourra apporter sur le plan de 
+	l'expérience des analyses intéressantes, c'est à dire exploitables pour la communauté.\newline
+	
+	\todo{complete here}	
+	
+
+	\subsection{Pourquoi UEDF}
 	
 	Le choix le plus rationnel vis à vis des objectifs devrait se faire en fonction des 
 	promesses théoriques de performance et de stabilité. 
