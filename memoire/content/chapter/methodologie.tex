@@ -13,15 +13,14 @@
 	D'abord, en implémentant un algorithme qui n'a pas d'implémentation connue, nous 
 	pouvons vérifier que ce passage de la théorie à la pratique est possible (car cela n'est pas 
 	toujours évident), nous pouvons également mesurer ses performances. 
-	Plus largement, nous pouvons émettre des analyses afin que des chercheurs puissent envisager certains points à l'avenir 
-	lorsqu'ils proposent de nouveaux algorithmes. \newline
+	Plus largement, nous pouvons émettre des propositions à l'attention de chercheurs 
+	afin qu'ils puissent envisager de développer certains points lorsqu'ils proposent de nouveaux algorithmes. \newline
 	
 	Il est donc primordial de se tourner vers un algorithme qui pourra apporter sur le plan de 
-	l'expérience des analyses intéressantes, c'est à dire exploitables pour la communauté.\newline
+	l'expérience des analyses intéressantes, c'est à dire exploitables pour la communauté. 
+	Insistons peut-être sur le fait que des résultats ne sont pas nécessairement chiffrés mais 
+	peuvent être des constats qualitatifs quant à la mise en œuvre elle-même.\newline
 	
-	\todo{complete here}	
-	
-
 	\subsection{Pourquoi UEDF}
 	
 	Le choix le plus rationnel vis à vis des objectifs devrait se faire en fonction des 
@@ -29,32 +28,56 @@
 	En effet, pour faire avancer la connaissance et permettre d'augmenter la confiance des utilisateurs 
 	potentiels, il est judicieux de choisir un algorithme dont on attend au moins ceci :
 	\begin{itemize}
-		\item Un algorithme global qui minimise le nombre de migrations
+		\item Un algorithme global
+		\item Qui minimise le nombre de migrations
 		\item L'ordonnanceur est en ligne, optimal pour la classe périodique
 		\item Il n'a pas bénéficié d'une implémentation sur un \textbf{RTOS}
 		\item Il promet des performances intéressantes
 	\end{itemize}
 	
-	Le premier choix a été \textbf{RUN}, puis finalement, son descendant, \textbf{QPS}. Ces choix étant guidés 
-	sur leur intérêt en tant qu'ordonnanceurs en tant que tels.
-	Toutefois, l'aspect très théorique des papiers le présentant a rendu la première phase de travail difficile. 
+	Le premier choix a été \hyperref[RUN]{RUN}[\ref*{RUN}], puis finalement, son descendant, \hyperref[QPS]{QPS}[\ref*{QPS}]. Ces choix étant guidés 
+	sur leur intérêt d'ordonnanceurs en tant que tels.
+	Toutefois, l'aspect très théorique des papiers les présentant a rendu la première phase de travail difficile. 
 	En outre, nous n'avons pas trouvé d'implémentation ou de simulation malgré nos recherches.
 	Finalement, nous n'avons pas réussi à entrer en contact avec les créateurs de ces algorithmes. \newline
 	
 	En effet, la possibilité de contacter les créateurs d'un algorithme peut singulièrement améliorer le 
-	travail dans le sens que certaines partie peuvent être mal comprises, et donc mal implémentées. 
-	Il est précieux de pouvoir vérifier l'interprétation de certaines explications auprès du 
-	créateur lui-même. \newline
-	Ceci est peut-être une première remarque à faire à propos de la possibilité d'implémenter 
-	un ordonnanceur : avoir un contact possible avec une personne à son origine -- voire qui a déjà 
-	réussi une implémentation -- rend le travail bien plus simple. \newline
+	travail. Cela étant, cette nécessité découle du caractère très théorique de la littérature disponible
+	et du manque fréquent de prise en considération des contraintes pratiques d'implémentation. 
+	Pour illustrer cette remarque, un exemple assez commun est la non prise en considération 
+	du fait que le fonctionnement des ordinateurs est évidemment discret, là où les 
+	calculs présentés se basent sur un fonctionnement continu.
+	Toute mise en pratique nécessite de faire des arrondis, ceux-ci doivent être cohérents.\newline
+
+\todo{ajouter surcout dans le glossaire}
+	Nous pouvons aussi évoquer les moments où l'algorithme doit faire des calculs. 
+	Dans un simulateur, ou dans une vision idéalisée de l'ordonnanceur, l'on peut arrêter l'exécution 
+	quand on le veut, avec des temps de surcoût [\ref*{surcout}]négligeables. Dans la réalité, comme on le verra, cela 
+	n'est pas le cas. 
+	Les auteurs qui connaissent bien ce fonctionnement auront la possibilité de devancer certaines questions.
+	Néanmoins, dans le cas d'un papier très théorique qui s'emploie à faire des démonstrations mathématiques, 
+	cela n'apparaîtra pas forcément.\newline
 	
+	\textbf{UEDF} bénéficie quant à lui d'une littérature qui développe mieux l'aspect pratique, et cela a orienté notre choix.\newline
 	
-	Finalement, c'est donc un argument quant à la communication (clarté, possibilité de poser des questions) 
+	\todo{déplacer ça ailleurs}
+	De plus, il y a des difficultés particulières liées au fait qu'un ordonnanceur ne soit qu'une partie d'un ensemble : 
+	un \textbf{RTOS}. En effet, l'ordonnanceur n'est qu'une partie du kernel, et dépend de l'implémentation 
+	d'autres parties du kernel, comme du dispatcher. Le travail d'implémentation d'un ordonnanceur ne consiste 
+	pas à modifier tout le RTOS, mais à ajouter une partie du kernel. On ne peut 
+	pas considérer l'ordonnanceur comme une tâche indépendante du reste du kernel, cela 
+	implique un certain nombre de contraintes et de difficultés.\newline
+	
+	En d'autres termes, l'implémentation d'un ordonnanceur peut s'avérer une tâche bien compliquée selon que l'auteur du papier décrivant l'algorithme 
+	ait une bonne connaissance des \textbf{RTOS} ou pas. 
+	\newline
+
+	
+	Finalement, c'est un argument quant à la communication (clarté, possibilité de poser des questions) 
 	qui a fixé le choix. Par conséquent, c'est \textbf{UEDF} qui a été sélectionné, car 
 	non seulement il respectait 
 	les promesses énoncées auparavant, mais aussi, en plus d'être très bien documenté, 
-	 nous pouvions poser nos questions directement à l'un de ses créateurs. Néanmoins, ses paramètres sont moins idéaux, 
+	nous pouvions poser nos questions directement à l'un de ses créateurs. Néanmoins, ses paramètres sont moins idéaux, 
 	et nous avons revu nos attentes quant à l'efficacité à la baisse. Cela n'a en rien 
 	modifié l'objet scientifique, à savoir le regard critique et la proposition d'améliorations 
 	afin de stimuler et faciliter des implémentations futures, mais cela a sans doute 
@@ -97,14 +120,13 @@
 
 		\subsubsection{Fonctionnement très général de Global EDF}
 		Afin de montrer la particularité d'\textbf{UEDF}, nous commençons par rappeler le fonctionnement 
-		d'un ordonnanceur bien connu et que l'on peut considérer comme "vertical" : \textbf{Global EDF}. \todo{link état de l'art}
+		d'un ordonnanceur bien connu et que l'on peut considérer comme "vertical" : \hyperref[GlobalEDF]{Global EDF}\ref*{GlobalEDF}.
 		
 		L'algorithme est extrêmement simple, et pour les besoins de la comparaison, nous rappelons 
 		ici son fonctionnement de façon très résumée.\\
 		À un moment \textit{t}, l'ordonnanceur prend sa décision de cette façon :
 		si un processeur est libre, il se voit attribué le travail de priorité supérieure parmi 
-		tous les travaux actifs. Cela permet d'avoir un algorithme extrêmement simple :\newline
-		
+		tous les travaux actifs. Cela permet d'avoir un algorithme simple et peu gourmand :\newline
 		
 		On conserve une structure de données 
 		ordonnée, comme un \textbf{Heap} \todo{glossaire} qui contient tous les travaux
