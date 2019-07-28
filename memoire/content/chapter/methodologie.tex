@@ -12,10 +12,10 @@
 	un \textbf{RTOS} dans plusieurs buts. 
 	D'abord, en implémentant un algorithme qui n'a pas d'implémentation connue, nous 
 	pouvons vérifier que ce passage de la théorie à la pratique est possible (car cela n'est pas 
-	toujours évident), nous pouvons également mesurer ses performances, et plus largement, nous 
-	pouvons émettre des analyses afin que des chercheurs puissent envisager certains points à l'avenir 
+	toujours évident), nous pouvons également mesurer ses performances. 
+	Plus largement, nous pouvons émettre des analyses afin que des chercheurs puissent envisager certains points à l'avenir 
 	lorsqu'ils proposent de nouveaux algorithmes. \newline
-	 
+	
 	Il est donc primordial de se tourner vers un algorithme qui pourra apporter sur le plan de 
 	l'expérience des analyses intéressantes, c'est à dire exploitables pour la communauté.\newline
 	
@@ -37,17 +37,17 @@
 	
 	Le premier choix a été \textbf{RUN}, puis finalement, son descendant, \textbf{QPS}. Ces choix étant guidés 
 	sur leur intérêt en tant qu'ordonnanceurs en tant que tels.
-	Toutefois, les papiers disponibles étaient assez théoriques. En outre, nous n'avons pas 
-	trouvé d'implémentation ou de simulation malgré nos recherches.
-	Finalement, nous n'avons pas réussi à entrer en contact avec les créateurs de ces algorithmes. 
+	Toutefois, l'aspect très théorique des papiers le présentant a rendu la première phase de travail difficile. 
+	En outre, nous n'avons pas trouvé d'implémentation ou de simulation malgré nos recherches.
+	Finalement, nous n'avons pas réussi à entrer en contact avec les créateurs de ces algorithmes. \newline
 	
-	Aussi nos questions restaient sans réponses, or, elles auraient pu permettre une implémentation 
-	malgré les obstacles précédemment cités.\newline
-	
+	En effet, la possibilité de contacter les créateurs d'un algorithme peut singulièrement améliorer le 
+	travail dans le sens que certaines partie peuvent être mal comprises, et donc mal implémentées. 
+	Il est précieux de pouvoir vérifier l'interprétation de certaines explications auprès du 
+	créateur lui-même. \newline
 	Ceci est peut-être une première remarque à faire à propos de la possibilité d'implémenter 
 	un ordonnanceur : avoir un contact possible avec une personne à son origine -- voire qui a déjà 
-	réussi une implémentation -- rend le travail bien plus simple, en fonction des 
-	explications disponibles à l'origine.\newline
+	réussi une implémentation -- rend le travail bien plus simple. \newline
 	
 	
 	Finalement, c'est donc un argument quant à la communication (clarté, possibilité de poser des questions) 
@@ -57,23 +57,31 @@
 	 nous pouvions poser nos questions directement à l'un de ses créateurs. Néanmoins, ses paramètres sont moins idéaux, 
 	et nous avons revu nos attentes quant à l'efficacité à la baisse. Cela n'a en rien 
 	modifié l'objet scientifique, à savoir le regard critique et la proposition d'améliorations 
-	afin de stimuler et faciliter des implémentations futures.\newline
-	
-	
-	Nous avons déjà présenté précédemment \textbf{UEDF}, de façon globale et succincte. 
-	Dans cette partie, nous allons un peu plus en profondeur.
+	afin de stimuler et faciliter des implémentations futures, mais cela a sans doute 
+	diminué les performances finales obtenues, tel que nous le verrons dans la partie Résultats.\newline
 	
 	
 	\subsection{Présentation UEDF}
+	
+	Nous avons déjà présenté précédemment \textbf{UEDF}, de façon globale et succincte. 
+	Dans cette partie, nous allons détailler \textbf{UEDF} afin d'en avoir une meilleure compréhension. Cela peut 
+	permettre de mesurer la différence entre les attentes théoriques et les résultats obtenus.\newline
+
 	\textbf{UEDF} est un ordonnanceur qui comporte plusieurs intérêts pour une implémentation.
-	Tout d'abord, il est principalement \textit{en ligne}\todo{verif glossaire}, ce qui n'est pas le cas de 
-	la plupart des ordonnanceurs utilisés dans l'industrie.
-	Ensuite, il est global.\todo{include lien vers glossaire} Or, la plupart des ordonnanceurs 
+	Tout d'abord, il est principalement \hyperref[inline]{en ligne}, ce qui n'est pas le cas de 
+	la plupart des ordonnanceurs utilisés dans l'industrie. 
+	Ensuite, il est global. Or, la plupart des ordonnanceurs 
 	globaux connus et implémentés ne sont pas optimaux (pour la classe périodique), pour la
 	raison exposée au préalable dans ce travail : il est nécessaire d'avoir de la clairvoyance, 
 	c'est à dire une connaissance relative du futur.\newline
 	
-	Globalement, \textbf{UEDF} va réserver du temps sur les processeurs pour toutes les tâches actives.
+	Le fonctionnement d'\textbf{UEDF} a brièvement été décrit mais il semble nécessaire d'illustrer 
+	mieux son fonctionnement ici, afin de comprendre les difficultés ou particularités liées 
+	à son implémentation.\newline
+	
+	
+	
+	, \textbf{UEDF} va réserver du temps sur les processeurs pour toutes les tâches actives.
 	Rappelons que pour \textbf{UEDF}, une tâche est considérée comme active entre le moment où la tâche 
 	a relâché un travail, et l'échéance, même si l'exécution de cette tâche a déjà été effectuée.
 	Pour ce faire, un calcul va permettre de réserver du temps sur chaque processeur.
@@ -274,9 +282,9 @@
 	\subsubsection{WCET}
 		\textbf{UEDF} est assez original par rapport aux autres algorithmes implémentés dans \textbf{HIPPEROS} 
 		par rapport à l'utilisation des données. Par exemple, pour le calcul d'\textbf{Allot}, il faut accéder 
-		au \textbf{RET}, qui dépend du \textbf{WCET}, et du temps déjà exécuté. Le \textbf{WCET} n'est pas 
-		utilisé que pour le calcul de l'utilisation, comme par exemple pour Global EDF, qui utilise 
-		le \textbf{WCET }pour ordonner les tâches. Or, cette donnée n'est pas évidente à produire. \newline
+		au \textbf{RET} \todo{inclure lien vers RET}, qui dépend du \textbf{WCET}, et du temps déjà exécuté. 
+		Le \textbf{WCET}, dans UEDF, est une donnée centrale. Elle est utilisée dans beaucoup de calculs, et 
+		son importance est grande pour le résultat. Or, cette donnée n'est pas évidente à produire. \newline
 		
 		Notre travail nous amène à nous pencher sur ce sujet, qui dépasse largement la portée de ce travail. 
 		Néanmoins, voici ce que l'on peut retenir pour nos besoins :\\

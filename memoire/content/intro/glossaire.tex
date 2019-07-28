@@ -7,7 +7,8 @@
 		\item \textbf{Temps de réalisation}\label{tempsderealisation} : C'est le moment $t$ où une tâche $\tau$ peut commencer à être exécutée.
 		\item \textbf{Temps de réponse\label{Response Time}} : Temps maximum nécessaire à la réalisation de la tâche 
 		entre le temps de réalisation et Fin.
-		\item \textbf{Worst Case Execution Time}\label{wcet} : Afin de faciliter les calculs et l'abstraction du problème, l'on pose habituellement que le temps considéré d'exécution de 
+		\item \textbf{Worst Case Execution Time}\label{wcet} : Afin de faciliter les calculs et l'abstraction du problème, 
+		l'on pose habituellement que le temps considéré d'exécution de 
 		la tâche est le pire temps. Cela permet d'envisager le pire scénario, et ainsi 
 		de s'assurer que si celui-ci est possible, alors dans de meilleures conditions, 
 		la faisabilité est conservée. La notation utilisée dans le reste de ce document 
@@ -60,7 +61,7 @@
 	\end{itemize}
 	
 	\subsection{Migration}\label{migration}
-	Une migration est le transfert d'une tâche ou d'un travail d’un processeur vers un autre.
+	Une migration est le transfert d'une tâche ou d'un travail d’un processeur vers un autre. 
 	
 	\subsection{Système de tâches}
 	Un système de tâches et un ensemble de tâches devant être exécutées conjointement. 
@@ -156,9 +157,10 @@
 	Dans le reste de ce document, les ordonnanceurs présentés sont tous économes selon cette définition.
 	
 	\subsection{En ligne, hors ligne}
+	\label{inline}
 	Un ordonnanceur peut faire ses opérations d'ordonnancement de deux façons : \medskip
 	\begin{itemize}
-		\item Durant le runtime, on parlera d'opérations en ligne
+		\item Durant l'exécution, on parlera d'opérations en ligne
 		\item Avant l'exécution, on parlera d'opérations hors ligne
 	\end{itemize}	
 	
