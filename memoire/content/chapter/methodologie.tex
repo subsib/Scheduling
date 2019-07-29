@@ -202,54 +202,59 @@
 	En théorie, l'on est capable de connaître la valeur exacte d'$allot_{ij}$ au temps $t$. En pratique, 
 	un système d'exploitation ne permet pas forcément cela, nous en reparlerons ultérieurement.	\newpage
 	
+	\subsection{Comparaison avec Global-EDF}
 	
-	\subsection{Comparaison avec Globa-EDF}
+	Nous avons choisi de comparer \textbf{UEDF} à \textbf{Global-EDF} [\ref*{GlobalEDF}]. 
+	La raison de ce choix est simple : 
+	cet algorithme est implémenté sur le RTOS HIPPEROS et il est global. Les autres 
+	ordonnanceurs disponibles sur HIPPEROS sont pour la plupart partitionnés.
+	Dans la famille des ordonnanceurs globaux se trouve Global-EDF ou également Global-FTP. 
+	Néanmoins pour ce dernier, le fonctionnement est très différent et impose de choisir 
+	nous-mêmes les priorités sur les tâches. Aussi nous limitons-nous à Global-EDF.\newline
 	
-	Nous avons choisi de comparer \textbf{UEDF} à \textbf{Global-EDF}. La raison de ce choix est simple : 
-	cet algorithme est implémenté sur le RTOS HIPPEROS. 
-	
-	Mais ces deux algorithmes ont de grandes divergences, notamment Global-EDF 
+	Ces deux algorithmes ont toutefois de grandes différences. Global-EDF 
 	ne permet pas -- même théoriquement -- d'atteindre l'optimalité. Ceci s'explique par le fait que 
-	Global-EDF peut être considéré comme "vertical" là où UEDF serait "horizontal". 
+	Global-EDF peut être considéré comme "vertical" là où UEDF serait "horizontal", et ce faisant, 
+	n'a pas de "vision de l'avenir", autrement nommée "clairvoyance".
 	
-		\subsubsection{Fonctionnement très général de Global EDF}
-		Afin de montrer la particularité d'\textbf{UEDF}, nous commençons par rappeler le fonctionnement 
-		d'un ordonnanceur bien connu et que l'on peut considérer comme "vertical" : \hyperref[GlobalEDF]{Global EDF}\ref*{GlobalEDF}.
-		
-		L'algorithme est extrêmement simple, et pour les besoins de la comparaison, nous rappelons 
-		ici son fonctionnement de façon très résumée.\\
-		À un moment \textit{t}, l'ordonnanceur prend sa décision de cette façon :
-		si un processeur est libre, il se voit attribué le travail de priorité supérieure parmi 
-		tous les travaux actifs. Cela permet d'avoir un algorithme simple et peu gourmand :\newline
-		
-		On conserve une structure de données 
-		ordonnée, comme un \textbf{Heap} \todo{glossaire} qui contient tous les travaux
-		devant être exécutés. À chaque fois que l'ordonnanceur doit prendre 
-		une décision, il lui suffit de prendre le travail de priorité supérieure et 
-		de l'exécuter sur le processeur libre.
-		
-		L'algorithme ne calcule rien à propos de l'avenir, sa décision au moment \textit{t}
-		n'est prise qu'en considérant les travaux à exécuter et la liberté d'un 
-		processeur. Il se peut qu'un autre ordonnancement plus efficace 
-		réussisse à ordonnancer un système que \textbf{Global EDF} ne puisse pas résoudre...
-		Cela rend tout de même l'ordonnanceur "efficace" en terme de calculs, 
-		puisqu'il comporte un Heap, de complexité $O(n\log n)$, qui sera mis à jour 
-		à chaque changement d'état du travail (relâché -> inséré, 
-		exécuté -> retiré du Heap).
-		
-		En revanche, ce fonctionnement ne permet pas à cet ordonnanceur d'atteindre 
-		l'optimalité pour la classe de systèmes périodiques, comme on peut le voir 
-		avec cet exemple :
-		\todo{montrer un exemple qui rende Global EDF non efficace pour un job}
+	\subsubsection{Fonctionnement très général de Global EDF}
+	Afin de montrer la particularité d'\textbf{UEDF}, nous commençons par rappeler le fonctionnement 
+	d'un ordonnanceur bien connu et que l'on peut considérer comme "vertical" : \hyperref[GlobalEDF]{Global EDF}\ref*{GlobalEDF}.
+	
+	L'algorithme est extrêmement simple, et pour les besoins de la comparaison, nous rappelons 
+	ici son fonctionnement de façon très résumée.\\
+	À un moment \textit{t}, l'ordonnanceur prend sa décision de cette façon :
+	si un processeur est libre, il se voit attribué le travail de priorité supérieure parmi 
+	tous les travaux actifs. Cela permet d'avoir un algorithme simple et peu gourmand :\newline
+	
+	On conserve une structure de données 
+	ordonnée, comme un \textbf{Heap} \todo{glossaire} qui contient tous les travaux
+	devant être exécutés. À chaque fois que l'ordonnanceur doit prendre 
+	une décision, il lui suffit de prendre le travail de priorité supérieure et 
+	de l'exécuter sur le processeur libre.
+	
+	L'algorithme ne calcule rien à propos de l'avenir, sa décision au moment \textit{t}
+	n'est prise qu'en considérant les travaux à exécuter et la liberté d'un 
+	processeur. Il se peut qu'un autre ordonnancement plus efficace 
+	réussisse à ordonnancer un système que \textbf{Global EDF} ne puisse pas résoudre...
+	Cela rend tout de même l'ordonnanceur "efficace" en terme de calculs, 
+	puisqu'il comporte un Heap, de complexité $O(n\log n)$, qui sera mis à jour 
+	à chaque changement d'état du travail (relâché -> inséré, 
+	exécuté -> retiré du Heap).
+	
+	En revanche, ce fonctionnement ne permet pas à cet ordonnanceur d'atteindre 
+	l'optimalité pour la classe de systèmes périodiques, comme on peut le voir 
+	avec cet exemple :
+	\todo{montrer un exemple qui rende Global EDF non efficace pour un job}
 
+
+	Nous appelons ce fonctionnement "horizontal" car au lieu de remplir 
+	en priorité les processeurs "libres", UEDF va remplir les 
+	processeurs par ordre. Ainsi, pour une utilisation inférieure à 100\%, 
+	on n'aura besoin que d'un seul processeur. Pour 200, 2 processeurs, bref, 
+	pour une utilisation de m * 100 \%, on utilisera m processeurs.
 	
-		Nous appelons ce fonctionnement "horizontal" car au lieu de remplir 
-		en priorité les processeurs "libres", UEDF va remplir les 
-		processeurs par ordre. Ainsi, pour une utilisation inférieure à 100\%, 
-		on n'aura besoin que d'un seul processeur. Pour 200, 2 processeurs, bref, 
-		pour une utilisation de m * 100 \%, on utilisera m processeurs.
-		
-		\todo{ajouter une description plus détaillée, avec pseudo code}
+	\todo{ajouter une description plus détaillée, avec pseudo code}
 		
 \section{HIPPEROS}
 	\customhighlight{HIPPEROS} (\textbf{HI}gh \textbf{P}erformance \textbf{P}arallel \textbf{E}mbedded \textbf{R}eal-time \textbf{O}perating \textbf{S}ystems)

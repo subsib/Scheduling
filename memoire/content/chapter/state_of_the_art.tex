@@ -65,7 +65,7 @@
 	
 	
 	\subsection{Ordonnanceurs à priorité fixe sur travail}
-	\subsection{Earliest Deadline First}
+	\subsection{Earliest Deadline First}\label{EDF}
 	\customhighlight{E}arliest \customhighlight{D}eadline \customhighlight{F}irst (EDF) est un ordonnanceur 
 	qui a été introduit en 1973, dans le même article que celui où est présenté Rate Monotonic 
 	par Lui et Layland \cite{liu_scheduling_1973}. 
@@ -476,13 +476,11 @@
 	systèmes périodiques. Ses performances ne sont à ce jour pas bien connues en pratique. 
 	La liste proposée ici n'est pas exhaustive, un très grand nombre de propositions existe actuellement. 
 	
-	\subsection{Global EDF}\label{GlobalEDF}
-	\todo{describe}
-	
 	
 	\subsection{EDF-k}
 	En 2003, Goossens et al. proposent l'algorithme \textit{EDF-k} \cite{goossens_priority-driven_2003}, 
 	dont l'idée principale est d'être basé sur la priorité. 
+	
 	La définition de \textit{Priority-driven Algorithm} (axé sur les priorités) 
 	est donnée par Ha et Liu en 1994 :
 	\begin{mydef}
@@ -513,6 +511,20 @@
 	Des travaux récents continuent d'implémenter des versions d'\textit{EDF} avec stratégie 
 	globale, par exemple \textit{GEDF} \cite{li_global_2015} \cite{nelissen_geoffrey_efficient_2013}, donnant lieu à \textit{PGEDF}. Cette 
 	branche continue donc d'être étudiée et présente des intérêts.
+	
+	\subsection{Global-EDF}\label{GlobalEDF}
+	Cet algorithme est une généralisation d'EDF [\ref*{EDF}] en version multicœur. Dans Global-EDF, on 
+	considère un ensemble de tâches ordonné par échéances, 
+	où la priorité $p$ de la tâche $\tau_i$ est plus élevée si son échéance est plus proche.
+	Pour $tau_{1} : d(t) = a$ et $tau_{2} : d(t) = b$, si $a < b$, alors $p(\tau_1) > p(\tau_2)$.\newline
+	
+	La décision d'ordonnancement est prise à l'instant $t$ de cette façon :
+	
+	Si un cœur est disponible, il effectue la tâche de priorité supérieure qui reste à effectuer.
+	L'algorithme ne permet pas de prévoir, aussi il n'est pas optimal, et dans le cas périodique, 
+	il faudra s'assurer de la faisabilité du système sur un temps au moins aussi long que 
+	l'hyper-période [\ref*{hyperperiode}]
+	
 	
 	\subsection{U-EDF}
 	\textit{U-EDF} est présenté en 2011 par Nelissen et al. \cite{nelissen_reducing_2011}. Il n'est pas \og \textit{P-Fair}\fg{} , et se démarque donc d'une bonne partie des algorithmes 
