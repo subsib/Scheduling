@@ -18,7 +18,7 @@
 		Une tâche périodique est une tâche qui génère régulièrement des travaux.  
 		Formellement, une tâche périodique est définie par un 4-uplet $(O, T, D, C)$ où \medskip
 		\begin{itemize}
-			\item \textbf{$O$} : est l'\og offset\fg{}, c'est-à-dire le temps que met la tâche à générer un premier travail.
+			\item \textbf{$O$} : est l'\og offset\fg{}\label{offset}, c'est-à-dire le temps que met la tâche à générer un premier travail.
 			\item \textbf{$T$} : est la période, c'est-à-dire le temps qui sépare deux générations de travaux par la tâche. 
 			Le premier travail est généré à l'instant $O$. Soit $i$, le nombre de fois que la tâche a été générée depuis le temps $0$,			
 			 alors pour $i \in \mathbb{N}$, $\forall i \in \{0, \infty \}$,  $t = O + i\times T$ 
@@ -75,7 +75,7 @@
 	Lorsque les \textit{offset} ne sont pas tous de 0, le système est dit à départs \og différés\fg{}, 
 	on parle également de système asynchrone.
 	
-	\subsection{Hyperpériode}
+	\subsection{Hyperpériode}\label{hyperperiode}
 	L'hyperpériode est un intervalle de temps qui est défini de façon formelle comme suit :\medskip
 	$P = ppcm\{T_i\} \in \{1,... m\}\}$
 	
@@ -220,4 +220,6 @@
 	plus grand (ou le plus petit selon ordre) et de nécessiter un temps de $\log(n)$ à chaque ajout/retrait d'un 
 	élément. Cette structure de données peut être utilisée dans certaines implémentations afin de gagner du temps par rapport à une 
 	liste triée de complexité supérieure.
+	
+	
 	

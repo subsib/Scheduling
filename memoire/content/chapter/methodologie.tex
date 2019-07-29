@@ -90,7 +90,7 @@
 	Dans cette partie, nous allons détailler \textbf{UEDF} afin d'en avoir une meilleure compréhension. Cela 
 	permettra de mesurer la différence entre les attentes théoriques et les résultats obtenus.\newline
 
-	\textbf{UEDF} est un ordonnanceur qui comporte plusieurs intérêts pour une implémentation.
+	Nous avons évoqué les intérêts de l'implémentation d'\textbf{UEDF} :\\
 	Tout d'abord, il est principalement \hyperref[inline]{en ligne}, ce qui n'est pas le cas de 
 	la plupart des ordonnanceurs utilisés dans l'industrie.
 	Ensuite, il est global. Or, la plupart des ordonnanceurs 
@@ -98,18 +98,86 @@
 	raison exposée au préalable dans ce travail : il est nécessaire d'avoir de la clairvoyance, 
 	c'est à dire une connaissance relative du futur.\newline
 	
-	Pour décrire \textbf{UEDF}, nous allons le décomposer en étapes.\newline
+	Pour analyser son fonctionnement, nous devons poser quelques définitions. Aussi, par souci de clarté, nous posons que 
+	l'offset [\ref*{offset}] de la tâche est nul dans la partie qui suit.\\
+	\paragraph{Tâche active}\label{tacheactive}
+	Ce qui définit une tâche "active" peut différer selon le contexte. Dans l'approche d'\textbf{UEDF}, une tâche est 
+	considérée comme active si un travail a été relâché et que ce travail n'a pas encore atteint son échéance. 
+	Un travail $\tau_i$ est actif s'il a été relâché sur ou après $t$ et que $d_i(t) > t$.
+	Une tâche peut donc 
+	être considérée comme active même si l'exécution d'un travail en cours est terminée. 
+	Concrètement, si une tâche est périodique à échéance implicite [\ref*{echeancesurrequete}], elle est active en permanence dès le 
+	premier relâchement de travail. Le travail sera actif durant son relâchement jusqu'à ce que $t >= d_i(t)$, où 
+	une nouvelle instance de la tâche $i$ sera relâchée.
 	
+	
+	\paragraph{Ensemble des tâches actives}\label{ensembledestachesactives}
+	Dans \textbf{UEDF}, on effectue le parcours d'une liste des tâches actuellement actives dans le système, 
+	cette liste étant ordonnée par échéances. 
+	 L'ensemble des tâches actives est écrit $A(t)$ dans les formules qui suivent.\newline
+	
+	Pour décrire \textbf{UEDF}, nous allons le décomposer en étapes.
+	À chaque fois qu'un nouveau travail est relâché, cela va provoquer le calcul suivant :\newline
 	\paragraph{Allot}
-	Les tâches actives sont ordonnées dans une liste. La priorité est définie selon l'échéance, 
+	Les tâches actives\ref*{tacheactive} sont ordonnées dans une liste. La priorité est définie selon l'échéance, 
 	la plus petite étant la plus prioritaire, comme dans \textbf{EDF} [\ref*{EDF}].
 	Dans cette phase, l'algorithme va "réserver" des tranches de temps d'exécution des tâches sur les 
 	processeurs, cela en calculant une valeur : \\
-	$allot[i][j]$ pour $i \in \{0, nb\_de\_taches - 1\}$, pour $j \in \{0, nb\_processeurs - 1\}$
-	La valeur $allot[i][j]$ représente le temps d'exécution de la tâche $i$ réservé sur le processeur $j$.\newline
+	$allot_{ij}$ pour $i \in \{0, nb\_de\_taches - 1\}$, pour $j \in \{0, nb\_processeurs - 1\}$
+	La valeur $allot_{ij}$ représente le nombre d'unités d'exécution de la tâche $i$ réservé sur le processeur $j$.\newline
+	Si cette valeur est positive, alors le temps $allot_{ij}$ du travail $i$ est réservé sur le 
+	processeur $j$. Si cette valeur est égale à $0$, aucun temps n'est réservé 
+	à l'exécution de la tâche $i$ sur le processeur $j$. Cela permet la constitution d'une liste, 
+	\textbf{Eligible}.\newline
 	
-	\includegraphics[scale=cale=1]{images/uedf_step0}
+	Les calculs sont longuement décrits et expliqués dans la thèse de G. Nelissen \cite{nelissen_u-edf_2012}, aussi nous invitons 
+	le lecteur curieux à se référer à ce document pour de plus amples détails. Mais en résumé, 
+	ce calcul se déroule de cette façon :
 	
+	Nous posons :
+	\begin{itemize}
+		\item $delay = d_i(t) - t$
+		\item $ret_i = wcet - $ le nombre d'unités de temps déjà exécutées
+		\item $m = $ le nombre de processeurs
+	\end{itemize}
+	
+	\begin{algorithm}
+		\caption{Compute Allot}
+		\begin{algorithmic}
+			\REQUIRE $A(t)$ ordonné par échéances
+			\STATE $W = 0$
+			
+			\FORALL{ $j \leftarrow \{1 ...m\} $}
+				\item $RES_j \leftarrow 0$
+				\item $ALLOT_j \leftarrow 0$
+			\ENDFOR
+
+			\FORALL{ $\tau_i \in A(t) $}
+				\item $prev_i \leftarrow 0$
+				\FORALL{ $j \leftarrow \{1 ...m\} $}
+					\item $RES_j \leftarrow RES_j = \{[W]_{j-1}^{j} - (j - 1)\}\times (d_i(t) - d_{i-1}(t))$
+					\item $ALLOT_{max} \leftarrow delay - ALLOT_j - RES_j - prev_i$
+					\item $allot_{ij} \leftarrow min\{allot_{max}, ret_i - prev_i\}$
+					\item $prev_i \leftarrow prev_i + allot_{ij}$
+					\item $ALLOT_j \leftarrow ALLOT_j + allot_{ij}$
+				\ENDFOR
+				\item $W \leftarrow W + U_i$
+			\ENDFOR
+		\end{algorithmic}
+	\end{algorithm}
+	
+	
+	Dans l'exemple qui suit, notre système est composé de deux tâches :
+	\begin{enumerate}
+		\item $\tau_1 : \{o:0; w:30; d=p:60;\}$
+		\item $\tau_2 : \{o:0; w:60; d=p:80;\}$
+	\end{enumerate}
+	\begin{figure}[H] 
+		\includegraphics[scale=0.5]{img/uedf/uedf}
+		\includegraphics[scale=0.5]{img/uedf/uedf2}
+		\includegraphics[scale=0.5]{img/uedf/uedf3}
+		\includegraphics[scale=0.5]{img/uedf/uedf4}
+	\end{figure}
 	\paragraph{Eligible}
 	À ce stade, aucune décision d'ordonnancement n'est encore prise, mais des ensembles de tâches (\textit{Eligible}, 
 	noté $\epsilon$ dans la suite) sont créés sous forme de listes. Chaque liste \textit{Eligible} définit 
@@ -121,23 +189,20 @@
 	cela signifie que si une tâche a une utilisation de moins de 100\%, elle sera suivie par 
 	au moins une partie d'une autre.\newline
 
-	\paragraph{Décision}
-	\textbf{UEDF} s'inspire pour finir de \textbf{EDF-Delay} pour l'algorithme de décision. En effet, 
+	\paragraph{Prise de décision}
+	La phase de décision de l'ordonnancement se déroule lors de la phase suivante.
+	\textbf{UEDF} s'inspire pour finir de \textbf{EDF-Delay}. 
+	Cet algorithme est très simple :
+	\begin{itemize}
+		\item Une tâche $\tau_i \in \epsilon_j$ est attribuée à un processeur si aucun autre processeur d'index plus bas n'est en train de l'exécuter
+		\item $\tau_i$ s'exécute sur le processeur tant qu'$allot_{ij} > 0$.
+	\end{itemize}
 	
+	Nous devons déjà formuler ici une grande nuance par rapport à la faisabilité exacte de cet algorithme. 
+	En théorie, l'on est capable de connaître la valeur exacte d'$allot_{ij}$ au temps $t$. En pratique, 
+	un système d'exploitation ne permet pas forcément cela, nous en reparlerons ultérieurement.
 	
-	, \textbf{UEDF} va réserver du temps sur les processeurs pour toutes les tâches actives.
-	Rappelons que pour \textbf{UEDF}, une tâche est considérée comme active entre le moment où la tâche 
-	a relâché un travail, et l'échéance, même si l'exécution de cette tâche a déjà été effectuée.
-	Pour ce faire, un calcul va permettre de réserver du temps sur chaque processeur.
-	
-	\textbf{UEDF} fait face à ce problème en ayant un traitement non pas vertical, mais horizontal
-	de l'ordonnancement des tâches.	
-
-	\todo{inclure image de slice}
-	À ce stade, aucune décision n'est prise, mais on dispose d'un ensemble de sous-systèmes qui peuvent 
-	être exécutés sur les processeurs à condition qu'$Allot_{ij} > 0$ où $i$ est une tâche, 
-	et $j$ le processeur.
-	
+	\newpage
 
 		\subsubsection{Fonctionnement très général de Global EDF}
 		Afin de montrer la particularité d'\textbf{UEDF}, nous commençons par rappeler le fonctionnement 
@@ -156,12 +221,12 @@
 		de l'exécuter sur le processeur libre.
 		
 		L'algorithme ne calcule rien à propos de l'avenir, sa décision au moment \textit{t}
-		n'est prise qu'en considérant les jobs à exécuter et la liberté d'un 
+		n'est prise qu'en considérant les travaux à exécuter et la liberté d'un 
 		processeur. Il se peut qu'un autre ordonnancement plus efficace 
 		réussisse à ordonnancer un système que \textbf{Global EDF} ne puisse pas résoudre...
 		Cela rend tout de même l'ordonnanceur "efficace" en terme de calculs, 
 		puisqu'il comporte un Heap, de complexité $O(n\log n)$, qui sera mis à jour 
-		à chaque changement d'état du job (relâché -> inséré, 
+		à chaque changement d'état du travail (relâché -> inséré, 
 		exécuté -> retiré du Heap).
 		
 		En revanche, ce fonctionnement ne permet pas à cet ordonnanceur d'atteindre 
@@ -172,7 +237,7 @@
 		\subsubsection{Fonctionnement détaillé de UEDF}
 		UEDF -- quant à lui -- résout le problème de l'ordonnancement en effectuant un pré-calcul 
 		que l'on pourrait comparer à un partitionnement. Ce calcul est toutefois en ligne et 
-		effectué à chaque fois qu'une tâche relâche un job dans le système.
+		effectué à chaque fois qu'une tâche relâche un travail dans le système.
 		
 		En résumé, à chaque fois qu'un travail est activé, un calcul va permettre 
 		de réserver des portions de temps pour toutes les tâches actives 
@@ -192,8 +257,8 @@
 			\item Travail terminé
 		\end{enumerate}
 
-		En l'occurrence, à ce moment, il suffit de procéder comme pour \textbf{Global EDF} et de sélectionner le job le plus prioritaire, en respectant 
-		une règle simple : effectuer le job de priorité supérieure, sauf s'il 
+		En l'occurrence, à ce moment, il suffit de procéder comme pour \textbf{Global EDF} et de sélectionner le travail le plus prioritaire, en respectant 
+		une règle simple : effectuer le travail de priorité supérieure, sauf s'il 
 		est déjà en train d'être exécuté sur un autre processeur. Auquel cas, on ne 
 		fait pas de migration, on prend simplement le travail suivant sur la liste.\newline
 		
