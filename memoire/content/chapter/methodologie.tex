@@ -108,7 +108,7 @@
 	être considérée comme active même si l'exécution d'un travail en cours est terminée. 
 	Concrètement, si une tâche est périodique à échéance implicite [\ref*{echeancesurrequete}], elle est active en permanence dès le 
 	premier relâchement de travail. Le travail sera actif durant son relâchement jusqu'à ce que $t >= d_i(t)$, où 
-	une nouvelle instance de la tâche $i$ sera relâchée.
+	une nouvelle instance de la tâche $\tau_i$ sera relâchée.
 	
 	
 	\paragraph{Ensemble des tâches actives}\label{ensembledestachesactives}
@@ -119,7 +119,7 @@
 	Pour décrire \textbf{UEDF}, nous allons le décomposer en étapes.
 	À chaque fois qu'un nouveau travail est relâché, cela va provoquer le calcul suivant :\newline
 	\paragraph{Allot}
-	Les tâches actives\ref*{tacheactive} sont ordonnées dans une liste. La priorité est définie selon l'échéance, 
+	Les tâches actives [\ref*{tacheactive}] sont ordonnées dans une liste. La priorité est définie selon l'échéance, 
 	la plus petite étant la plus prioritaire, comme dans \textbf{EDF} [\ref*{EDF}].
 	Dans cette phase, l'algorithme va "réserver" des tranches de temps d'exécution des tâches sur les 
 	processeurs, cela en calculant une valeur : \\
@@ -127,7 +127,7 @@
 	La valeur $allot_{ij}$ représente le nombre d'unités d'exécution de la tâche $i$ réservé sur le processeur $j$.\newline
 	Si cette valeur est positive, alors le temps $allot_{ij}$ du travail $i$ est réservé sur le 
 	processeur $j$. Si cette valeur est égale à $0$, aucun temps n'est réservé 
-	à l'exécution de la tâche $i$ sur le processeur $j$. Cela permet la constitution d'une liste, 
+	à l'exécution de la tâche $\tau_i$ sur le processeur $\pi_j$. Cela permet la constitution d'une liste, 
 	\textbf{Eligible}.\newline
 	
 	Les calculs sont longuement décrits et expliqués dans la thèse de G. Nelissen \cite{nelissen_u-edf_2012}, aussi nous invitons 
@@ -172,11 +172,11 @@
 		\item $\tau_1 : \{o:0; w:30; d=p:60;\}$
 		\item $\tau_2 : \{o:0; w:60; d=p:80;\}$
 	\end{enumerate}
-	\begin{figure}[H] 
-		\includegraphics[scale=0.5]{img/uedf/uedf}
-		\includegraphics[scale=0.5]{img/uedf/uedf2}
-		\includegraphics[scale=0.5]{img/uedf/uedf3}
-		\includegraphics[scale=0.5]{img/uedf/uedf4}
+	\begin{figure}[H]
+		\includegraphics[scale=1]{img/uedf/uedf12}
+		\caption{étapes 0 et 1}
+		\includegraphics[scale=1]{img/uedf/uedf34}
+		\caption{étapes 2 et 3}
 	\end{figure}
 	\paragraph{Eligible}
 	À ce stade, aucune décision d'ordonnancement n'est encore prise, mais des ensembles de tâches (\textit{Eligible}, 
@@ -200,10 +200,18 @@
 	
 	Nous devons déjà formuler ici une grande nuance par rapport à la faisabilité exacte de cet algorithme. 
 	En théorie, l'on est capable de connaître la valeur exacte d'$allot_{ij}$ au temps $t$. En pratique, 
-	un système d'exploitation ne permet pas forcément cela, nous en reparlerons ultérieurement.
+	un système d'exploitation ne permet pas forcément cela, nous en reparlerons ultérieurement.	\newpage
 	
-	\newpage
-
+	
+	\subsection{Comparaison avec Globa-EDF}
+	
+	Nous avons choisi de comparer \textbf{UEDF} à \textbf{Global-EDF}. La raison de ce choix est simple : 
+	cet algorithme est implémenté sur le RTOS HIPPEROS. 
+	
+	Mais ces deux algorithmes ont de grandes divergences, notamment Global-EDF 
+	ne permet pas -- même théoriquement -- d'atteindre l'optimalité. Ceci s'explique par le fait que 
+	Global-EDF peut être considéré comme "vertical" là où UEDF serait "horizontal". 
+	
 		\subsubsection{Fonctionnement très général de Global EDF}
 		Afin de montrer la particularité d'\textbf{UEDF}, nous commençons par rappeler le fonctionnement 
 		d'un ordonnanceur bien connu et que l'on peut considérer comme "vertical" : \hyperref[GlobalEDF]{Global EDF}\ref*{GlobalEDF}.
@@ -234,46 +242,7 @@
 		avec cet exemple :
 		\todo{montrer un exemple qui rende Global EDF non efficace pour un job}
 
-		\subsubsection{Fonctionnement détaillé de UEDF}
-		UEDF -- quant à lui -- résout le problème de l'ordonnancement en effectuant un pré-calcul 
-		que l'on pourrait comparer à un partitionnement. Ce calcul est toutefois en ligne et 
-		effectué à chaque fois qu'une tâche relâche un travail dans le système.
-		
-		En résumé, à chaque fois qu'un travail est activé, un calcul va permettre 
-		de réserver des portions de temps pour toutes les tâches actives 
-		actuellement dans le système. Au lieu de ne prendre en considération que 
-		les priorités et les processeurs libres, \textbf{UEDF }vérifie donc à 
-		chaque nouvelle libération de tâche que l'ordonnancement peut se faire. 
-		En théorie, on devrait donc savoir immédiatement si un système est ordonnançable, 
-		avant même de croiser un dépassement d'échéance. 
-		
-		Ainsi, la décision n'est pas réellement prise à ce moment, 
-		mais on sait déjà qu'un travail peut-être effectué sur un 
-		processeur, en garantissant le respect de l'échéance.
-		
-		La décision est ensuite prise à chaque événement de ce type :
-		\begin{enumerate}
-			\item Relâchement de travail
-			\item Travail terminé
-		\end{enumerate}
-
-		En l'occurrence, à ce moment, il suffit de procéder comme pour \textbf{Global EDF} et de sélectionner le travail le plus prioritaire, en respectant 
-		une règle simple : effectuer le travail de priorité supérieure, sauf s'il 
-		est déjà en train d'être exécuté sur un autre processeur. Auquel cas, on ne 
-		fait pas de migration, on prend simplement le travail suivant sur la liste.\newline
-		
-		On peut conclure par une explication imagée afin d'avoir une compréhension du fonctionnement d'\textbf{UEDF}. À chaque nouveau travail ajouté dans l'ensemble de travaux, 
-		il fait un calcul afin de créer des sortes de partitionnements des travaux. 
-		Ensuite, chacun de ces sous-systèmes applique EDF avec une règle ajoutée qui consiste 
-		à vérifier si le travail de priorité supérieure n'est pas déjà en cours d'exécution.
-		
-		On peut dire qu'\textbf{UEDF} sur un processeur revient à appliquer \textbf{EDF}. Il 
-		demeure très différent dès lors qu'il y a plusieurs processeurs.
-		
-		
-		\todo{cette explication serait même incompréhensible pour quelqu'un connaissant bien UEDF... REFORMULER !! }
-		\todo{illustration simple avec dessin}
-		
+	
 		Nous appelons ce fonctionnement "horizontal" car au lieu de remplir 
 		en priorité les processeurs "libres", UEDF va remplir les 
 		processeurs par ordre. Ainsi, pour une utilisation inférieure à 100\%, 
