@@ -238,9 +238,8 @@
 
 	Nous pouvons attendre un surcoût important sur cette base. Une hypothèse étant que ce surcoût 
 	augmente avec le nombre de tâches, mais aussi avec le nombre de cœurs. Un même système pourrait avoir plus 
-	de surcoût avec plus de cœurs. Une des hypothèses à vérifier peut-être de vérifier si certains systèmes 
-	perdent en pratique leur faisabilité en passant de 2 à 4 cœurs, par exemple.
-	
+	de surcoût avec plus de cœurs. Cela pourra être vérifié dans les expérimentations.
+
 	\newpage
 	
 	
@@ -266,16 +265,17 @@
 	cet algorithme est implémenté sur le RTOS HIPPEROS et il est global, comme 
 	l'indique son nom. 
 	Les autres ordonnanceurs disponibles sur HIPPEROS sont pour la plupart partitionnés.
-	Dans la famille des ordonnanceurs globaux se trouve également \textbf{Global-FTP}, 
+	
+	Dans la famille des ordonnanceurs globaux se trouve également \textbf{Global-FTP} [\ref*{globalftp}]\todo{présenter globalFTP}, 
 	néanmoins pour ce dernier, les priorités ont un fonctionnement très différent 
 	et il nous semblait moins approprié de les comparer. 
-	Aussi les tests effectués sur \textbf{UEDF} seront également faits en utilisant \textbf{Global-EDF } pour 
+	Aussi les tests effectués sur \textbf{UEDF} seront également faits en utilisant \textbf{Global-EDF} pour 
 	élément de comparaison.\newline
 	
-	Ces deux algorithmes ont toutefois de grandes différences. \textbf{Global-EDF} 
+	Ces deux algorithmes ont toutefois de grandes différences. \textbf{Global-EDF}
 	ne permet pas -- même théoriquement -- d'atteindre l'optimalité. Ceci s'explique par le fait que 
-	\textbf{Global-ED}F peut être considéré comme "vertical" là où UEDF serait "horizontal", et ce faisant, 
-	n'a pas de "vision de l'avenir", autrement nommée "clairvoyance".
+	\textbf{Global-ED}F peut être considéré comme \og{}vertical\fg{} là où UEDF serait \og{}horizontal\fg{}, et ce faisant, 
+	n'a pas de \og{}vision de l'avenir\fg{}, autrement nommée \og{}clairvoyance\fg{}.
 	
 	\subsubsection{Fonctionnement très général de Global EDF}
 	
@@ -295,28 +295,42 @@
 	\end{algorithmic}
 \end{algorithm}	
 	
-	L'algorithme ne calcule rien à propos de l'avenir, sa décision au moment \textit{t}
-	n'est prise qu'en considérant les travaux à exécuter et la liberté d'un 
-	processeur. Il se peut qu'un autre ordonnancement plus efficace 
-	réussisse à ordonnancer un système que \textbf{Global EDF} ne puisse pas résoudre...
-	Cela rend tout de même l'ordonnanceur "efficace" en terme de calculs, 
-	puisqu'il comporte un Heap, de complexité $O(n\log n)$, qui sera mis à jour 
-	à chaque changement d'état du travail (relâché -> inséré, 
-	exécuté -> retiré du Heap).
+	L'algorithme permet de prendre une décision au moment \textit{t} en ne considérant 
+	que les travaux à exécuter par ordre de priorité et les processeurs disponibles.
 	
-	En revanche, ce fonctionnement ne permet pas à cet ordonnanceur d'atteindre 
-	l'optimalité pour la classe de systèmes périodiques, comme on peut le voir 
-	avec cet exemple :
-	\todo{montrer un exemple qui rende Global EDF non efficace pour un job}
-
-
-	Nous appelons ce fonctionnement "horizontal" car au lieu de remplir 
-	en priorité les processeurs "libres", UEDF va remplir les 
-	processeurs par ordre. Ainsi, pour une utilisation inférieure à 100\%, 
-	on n'aura besoin que d'un seul processeur. Pour 200, 2 processeurs, bref, 
-	pour une utilisation de m * 100 \%, on utilisera m processeurs.
+	Si l'on reprend l'exemple illustré précédemment, la décision sera prise de cette façon :\newline
 	
-	\todo{ajouter une description plus détaillée, avec pseudo code}
+	
+	\begin{figure}[H]
+		\includegraphics[scale=0.5]{img/gedf/gedf}
+		\includegraphics[scale=0.5]{img/gedf/gedf2}
+		\caption{Global EDF}
+	\end{figure}
+	 
+	On peut facilement voir que cela peut entraîner de \og{}mauvais choix\fg{}. 
+	En changeant l'exemple précédent, et en prenant un exemple avec 3 travaux, 
+	on n'obtiendra pas du tout le même ordonnancement dans les deux algorithmes, 
+	et celui-ci mettra en échec \textbf{Global-EDF} très facilement.\newline
+	
+	Prenons un ensemble de trois tâches comme suit :
+
+	\begin{enumerate}
+		\item $\tau_1 : \{o:0; w:40; d=p:60;\}$
+		\item $\tau_2 : \{o:0; w:40; d=p:60;\}$
+		\item $\tau_3 : \{o:0; w:40; d=p:60;\}$
+	\end{enumerate}
+	
+	\todo{insérer schema ici}
+	
+	Malgré ce point, \textbf{Global-EDF} est \og{}efficace\fg{} en terme de calculs.
+	Le point le plus complexe concerne la structure de données qui conserve les 
+	tâches courantes. Une bonne idée est d'utiliser un Heap [\ref*{heap}] qui 
+	va permettre de fournir toujours en tête la tâche de priorité supérieure.\newline
+
+	Comparativement, nous caractérisons le fonctionnement d'UEDF d'\og{}horizontal\fg{} 
+	car au lieu de remplir en priorité les processeurs \og{}libres\fg{}, \textbf{UEDF } 
+	va remplir l'occupation des processeurs un par un. 
+	\todo{insérer schema},
 		
 \section{HIPPEROS}
 	\customhighlight{HIPPEROS} (\textbf{HI}gh \textbf{P}erformance \textbf{P}arallel \textbf{E}mbedded \textbf{R}eal-time \textbf{O}perating \textbf{S}ystems)
@@ -339,22 +353,40 @@
 	Dans cette partie, nous allons analyser les difficultés rencontrées lors de l'implémentation en elle-même, 
 	en nous concentrant sur celles liées aux aspects théoriques d'origine. 
 
-	\subsubsection{Accès aux données nécessaires}
+	\subsubsection{Utilisation instantanée}
 	
-		Dans \textbf{HIPPEROS}, il existe d'autres ordonnanceurs déjà implémentés. Il convenait donc 
-		de s'adapter à l'implémentation existante. Cela signifie des accès parfois compliqués afin d'accéder 
-		aux informations de la tâche.\newline
-		
-		\textbf{HIPPEROS} ordonne les tâches de cette façon : 
+		Dans \textbf{HIPPEROS}, il existe d'autres ordonnanceurs déjà implémentés. 
+		Ils ont leur fonctionnement propre, et de façon générale, sont assez différents d'\textbf{UEDF} par 
+		rapport aux variables auxquelles ils accèdent. Si l'\textit{utilisation} [\ref*{utilisation}] d'une tâche n'est pas une 
+		donnée très difficile à produire, en revanche, l'utilisation instantanée [\ref*{instantutilisation}] d'un système 
+		pose certaines questions, comme celle-ci : comment arrondir les valeurs 
+		(de combien peut-on décaler afin d'avoir le moins de pertes possibles). 
+		La réponse à apporter diverge en fonction de plusieurs facteurs :\newline
 		\begin{itemize}
-			\item Les données concernant les tâches sont accessibles via un objet \textit{task}. Ces 
-			données sont statiques.
-			\item Certaines données concernent une autre structure, appelée \textit{process}. L'accès 
-			à cette structure ne se fait pas de la même façon. 
-			\item Les données concernant le travail sont dans la structure \todo{je saisplus}.
+			\item Selon les cas, il n'est pas nécessaire d'y faire appel (classes périodiques)
+			\item Comment sont stockées les valeurs temporelles $period$ et $wcet$ ?
+			\item Si l'on a un nombre plausible de tâches, quelle valeur pouvons-nous atteindre ?
 		\end{itemize}
+		Dans le cas présent, nous avons estimé que décaler les valeurs de $1000$ était suffisant. 
+		Sur une autre plateforme, cette réponse pourrait être différente.
+		
+	\subsection{Structures de données}
+		Dans ses nombreux calculs, \textbf{UEDF} fait appel à un certain nombre de données. 
+		Ainsi, on doit conserver un tableau à deux dimensions $Allot$, qui contient des données 
+		temporelles. \newline
+		Il est nécessaire de maintenir à jour un ensemble trié de tâches, pour le 
+		calcul d'$Allot$. Pour cette structure, notre choix a beaucoup évolué au cours du temps. 
+		La première idée était le besoin de parcourir cette liste dans l'ordre, plusieurs fois, 
+		d'y ajouter et d'en retirer des éléments. A priori, pour ces raisons, le Heap ne 
+		correspond pas bien à nos besoins, aussi avons-nous utilisé une liste liée en 
+		premier lieu. Néanmoins, les mauvaises performances de la liste liée 
+		nous ont amené à reconsidérer ce choix. \textbf{UEDF} conserve un Heap, 
+		qui est copié afin d'en faire le parcours ordonné au moment voulu. 
+		Ce choix a fait diminuer drastiquement le surcoût. Néanmoins, 
+		il serait tout aussi possible de conserver une liste de type \textbf{ArrayList}.
+		
 		Une première chose à laquelle il faut être attentif est de rendre possible les accès 
-		à ces données, par exemple en conservant des tableaux de références, afin de minimiser les temps 
+		aux données, par exemple en conservant des tableaux de références, afin de minimiser les temps 
 		d'accès. Cela nécessite de faire un choix : on optimise le temps d'accès en conservant plus de données. \newline
 	
 		Les autres ordonnanceurs n'utilisent pas vraiment les données concernant le temps 
