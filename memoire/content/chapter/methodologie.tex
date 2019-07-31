@@ -186,7 +186,7 @@
 	
 	Notons que les calculs fournis par l'algorithme permettent en théorie de "remplir" 
 	la charge d'un processeur à 100\% d'utilisation avant de passer au suivant. Concrètement, 
-	cela signifie que si une tâche a une utilisation de moins de 100\%, elle sera suivie par 
+	cela signifie que si la première tâche a une utilisation de moins de 100\%, elle sera suivie par 
 	au moins une partie d'une autre.\newline
 
 	\paragraph{Prise de décision}
@@ -194,44 +194,106 @@
 	\textbf{UEDF} s'inspire pour finir de \textbf{EDF-Delay}. 
 	Cet algorithme est très simple :
 	\begin{itemize}
+		\setlength\itemsep{0.1em}
 		\item Une tâche $\tau_i \in \epsilon_j$ est attribuée à un processeur si aucun autre processeur d'index plus bas n'est en train de l'exécuter
 		\item $\tau_i$ s'exécute sur le processeur tant qu'$allot_{ij} > 0$.
 	\end{itemize}
+
+
+	\paragraph{Déroulement}
+	L'algorithme $Compute Allot$ est à effectuer à chaque relâchement de tâche. La valeur $Allot_{ij}$ 
+	doit être mise à jour à chaque prise de décision. Une décision est attendue pour chacun des événements suivants :\\
+	\begin{itemize}
+		\setlength\itemsep{0.1em}
+		\item Une instance de tâche (travail) a été relâchée
+		\item Un travail est terminé
+		\item $allot{ij} = 0$, pour $i$ un travail et $j$ un processeur 
+	\end{itemize}
 	
-	Nous devons déjà formuler ici une grande nuance par rapport à la faisabilité exacte de cet algorithme. 
-	En théorie, l'on est capable de connaître la valeur exacte d'$allot_{ij}$ au temps $t$. En pratique, 
-	un système d'exploitation ne permet pas forcément cela, nous en reparlerons ultérieurement.	\newpage
+	Nous pouvons déjà formuler ici une nuance par rapport à la théorie et les attentes que l'on peut en avoir 
+	en pratique : 
+	Nous savons dès le départ que l'algorithme \textbf{UEDF} est assez gourmand en calcul puisque chaque relâchement de 
+	tâche va provoquer l'exécution de l'algorithme $Compute Allot$, or, le calcul de cette valeur 
+	implique un parcours de toutes les tâches ordonnées, pour chaque processeur. 
+	Outre qu'il est nécessaire de gérer une structure de données efficace, nous pouvons 
+	déjà considérer que le tri de la structure sera d'un coût non négligeable lors de l'exécution. \newline
+	
+	Par ailleurs, le calcul même de $Compute Allot$ implique lui aussi une certaine complexité.
+	Ainsi :
+	\begin{itemize}
+		\setlength\itemsep{0.1em}
+		\item soit $m$ le nombre de processeurs
+		\item soit $n$ le nombre de tâches actives [\ref*{tacheactive}] du système
+		\item $Compute Allot \in O(m\times n)$
+	\end{itemize}
+
+	Et pour finir, régulièrement, la valeur $allot_{ij} \forall i \in TaskSet, \forall j \in m$ doit être mise 
+	à jour, dont la complexité est donc :
+	\begin{itemize}
+		\setlength\itemsep{0.1em}
+			\item soit $m$ le nombre de processeurs
+			\item soit $n$ le nombre de tâches actives [\ref*{tacheactive}] du système
+			\item $update Allot \in O(m\times n)$
+	\end{itemize}
+
+	Nous pouvons attendre un surcoût important sur cette base. Une hypothèse étant que ce surcoût 
+	augmente avec le nombre de tâches, mais aussi avec le nombre de cœurs. Un même système pourrait avoir plus 
+	de surcoût avec plus de cœurs. Une des hypothèses à vérifier peut-être de vérifier si certains systèmes 
+	perdent en pratique leur faisabilité en passant de 2 à 4 cœurs, par exemple.
+	
+	\newpage
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	\subsection{Comparaison avec Global-EDF}
 	
 	Nous avons choisi de comparer \textbf{UEDF} à \textbf{Global-EDF} [\ref*{GlobalEDF}]. 
 	La raison de ce choix est simple : 
-	cet algorithme est implémenté sur le RTOS HIPPEROS et il est global. Les autres 
-	ordonnanceurs disponibles sur HIPPEROS sont pour la plupart partitionnés.
-	Dans la famille des ordonnanceurs globaux se trouve Global-EDF ou également Global-FTP. 
-	Néanmoins pour ce dernier, le fonctionnement est très différent et impose de choisir 
-	nous-mêmes les priorités sur les tâches. Aussi nous limitons-nous à Global-EDF.\newline
+	cet algorithme est implémenté sur le RTOS HIPPEROS et il est global, comme 
+	l'indique son nom. 
+	Les autres ordonnanceurs disponibles sur HIPPEROS sont pour la plupart partitionnés.
+	Dans la famille des ordonnanceurs globaux se trouve également \textbf{Global-FTP}, 
+	néanmoins pour ce dernier, les priorités ont un fonctionnement très différent 
+	et il nous semblait moins approprié de les comparer. 
+	Aussi les tests effectués sur \textbf{UEDF} seront également faits en utilisant \textbf{Global-EDF } pour 
+	élément de comparaison.\newline
 	
-	Ces deux algorithmes ont toutefois de grandes différences. Global-EDF 
+	Ces deux algorithmes ont toutefois de grandes différences. \textbf{Global-EDF} 
 	ne permet pas -- même théoriquement -- d'atteindre l'optimalité. Ceci s'explique par le fait que 
-	Global-EDF peut être considéré comme "vertical" là où UEDF serait "horizontal", et ce faisant, 
+	\textbf{Global-ED}F peut être considéré comme "vertical" là où UEDF serait "horizontal", et ce faisant, 
 	n'a pas de "vision de l'avenir", autrement nommée "clairvoyance".
 	
 	\subsubsection{Fonctionnement très général de Global EDF}
-	Afin de montrer la particularité d'\textbf{UEDF}, nous commençons par rappeler le fonctionnement 
-	d'un ordonnanceur bien connu et que l'on peut considérer comme "vertical" : \hyperref[GlobalEDF]{Global EDF}\ref*{GlobalEDF}.
 	
-	L'algorithme est extrêmement simple, et pour les besoins de la comparaison, nous rappelons 
+	L'algorithme est simple, et pour les besoins de la comparaison, nous rappelons 
 	ici son fonctionnement de façon très résumée.\\
 	À un moment \textit{t}, l'ordonnanceur prend sa décision de cette façon :
 	si un processeur est libre, il se voit attribué le travail de priorité supérieure parmi 
-	tous les travaux actifs. Cela permet d'avoir un algorithme simple et peu gourmand :\newline
+	tous les travaux actifs. Cela permet d'avoir un algorithme simple et peu gourmand.
 	
-	On conserve une structure de données 
-	ordonnée, comme un \textbf{Heap} \todo{glossaire} qui contient tous les travaux
-	devant être exécutés. À chaque fois que l'ordonnanceur doit prendre 
-	une décision, il lui suffit de prendre le travail de priorité supérieure et 
-	de l'exécuter sur le processeur libre.
+	\begin{algorithm}
+	\caption{Global-EDF}
+	\begin{algorithmic}
+		\REQUIRE $JobSet(t)$ ordonné par échéances
+		\FORALL{ $j \in m $}
+			\item $decision \leftarrow pop(JobSet(t))$
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}	
 	
 	L'algorithme ne calcule rien à propos de l'avenir, sa décision au moment \textit{t}
 	n'est prise qu'en considérant les travaux à exécuter et la liberté d'un 
