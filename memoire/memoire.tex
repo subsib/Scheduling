@@ -9,7 +9,14 @@
 \usepackage{makeidx}
 \pagestyle{myheadings}
 \fancyhf{}
-\rhead[\leftmark]{thepage}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\renewcommand{\headrulewidth}{1pt}
+\fancyhead[L]{\leftmark}
+\fancyfoot[C]{\thepage}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 %\usepackage{natbib}
@@ -17,7 +24,11 @@
 \usepackage[T1]{fontenc} % pour taper les lettres accentuées
 %\usepackage{charter} % change font style
 %\usepackage[sc]{mathpazo}
-\usepackage{utopia}
+%\usepackage{utopia}
+\usepackage{newcent}
+%\usepackage{times}
+%\usepackage{bookman}
+%\usepackage{courier}
 \usepackage{todonotes}
 \usepackage[francais,english]{babel}
 \usepackage{url}
@@ -42,6 +53,17 @@
 \newcommand*{\defeq}{\stackrel{\text{def}}{=}}
 
 
+\usepackage{titlesec}
+\usepackage{lipsum}
+
+%% Tronches des chapitres
+\titleformat{\chapter}[frame]
+{\normalsize}%
+{\filright\sffamily\Large%
+	\enspace Chapitre \thechapter\enspace}%
+{8pt}{\sffamily\Huge\bfseries\filcenter}
+%%%%%%%%%%%%%%%%%%%%
+
 % put some text in red
 \newcommand{\redtext}[1]{{\color{red}{#1}}}
 % highlight some text
@@ -59,6 +81,7 @@
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \newcommand\HRule{\rule{\textwidth}{1pt}}
+
 
 \begin{document}
 	%%%%%%%%%%%%%%%%
@@ -124,11 +147,11 @@
 		\vspace*{\fill}}
 	{\vspace*{\fill}\par\pagebreak}
 	
-	\thispagestyle{empty} 
+%	\thispagestyle{empty} 
 	\setcounter{page}{0}
 	\selectlanguage{french}
 	\tableofcontents
-	
+	%\thispagestyle{empty} 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%% ABSTRACT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -145,16 +168,21 @@
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTRODUCTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \setstretch{1.5}	
-\section*{Remerciements}
+\chapter*{Remerciements}
+\thispagestyle{empty}
 \input{content/intro/merci}
 \newpage
+
+\fancyhead{}
 
 \chapter*{Introduction}{}
 	\setcounter{page}{1}
 
 	\input{content/intro/presentation_subject}
-	\todo{add contributions}
+	%\todo{add contributions}
+
 \chapter{Vocabulaire général sur les systèmes temps réel}
+	\fancyhead[L]{\leftmark}
 	\input{content/intro/glossaire}
 	
 \chapter{État de l'art}
@@ -165,7 +193,9 @@
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\section{Conclusion}
 	\input{content/conclusion/conclusion_state_of_the_art}
-	
+
+\chapter{Éléments du contexte}
+	\input{content/chapter/context}
 \chapter{Méthodologie}
 	%\input{content/chapter/implementation}
 	\input{content/chapter/methodologie}
