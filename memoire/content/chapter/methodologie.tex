@@ -98,16 +98,21 @@
 	raison exposée au préalable dans ce travail : il est nécessaire d'avoir de la clairvoyance, 
 	c'est à dire une connaissance relative du futur.\newline
 	
+	Dans la littérature présentant UEDF, on parle de généralisation horizontale d'EDF. 
+	\todo{trouver un endroit où présenter ça}
+	
+	
+	
 	Pour analyser son fonctionnement, nous devons poser quelques définitions. Aussi, par souci de clarté, nous posons que 
 	l'offset [\ref*{offset}] de la tâche est nul dans la partie qui suit.\\
 	\paragraph{Tâche active}\label{tacheactive}
-	Ce qui définit une tâche "active" peut différer selon le contexte. Dans l'approche d'\textbf{UEDF}, une tâche est 
+	Ce qui définit une tâche \og{}active\fg{} peut différer selon le contexte. Dans l'approche d'\textbf{UEDF}, une tâche est 
 	considérée comme active si un travail a été relâché et que ce travail n'a pas encore atteint son échéance. 
-	Un travail $\tau_i$ est actif s'il a été relâché sur ou après $t$ et que $d_i(t) > t$.
+	Un travail $\tau_i$ est actif s'il a été relâché sur ou avant $t$ et que $d_i(t) \geq t$.
 	Une tâche peut donc 
 	être considérée comme active même si l'exécution d'un travail en cours est terminée. 
 	Concrètement, si une tâche est périodique à échéance implicite [\ref*{echeancesurrequete}], elle est active en permanence dès le 
-	premier relâchement de travail. Le travail sera actif durant son relâchement jusqu'à ce que $t >= d_i(t)$, où 
+	premier relâchement de travail. Le travail sera actif durant son relâchement jusqu'à ce que $t \geq d_i(t)$, où 
 	une nouvelle instance de la tâche $\tau_i$ sera relâchée.
 	
 	
@@ -121,7 +126,7 @@
 	\paragraph{Allot}
 	Les tâches actives [\ref*{tacheactive}] sont ordonnées dans une liste. La priorité est définie selon l'échéance, 
 	la plus petite étant la plus prioritaire, comme dans \textbf{EDF} [\ref*{EDF}].
-	Dans cette phase, l'algorithme va "réserver" des tranches de temps d'exécution des tâches sur les 
+	Dans cette phase, l'algorithme va \og{}réserver\fg{} des tranches de temps d'exécution des tâches sur les 
 	processeurs, cela en calculant une valeur : \\
 	$allot_{ij}$ pour $i \in \{0, nb\_de\_taches - 1\}$, pour $j \in \{0, nb\_processeurs - 1\}$
 	La valeur $allot_{ij}$ représente le nombre d'unités d'exécution de la tâche $i$ réservé sur le processeur $j$.\newline
@@ -139,9 +144,10 @@
 		\item $delay = d_i(t) - t$
 		\item $ret_i = wcet - $ le nombre d'unités de temps déjà exécutées
 		\item $m = $ le nombre de processeurs
+		\item L'opérateur $[x]_a^b \defeq \max\{a, \min\{b, x \}\}$
 	\end{itemize}
-	
-	\begin{algorithm}
+
+	\begin{algorithm}[H]
 		\caption{Compute Allot}
 		\begin{algorithmic}
 			\REQUIRE $A(t)$ ordonné par échéances
@@ -151,7 +157,7 @@
 				\item $RES_j \leftarrow 0$
 				\item $ALLOT_j \leftarrow 0$
 			\ENDFOR
-
+	
 			\FORALL{ $\tau_i \in A(t) $}
 				\item $prev_i \leftarrow 0$
 				\FORALL{ $j \leftarrow \{1 ...m\} $}
@@ -165,7 +171,6 @@
 			\ENDFOR
 		\end{algorithmic}
 	\end{algorithm}
-	
 	
 	Dans l'exemple qui suit, notre système est composé de deux tâches :
 	\begin{enumerate}
@@ -184,10 +189,14 @@
 	les seules tâches que les processeurs associés peuvent exécuter (en cela, cette phase d'\textbf{UEDF} peut 
 	être considérée comme une phase de partitionnement) durant l'exécution à venir.\newline
 	
-	Notons que les calculs fournis par l'algorithme permettent en théorie de "remplir" 
+	Notons que les calculs fournis par l'algorithme permettent en théorie de \og{}remplir\fg{} 
 	la charge d'un processeur à 100\% d'utilisation avant de passer au suivant. Concrètement, 
 	cela signifie que si la première tâche a une utilisation de moins de 100\%, elle sera suivie par 
 	au moins une partie d'une autre.\newline
+	
+	Les valeurs d'$Allot$ ne doivent pas être considérées comme le temps d'exécution qui sera réellement 
+	exécuté sur le processeur. Il faut garder à l'esprit qu'à chaque relâchement de travail, 
+	$Allot$ sera recalculé. 
 
 	\paragraph{Prise de décision}
 	La phase de décision de l'ordonnancement se déroule lors de la phase suivante.
@@ -209,6 +218,13 @@
 		\item Un travail est terminé
 		\item $allot{ij} = 0$, pour $i$ un travail et $j$ un processeur 
 	\end{itemize}
+	
+	On peut voir en théorie l'ordonnancement de trois tâches en annexe, afin de mieux comprendre le déroulement d'une exécution.
+	À titre de remarque, le travail d'illustration d'une exécution nous semble 
+	important pour procéder à une implémentation, sinon le risque est d'omettre le développement 
+	d'outils indispensables au bon déroulement de l'exécution.
+	\todo{gantt chart avec exemple 30;60, 60; 80, 60;80}
+	\newline
 	
 	Nous pouvons déjà formuler ici une nuance par rapport à la théorie et les attentes que l'on peut en avoir 
 	en pratique : 
@@ -265,16 +281,13 @@
 	cet algorithme est implémenté sur le RTOS HIPPEROS et il est global, comme 
 	l'indique son nom. 
 	Les autres ordonnanceurs disponibles sur HIPPEROS sont pour la plupart partitionnés.
-	
-	Dans la famille des ordonnanceurs globaux se trouve également \textbf{Global-FTP} [\ref*{globalftp}]\todo{présenter globalFTP dans état de l'art}, 
-	néanmoins pour ce dernier, les priorités ont un fonctionnement très différent 
-	et il nous semblait moins approprié de les comparer. 
+ 
 	Aussi les tests effectués sur \textbf{UEDF} seront également faits en utilisant \textbf{Global-EDF} pour 
 	élément de comparaison.\newline
 	
 	Ces deux algorithmes ont toutefois de grandes différences. \textbf{Global-EDF}
 	ne permet pas -- même théoriquement -- d'atteindre l'optimalité. Ceci s'explique par le fait que 
-	\textbf{Global-ED}F peut être considéré comme \og{}vertical\fg{} là où UEDF serait \og{}horizontal\fg{}, et ce faisant, 
+	\textbf{Global-ED}F peut être considéré comme \og{}vertical\fg{} là où \textbf{UEDF} serait \og{}horizontal\fg{}, et ce faisant, 
 	n'a pas de \og{}vision de l'avenir\fg{}, autrement nommée \og{}clairvoyance\fg{}.
 	
 	\subsubsection{Fonctionnement de Global EDF}
@@ -326,14 +339,9 @@
 	Malgré ce point, \textbf{Global-EDF} est \og{}efficace\fg{} en terme de calculs.
 	Le point le plus complexe concerne la structure de données qui conserve les 
 	tâches courantes. Une bonne idée est d'utiliser un Heap [\ref*{heap}] qui 
-	va permettre de fournir toujours en tête la tâche de priorité supérieure.
-	Et pour s'assurer de la faisabilité de l'ensemble de tâches, 
+	va permettre de fournir toujours en tête le travail de priorité supérieure.
+	Pour s'assurer de la faisabilité de l'ensemble de tâches, 
 	il faudra tester l'ordonnancement suffisamment longtemps (hyper-période).\newline
-
-	Dans la littérature présentant U-EDF, on parle de généralisation d'EDF de façon 
-	verticale pour Global-EDF, ou de généralisation horizontale pour U-EDF. 
-	Cette image peut se comprendre d'autant mieux avec le schéma suivant :
-	\todo{insérer schema avec procs verticaux ou horizontaux}
 		
 \section{HIPPEROS}
 	\customhighlight{HIPPEROS} (\textbf{HI}gh \textbf{P}erformance \textbf{P}arallel \textbf{E}mbedded \textbf{R}eal-time \textbf{O}perating \textbf{S}ystems)
@@ -515,6 +523,8 @@
 		de fois les tâches et pris le pire temps comme valeur de \textbf{WCET}. Cela ne garantit en fait 
 		pas que le \textbf{WCET} soit réellement le pire des cas, mais cela est suffisant pour nos besoins ici.
 	
+	\newpage
+	\todo{Revoir, c'est DE LA MERDE}
 	\subsubsection{Utilisation instantanée et interruptions}
 
 	L'algorithme d'ordonnancement d'\textbf{UEDF} utilise comme variable l'utilisation instantanée du système. 
@@ -537,7 +547,7 @@
 	
 
 	L'ordonnanceur n'est pas compté dans les tâches, c'est un module du kernel. Par conséquent, il n'est pas comptabilisé 
-	dans l'utilisation instantanée. Il fait partie de ce tas que l'on nomme "overhead" et dans lequel 
+	dans l'utilisation instantanée. Il fait partie de ce tas que l'on nomme \og{}overhead\fg{} et dans lequel 
 	on met tout ce qui prend du temps sans être régulier. 
 	Migrations, ordonnanceur, interruptions... Ces temps ne font pas partie du système, mais ils occupent
 	pourtant du temps.
