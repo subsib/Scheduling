@@ -266,7 +266,7 @@
 	l'indique son nom. 
 	Les autres ordonnanceurs disponibles sur HIPPEROS sont pour la plupart partitionnés.
 	
-	Dans la famille des ordonnanceurs globaux se trouve également \textbf{Global-FTP} [\ref*{globalftp}]\todo{présenter globalFTP}, 
+	Dans la famille des ordonnanceurs globaux se trouve également \textbf{Global-FTP} [\ref*{globalftp}]\todo{présenter globalFTP dans état de l'art}, 
 	néanmoins pour ce dernier, les priorités ont un fonctionnement très différent 
 	et il nous semblait moins approprié de les comparer. 
 	Aussi les tests effectués sur \textbf{UEDF} seront également faits en utilisant \textbf{Global-EDF} pour 
@@ -277,13 +277,13 @@
 	\textbf{Global-ED}F peut être considéré comme \og{}vertical\fg{} là où UEDF serait \og{}horizontal\fg{}, et ce faisant, 
 	n'a pas de \og{}vision de l'avenir\fg{}, autrement nommée \og{}clairvoyance\fg{}.
 	
-	\subsubsection{Fonctionnement très général de Global EDF}
+	\subsubsection{Fonctionnement de Global EDF}
 	
-	L'algorithme est simple, et pour les besoins de la comparaison, nous rappelons 
-	ici son fonctionnement de façon très résumée.\\
+	L'algorithme est relativement simple, et pour les besoins de la comparaison, nous résumons 
+	ici son fonctionnement.\\
 	À un moment \textit{t}, l'ordonnanceur prend sa décision de cette façon :
 	si un processeur est libre, il se voit attribué le travail de priorité supérieure parmi 
-	tous les travaux actifs. Cela permet d'avoir un algorithme simple et peu gourmand.
+	tous les travaux actifs. Cela permet d'avoir un algorithme peu gourmand.
 	
 	\begin{algorithm}
 	\caption{Global-EDF}
@@ -310,11 +310,12 @@
 	On peut facilement voir que cela peut entraîner de \og{}mauvais choix\fg{}. 
 	En changeant l'exemple précédent, et en prenant un exemple avec 3 travaux, 
 	on n'obtiendra pas du tout le même ordonnancement dans les deux algorithmes, 
-	et celui-ci mettra en échec \textbf{Global-EDF} très facilement.\newline
+	et celui-ci mettra en échec \textbf{Global-EDF} quasiment immédiatement.\newline
 	
 	Prenons un ensemble de trois tâches comme suit :
 
 	\begin{enumerate}
+		\setlength\itemsep{0.1em}
 		\item $\tau_1 : \{o:0; w:40; d=p:60;\}$
 		\item $\tau_2 : \{o:0; w:40; d=p:60;\}$
 		\item $\tau_3 : \{o:0; w:40; d=p:60;\}$
@@ -325,12 +326,14 @@
 	Malgré ce point, \textbf{Global-EDF} est \og{}efficace\fg{} en terme de calculs.
 	Le point le plus complexe concerne la structure de données qui conserve les 
 	tâches courantes. Une bonne idée est d'utiliser un Heap [\ref*{heap}] qui 
-	va permettre de fournir toujours en tête la tâche de priorité supérieure.\newline
+	va permettre de fournir toujours en tête la tâche de priorité supérieure.
+	Et pour s'assurer de la faisabilité de l'ensemble de tâches, 
+	il faudra tester l'ordonnancement suffisamment longtemps (hyper-période).\newline
 
-	Comparativement, nous caractérisons le fonctionnement d'UEDF d'\og{}horizontal\fg{} 
-	car au lieu de remplir en priorité les processeurs \og{}libres\fg{}, \textbf{UEDF } 
-	va remplir l'occupation des processeurs un par un. 
-	\todo{insérer schema},
+	Dans la littérature présentant U-EDF, on parle de généralisation d'EDF de façon 
+	verticale pour Global-EDF, ou de généralisation horizontale pour U-EDF. 
+	Cette image peut se comprendre d'autant mieux avec le schéma suivant :
+	\todo{insérer schema avec procs verticaux ou horizontaux}
 		
 \section{HIPPEROS}
 	\customhighlight{HIPPEROS} (\textbf{HI}gh \textbf{P}erformance \textbf{P}arallel \textbf{E}mbedded \textbf{R}eal-time \textbf{O}perating \textbf{S}ystems)
@@ -355,96 +358,132 @@
 
 	\subsubsection{Utilisation instantanée}
 	
-		Dans \textbf{HIPPEROS}, il existe d'autres ordonnanceurs déjà implémentés. 
+		Dans \textbf{HIPPEROS}, il existe plusieurs ordonnanceurs déjà implémentés. 
 		Ils ont leur fonctionnement propre, et de façon générale, sont assez différents d'\textbf{UEDF} par 
-		rapport aux variables auxquelles ils accèdent. Si l'\textit{utilisation} [\ref*{utilisation}] d'une tâche n'est pas une 
-		donnée très difficile à produire, en revanche, l'utilisation instantanée [\ref*{instantutilisation}] d'un système 
-		pose certaines questions, comme celle-ci : comment arrondir les valeurs 
-		(de combien peut-on décaler afin d'avoir le moins de pertes possibles). 
+		rapport aux variables auxquelles ils accèdent. 
+		UEDF a besoin de l'utilisation d'une tâche dans certains de ses calculs. Or, l'utilisation 
+		est une fraction. Nous souhaitons éviter la représentation à virgule flottante 
+		pour gérer ces fractions, cela nécessite un décalage des valeurs.
+		 
+		Se pose immédiatement la question de combien peut-on décaler afin d'avoir le moins de pertes possibles. 
 		La réponse à apporter diverge en fonction de plusieurs facteurs :\newline
 		\begin{itemize}
-			\item Selon les cas, il n'est pas nécessaire d'y faire appel (classes périodiques)
+			\setlength\itemsep{0.1em}
 			\item Comment sont stockées les valeurs temporelles $period$ et $wcet$ ?
-			\item Si l'on a un nombre plausible de tâches, quelle valeur pouvons-nous atteindre ?
+			\item quelles valeurs pouvons-nous atteindre ?
+			\item quelle sera l'incidence de cette valeur dans les calculs ?
 		\end{itemize}
-		Dans le cas présent, nous avons estimé que décaler les valeurs de $1000$ était suffisant. 
-		Sur une autre plateforme, cette réponse pourrait être différente.
+		Dans le cas présent, nous avons estimé que décaler les valeurs de $1000$ était largement suffisant. 
+		En effet, l'utilisation va déterminer la portion de temps que 
+		nous ajoutons dans un processeur. 
+		Typiquement, si nous avons \og{}rempli\fg{} un processeur à $50\%$ de son utilisation pour une 
+		tâche dont le WCET est de $500000 \mu s$
+		
+		\todo{trouver bonne explmiucation, je crois que j'ai compris}.
+		
+		Dans la pratique, l'habitude est de donner des WCET, périodes et échéances \og{}rondes\fg{}, aussi 
+		cela ne pose pas de problème.
+		
 		
 	\subsection{Structures de données}
-		Dans ses nombreux calculs, \textbf{UEDF} fait appel à un certain nombre de données. 
+		Dans ses nombreux calculs, \textbf{UEDF} fait appel à un certain nombre de données.
+		Certaines sont accessibles depuis l'API d'HIPPEROS, mais un certain nombre sont 
+		des variables de l'ordonnanceur lui-même.\newline
+		
+		\paragraph{Allot}
 		Ainsi, on doit conserver un tableau à deux dimensions $Allot$, qui contient des données 
-		temporelles. \newline
+		temporelles. 
+		Cette structure est de taille $m \times n$ en théorie. 
+		En pratique, dans HIPPEROS, $m$ et $n$ sont définies dans une \textit{Release}, 
+		le nombre de tâches pouvant être à ce jour : 
+		\begin{enumerate}
+			\setlength\itemsep{0.1em}
+			\item 32
+			\item 128
+			\item 1024
+		\end{enumerate}
+		Il ne nous a pas semblé utile de changer cela. Nos tests ont tous pour configuration 
+		un nombre de tâche maximum de 32, nous revenons ultérieurement sur les raisons de ce choix.
+		\newline
+		
+		\paragraph{Liste triée de tâches}
 		Il est nécessaire de maintenir à jour un ensemble trié de tâches, pour le 
 		calcul d'$Allot$. Pour cette structure, notre choix a beaucoup évolué au cours du temps. 
 		La première idée était le besoin de parcourir cette liste dans l'ordre, plusieurs fois, 
 		d'y ajouter et d'en retirer des éléments. A priori, pour ces raisons, le Heap ne 
 		correspond pas bien à nos besoins, aussi avons-nous utilisé une liste liée en 
 		premier lieu. Néanmoins, les mauvaises performances de la liste liée 
-		nous ont amené à reconsidérer ce choix. \textbf{UEDF} conserve un Heap, 
-		qui est copié afin d'en faire le parcours ordonné au moment voulu. 
-		Ce choix a fait diminuer drastiquement le surcoût. Néanmoins, 
-		il serait tout aussi possible de conserver une liste de type \textbf{ArrayList}.
+		nous ont amené à reconsidérer ce choix, d'autant plus que les parcours de listes étaient nombreux. 
+		À l'heure actuelle, notre implémentation construit un Heap avant le recalcul d'$Allot$.
+		Ce Heap est copié chaque fois avant d'en faire le parcours, dans les diverses parties du code.
+		En pratique, lorsque des travaux sont relâchés, nous parcourons à l'heure actuelle 3 fois ce Heap, 
+		chaque fois copié au préalable. 
+		Ce choix a fait diminuer drastiquement le surcoût.
+		\todo{ajouter citation qui dit qu'il faut pas optimiser avant d'avoir bien implémenté, knuth}
+		Notons qu'il est tout à fait imaginable de ne pas reconstruire le Heap à chaque fois qu'il faut 
+		calculer $Allot$, il faudrait conserver le Heap, et mieux gérer les ajouts ou retraits. C'est 
+		une amélioration simple qui n'a pas encore été faite, et pourrait réduire légèrement les surcoûts.
+		\todo{ptete essayer avant la remise, ça pourrait se faire facilement je pense.} 
+		\newline
 		
+		\paragraph{Liste d'états}
 		Une première chose à laquelle il faut être attentif est de rendre possible les accès 
 		aux données, par exemple en conservant des tableaux de références, afin de minimiser les temps 
-		d'accès. Cela nécessite de faire un choix : on optimise le temps d'accès en conservant plus de données. \newline
-	
-		Les autres ordonnanceurs n'utilisent pas vraiment les données concernant le temps 
-		d'exécution de la tâche. Pour \textbf{UEDF}, nous avons besoin d'un accès efficace et 
-		correctement mis à jour à ces données. Typiquement, le \textbf{Resting Execution Task} est utilisé en plein 
-		milieu du calcul \textbf{Allot}, ce qui signifie que lors du calcul, il doit être possible 
-		de récupérer ces données. Or, cela n'est pas tout à fait possible, ou du moins, pas idéalement. 
-		En fait, \textbf{HIPPEROS} met à jour le temps exécuté d'une tâche lors d'un changement d'état de celle-ci. 
-		Ainsi, si un travail est effectué, on note dans ses états le moment auquel il a été dispatché.
-		Au temps \textit{t}, si l'on veut savoir combien de temps il a été effectué, s'il n'a pas changé 
-		d'état, il faudra calculer ce temps dans \textbf{UEDF} car \textbf{HIPPEROS} n'aura pas encore mis à 
-		jour cette donnée.\newline
+		d'accès. Cela nécessite de faire un choix : on optimise le temps d'accès en conservant plus de données. 
+		L'ordonnancement en cours est ainsi doublement référencé : 
+		\begin{itemize}
+			\setlength\itemsep{0.1em}
+			\item $Job\_id \leftarrow coreToSchedule_{core}$ permet d'obtenir le travail en cours d'exécution sur le processeur $core \in m$
+			\item $core \leftarrow scheduledToCore_{job\_id}$ permet d'obtenir le processeur qui exécute le travail $job\_id \in n$.
+		\end{itemize}
+
+		Nous devons également conserver les divers états d'un travail. En effet, rappelons que dans \textbf{UEDF}, 
+		un travail est considéré comme \textit{actif} tant qu'il n'a pas rencontré son échéance -- et ce, 
+		même s'il est \textit{terminé}. Nous conservons donc un tableau d'états permettant 
+		d'accéder facilement à cette information.
+		De même, nous devons différencier l'état \textit{bloqué} d'un travail \textit{terminé}, ce qui n'est pas le cas 
+		dans les autres ordonnanceurs implémentés dans HIPPEROS. Par exemple, dans \textbf{Global-EDF}, si un travail 
+		attend une ressource, elle sera purement et simplement retirée de la liste de tâches actives, et lorsqu'elle 
+		sera réactivée, elle sera réintroduite dans cette liste. Ce comportement n'est pas possible dans \textbf{UEDF}, 
+		qui \og{}réserver\fg{} du temps, et \og{}prévoit\fg{} un ordonnancement. Si le travail sort, et est simplement 
+		réintroduit, cela provoquerait un nouveau calcul d'$Allot$, basé sur le $WCET$, et pas le temps restant d'exécution.
+		
+		\paragraph{WCET, et Temps d'exécution}
+		
+		Les autres ordonnanceurs implémentés dans HIPPEROS n'utilisent pas les données concernant le temps 
+		d'exécution de la tâche dans leur prise de décision. 
+		Pour \textbf{UEDF}, nous avons besoin d'un accès efficace et correctement mis à jour à ces données. 
+		Typiquement, le \textbf{Temps d'exécution restant}(\textbf{RET}) est utilisé pour le calcul et la mise à jour 
+		d'\textbf{Allot}.\newline
+		
+		En pratique, \textbf{HIPPEROS} met à jour le temps exécuté d'un travail lors d'un événement qui le concerne. 
+		Ainsi, si un travail est effectué, on note le moment où le travail a été dispatché.
+		Au temps \textit{t}, si l'on veut savoir combien de temps a déjà été exécuté, 
+		s'il n'a pas croisé d'événement, il faudra calculer ce temps dans \textbf{UEDF} 
+		car \textbf{HIPPEROS} n'aura pas encore mis à jour cette donnée.\newline
 		Si en terme de temps d'accès, cette requête n'est pas très compliquée, il n'en demeure pas moins 
 		que le résultat sera un peu approximatif, puisque l'ordonnanceur n'arrête pas l'exécution des tâches pendant 
 		son exécution. Cela ne change pas fondamentalement le calcul car cela change des valeurs très faibles, 
 		mais cela constitue une adaptation de la théorie en pratique.\newline
-		
-		
-		Une des critiques que l'on peut adresser à l'algorithme \textbf{UEDF} est sa complexité. 
-		Pour rappel, à chaque ajout de travail dans l'ensemble des tâches actives, il faut 
-		parcourir la liste entièrement, et ce plusieurs fois, ce qui mène à 
-		une complexité de \todo{chercher... $O(m \times n)$ ?}. 
-		Certes, avec une astuce, proposée par G. Nelissen dans sa thèse, il est possible de réduire 
-		la complexité du calcul, néanmoins pas sa fréquence. Il est donc primordial de réussir à 
-		minimiser la complexité, et maximiser l'efficacité des structures de données utilisées par l'algorithme.\newline
-		
-		
-		En théorie, lorsqu'on doit parcourir une liste ordonnée et supprimer des éléments régulièrement, 
-		qui ne sont forcément la tête de la liste, le Heap est assez mal adapté. En premier lieu, 
-		nous avons donc implémenté une liste liée, laissant à une étape ultérieure l'optimisation. 
-		Pour citer cette phrase bien connue de T. Khuhn \todo{citation sur optimisation}.
-		
-		Ces listes sont connues pour avoir de mauvaises 
-		performances, et elles impactaient énormément le temps de calcul d'\textbf{UEDF}. 
-		Nous verrons que par la modification de cette structure, nous avons déjà réduit drastiquement 
-		le temps d'exécution du calcul. Est-ce suffisant pour permettre à \textbf{UEDF} d'être utilisé dans la réalité est une question à laquelle nous répondrons dans le prochain chapitre.
-		
+
 	\subsubsection{Modèle séquentiel}
 	
-		Le problème que nous venons d'évoquer plus haut concernant le \textbf{RET}. On a besoin de données 
-		à un certain moment qui ne sont pas encore disponibles et qu'\textbf{UEDF} doit calculer lui-même. 
-		
-		Dans l'exposé idéal d'un ordonnanceur, l'exécution s'arrête, l'ordonnanceur fait ses calculs, créé son 
-		ordonnancement, et dispatche les travaux selon les règles qui lui sont propres avant que l'exécution reprenne. 
+		Le problème que nous venons d'évoquer plus haut concernant le \textbf{RET}. 
+		Dans une siuation modélisée, l'exécution s'arrête, l'algorithme d'ordonnancement est effectué, 
+		puis les travaux sont dispatchés et l'exécution reprend.\newline
+		 
 		Un ordonnanceur fait bien souvent partie des tâches lui-même, et il faut qu'il soit lui-même ordonnancé, 
 		afin de pouvoir changer l'exécution en cours. Toujours est-il qu'en attendant, l'exécution sur les autres cœurs 
 		n'est pas stoppée, et les données continuent d'évoluer. 
+		\todo{NON c'est FAUX !!}
 		
-		Un cas de figure peut se produire, par exemple : au lieu de n'avoir qu'un seul travail à ajouter dans 
-		l'ensemble de tâches actives, on peut très bien avoir ajouté plusieurs travaux ainsi que terminé un travail.
-		Cela ne change pas fondamentalement le calcul : dans le cas de multiples travaux terminés et pas de travaux nouveaux, 
-		il suffit de prendre une décision pour chaque processeur libre (on créé une liste).
-		Dans le cas de multiples ajouts de nouveaux travaux, c'est également simple, puisque l'on 
-		doit de toute façon recalculer Allot pour tout l'ensemble, on fait la même chose. 
-		
-		Ce qui est plus compliqué, c'est s'il y a les deux. Mais s'il y a les deux, on doit 
-		de toute façon recalculer un nouvel ordonnanceur, donc on obtient ce fonctionnement :
-		
+		\todo{expliquer dispatcher model :}
+		le dispacther demande le schedule, 
+		le schedule est calculé, et retourné,
+		le dispatcher exécute.
+		les événements sont créés : block, kill, activate... et provoquent kill ou activate, donc faut 
+		savoir pourquoi on se retrouve dedans computeSchedule.
+
 		Si un ou des nouveaux travaux : un booléen indique qu'il faut recalculer Allot. Puis, 
 		on fait l'assignation ensuite.
 		S'il n'y a pas de nouveaux travaux mais qu'il y a un ou des travaux terminés :
@@ -453,12 +492,11 @@
 		C'est aussi simple que ça, mais cela n'est pas décrit dans le papier et représente une 
 		adaptation du modèle.
 	
+		\todo{chart représentant le déroulement d'une exécution ??}
 	
 		
 	\subsubsection{WCET}
-		\textbf{UEDF} est assez original par rapport aux autres algorithmes implémentés dans \textbf{HIPPEROS} 
-		par rapport à l'utilisation des données. Par exemple, pour le calcul d'\textbf{Allot}, il faut accéder 
-		au \textbf{RET} \todo{inclure lien vers RET}, qui dépend du \textbf{WCET}, et du temps déjà exécuté. 
+		\todo{dev beaucoup plus}
 		Le \textbf{WCET}, dans UEDF, est une donnée centrale. Elle est utilisée dans beaucoup de calculs, et 
 		son importance est grande pour le résultat. Or, cette donnée n'est pas évidente à produire. \newline
 		
