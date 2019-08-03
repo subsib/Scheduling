@@ -1,6 +1,6 @@
 
-	Une partie du travail consistait à évaluer si \textbf{UEDF} était implémentable. 
-	La réponse est oui, car nous avons ici une implémentation fonctionnelle et fidèle à la description 
+	Une partie du travail consistait à évaluer si \textbf{UEDF} est implémentable. 
+	La réponse est oui, car nous avons une implémentation fonctionnelle et fidèle à la description 
 	théorique de l'algorithme. \newline
 	
 	Néanmoins, il nous semble utile d'exposer nos choix, afin de permettre à de nouveaux candidats 
@@ -12,7 +12,7 @@
 		Dans \textbf{HIPPEROS}, il existe plusieurs ordonnanceurs déjà implémentés. 
 		Ils ont leur fonctionnement propre, et de façon générale, sont assez différents d'\textbf{UEDF} par 
 		rapport aux variables auxquelles ils accèdent. 
-		UEDF a besoin de l'\textit{utilisation} d'une tâche dans certains de ses calculs. Or, l'\textit{utilisation} 
+		\textbf{UEDF} a besoin de l'\textit{utilisation} d'une tâche dans certains de ses calculs. Or, l'\textit{utilisation} 
 		est une fraction. Nous souhaitons éviter la représentation à virgule flottante 
 		pour gérer ces fractions, et par conséquent, cela nécessite un décalage des valeurs.\newline
 		 
@@ -36,7 +36,7 @@
 			Quand bien même nous irions plus loin, nous ne dépasserions pas les 8 cœurs pour des raisons 
 			matérielles, donc 800\% : $SHIFT \times 8$.
 			\item En reprenant l'algorithme en section \ref{algouedf}, 
-			l'utilisation sert à multiplier la différence entre deux échéances de travaux différents.
+			l'\textit{utilisation} sert à multiplier la différence entre deux échéances de travaux différents.
 			Cette valeur est libre, et on peut l'imaginer grande dans certains cas. 
 			Admettons qu'une tâche ait une échéant de $8.000.000 \mu s$, et une autre du double, comme cela 
 			peut tout à fait se croiser dans un cas pratique, on aura une différence de $8.000.000$ à multiplier
@@ -50,7 +50,7 @@
 		Dans ses nombreux calculs, \textbf{UEDF} fait appel à un certain nombre de données concernant les tâches ou les travaux.
 		Mais l'ordonnanceur a également besoin d'accéder à des variables qui lui sont 
 		spécifiques à divers moments de l'exécution. 
-		En outre, il doit également les travaux n'ayant pas atteint leur échéance, 
+		En outre, il doit également conserver les travaux n'ayant pas atteint leur échéance, 
 		car, entre deux relâchements de tâche, un travail $i$ peut se terminer ou être préempté, 
 		il continue cependant de \og{}peser\fg{} dans l'ordonnancement au temps $t$ tant que $t < d_i(t)$.
 		\newline
@@ -108,7 +108,7 @@
 		dans les autres ordonnanceurs implémentés dans HIPPEROS. Par exemple, dans \textbf{Global-EDF}, si un travail 
 		attend une ressource, elle sera purement et simplement retirée de la liste de tâches actives, et lorsqu'elle 
 		sera réactivée, elle sera réintroduite dans cette liste. Ce comportement n'est pas possible dans \textbf{UEDF}, 
-		qui \og{}réserver\fg{} du temps, et \og{}prévoit\fg{} un ordonnancement. Si le travail sort, et est simplement 
+		qui \og{}réserve\fg{} du temps, et \og{}prévoit\fg{} un ordonnancement. Si le travail sort, et est simplement 
 		réintroduit, cela provoquerait un nouveau calcul d'$Allot$, basé sur le $WCET$, et pas le temps restant d'exécution.
 		
 	\section{WCET, et Temps d'exécution}
@@ -126,7 +126,7 @@
 		car \textbf{HIPPEROS} n'aura pas encore mis à jour cette donnée.\newline
 		Si en terme de temps d'accès, cette requête n'est pas très compliquée, il n'en demeure pas moins 
 		que le résultat sera un peu approximatif, puisque l'ordonnanceur n'arrête pas l'exécution des tâches pendant 
-		son exécution. Cela ne change pas fondamentalement le calcul car cela change des valeurs très faibles, 
+		son exécution. Cela ne change pas fondamentalement le calcul car cela change très faiblement les valeurs, 
 		mais cela constitue une adaptation de la théorie en pratique.\newline
 
 	\section{Modèle VS réel}
@@ -137,95 +137,55 @@
 		immédiatement, en ayant des conséquences extrêmement rapides.
 		\newline
 		
-		\todo{vérifier si pas de redite. Je dis sans arrêt la même chose je crois.}
 		L'ordonnanceur ne fait pas partie le l'ensemble des tâches du système. Cependant, il est exécuté 
 		sur un des processeurs, et occupe une charge non nulle de temps. Outre que cela fausse les calculs 
 		liés à la charge possible (concrètement, les 100\% d'utilisation libres sur le cœur qui exécute 
-		les actions de l'ordonnanceur ne sont plus 100\% mais sont emputées du surcoût), 
-		cela créé un décalage entre le temps calculé au moment $t$ et le moment réel de l'exécution.\newline
+		les actions de l'ordonnanceur ne sont plus 100\% mais sont amputés du surcoût), 
+		cela créé un décalage entre le temps calculé au moment $t$ et le moment réel de l'exécution.
+		Il faudra adapter les WCET des tâches en fonction de cela. \newline
+		
+	\section{Événements et calcul de l'ordonnancement}
 
+		Dans HIPPEROS, voici une exécution typique :
+		\begin{itemize}
+			\setlength\itemsep{0.1em}
+			\item Des tâches sont activées
+			\item Le \textit{dispatcheur} demande à l'ordonnanceur de calculer l'ordonnancement
+			\item Le \textit{dispatcheur} prend les décisions de l'ordonnanceur et effectue les changements 
+			s'il y a lieu (dispatcher une tâche, en préempter une autre, etc.)
+			\item Des événements viennent réveiller le \textit{dispatcheur}, comme la fin, 
+			la préemption, ou le relâchement d'un travail. Entre deux événements, l'exécution 
+			de chacun des travaux sur les processeurs a lieu sans interruption.
+		\end{itemize}
 		
+		Concrètement, c'est une fonction \textit{compute\_schedule} qui est appelée, sans 
+		que l'on sache forcément quel événement a provoqué son appel. \newline
 		
-		\todo{expliquer dispatcher model :}
-		le dispacther demande le schedule, 
-		le schedule est calculé, et retourné,
-		le dispatcher exécute.
-		les événements sont créés : block, kill, activate... et provoquent kill ou activate, donc faut 
-		savoir pourquoi on se retrouve dedans computeSchedule.
-
-		Si un ou des nouveaux travaux : un booléen indique qu'il faut recalculer Allot. Puis, 
-		on fait l'assignation ensuite.
-		S'il n'y a pas de nouveaux travaux mais qu'il y a un ou des travaux terminés :
-		pour chaque processeur libre, prendre une décision pour la suite.\newline
-		
-		C'est aussi simple que ça, mais cela n'est pas décrit dans le papier et représente une 
-		adaptation du modèle.
+		Or, dans \textbf{UEDF}, il est nécessaire de différencier les moments où un travail a été relâché 
+		d'un autre, où l'on ne devra pas recalculer $Allot$. Il suffit dès lors d'activer un 
+		booléen indiquant qu'un nouveau travail a été relâché. Si ce booléen est vrai, 
+		l'algorithme calcule totalement $Allot$, dans le cas contraire, il ne fait que mettre ses valeurs à 
+		jour, avant de prendre dans les deux cas une décision.\newline
 	
-		\todo{chart représentant le déroulement d'une exécution ??}
-	
-		
-	\subsubsection{WCET}
-		\todo{dev beaucoup plus}
-		Le \textbf{WCET}, dans UEDF, est une donnée centrale. Elle est utilisée dans beaucoup de calculs, et 
-		son importance est grande pour le résultat. Or, cette donnée n'est pas évidente à produire. \newline
-		
-		Notre travail nous amène à nous pencher sur ce sujet, qui dépasse largement la portée de ce travail. 
-		Néanmoins, voici ce que l'on peut retenir pour nos besoins :\\
-		Ce sujet est documenté dans la littérature scientifique. Il n'est pas évident de déterminer le 
-		\textbf{WCET} pour toutes les tâches. Mettons qu'une tâche doive faire des lectures/écritures, 
-		ce temps-là devra être considéré. Il est possible de déterminer le nombre d'instructions, 
-		et donc un temps théorique en fonction de la machine utilisée pour l'exécuter, mais cela dépend 
-		parfois de l'exécution. En effet, certaines opérations, en fonction des données, ne vont pas prendre 
-		le même temps, or, ce que l'on cherche à déterminer et le pire des cas.\newline
-	
-		Pour les besoins de ce travail, nous avons simplifié la question, considérant des tâches 
-		non dépendantes les unes des autres, avons fait un calcul à la main pour évaluer le 
-		nombre d'opérations, et avons vérifié le temps d'exécution des tâches en exécutant un grand nombre 
-		de fois les tâches et pris le pire temps comme valeur de \textbf{WCET}. Cela ne garantit en fait 
-		pas que le \textbf{WCET} soit réellement le pire des cas, mais cela est suffisant pour nos besoins ici.
-	
-	\newpage
-	\todo{Revoir, c'est DE LA MERDE}
-	\subsubsection{Utilisation instantanée et interruptions}
-
-	L'algorithme d'ordonnancement d'\textbf{UEDF} utilise comme variable l'utilisation instantanée du système. 
-	Pour rappel, celle-ci est définie par la somme des utilisations des tâches actives à l'instant $t$, 
-	tâche active signifiant tâche ayant relâché un travail qui n'a pas encore atteint son échéance. 
-	On considère donc ici pouvoir comptabiliser tous les processus en exécution. Ceci est 
-	en fait assez théorique et pose certains problèmes.
-	
-	Le problème de l'évaluation du \textbf{WCET} posé précédemment, il faut à ce stade rappeler comment 
-	fonctionne un système d'exploitation.
-	
-	D'un point de vue théorique, si l'on estime voir l'ensemble des tâches dans un ensemble uniforme, 
-	en pratique, ce n'est pas forcément le cas. Dans ce travail, une partie de la complexité est 
-	donc éloignée. NUMA = non-memory-uniform-access
-	
-	Linux traite chaque processus comme un thread. Les threads ont un domaine. 
-	https://lwn.net/Articles/80911/
-	https://hal.archives-ouvertes.fr/hal-01295194/document  sur le scheduler linux
-	\todo{développer cette partie et sourcer}
-	
-
-	L'ordonnanceur n'est pas compté dans les tâches, c'est un module du kernel. Par conséquent, il n'est pas comptabilisé 
-	dans l'utilisation instantanée. Il fait partie de ce tas que l'on nomme \og{}overhead\fg{} et dans lequel 
-	on met tout ce qui prend du temps sans être régulier. 
-	Migrations, ordonnanceur, interruptions... Ces temps ne font pas partie du système, mais ils occupent
-	pourtant du temps.
-	
-	Ce n'est pas la seule tâche qui n'est pas comptabilisée dans l'ensemble, puisqu'on peut définir des 
-	interruptions côté utilisateur. 
-	Concrètement, on imagine une sonde qui envoie très rarement des données. On ne réserve 
-	pas de temps, on vérifie régulièrement qu'elle a des données à traiter, et si c'est le cas, on les traite.\\
-	C'est un cas d'utilisation du system domain : garantir que les données seront traitées vite, dès qu'elles arrivent, 
-	mais ne pas attribuer une tâche pour le faire régulièrement.
+	\section{Domaine système}
+	\todo{explication à revoir}
 	Dans un système d'exploitation, l'ordonnanceur est chargé d'ordonnancer les tâches selon leurs priorités. 
-	Pour ce faire, la norme \textbf{POSIX} définit des niveaux de priorité pour les threads. 
-	\textbf{HIPPEROS }se base sur la même approche, et définit plusieurs niveaux également. C'est ainsi 
-	qu'un thread peut être de scope system, et dans ce cas, sa priorité est haute, ou de priorité 
-	moindre, et il sera ordonnancé par \textbf{UEDF}.\newline
+	La norme \textbf{POSIX} définit des niveaux de priorité pour les threads. 
+	\textbf{HIPPEROS} se base sur une approche similaire, et définit plusieurs niveaux également. 
+	Un domaine peut être du domaine
+	\textit{système}, ou pas. S'il est du domaine \textit{système}, il est de priorité supérieure, quoi que décide 
+	l'ordonnanceur. Cela s'explique de cette manière :\newline
+
+	Dans son modèle, HIPPEROS autorise l'utilisateur à définir des interruptions. 	
+	Concrètement, on imagine une sonde qui envoie très rarement des données. On ne réserve 
+	pas de temps d'exécution régulier pour effectuer cette écoute, 
+	on vérifie simplement régulièrement qu'elle a des données à traiter, et si c'est le cas, on les traite.\newline
 	
-	Tout ceci montre les limites d'un modèle où l'on charge l'utilisation des processeurs à 100\% avant de 
-	passer au suivant. Certes, l'utilisation sera optimisée, dans le sens où l'on 
-	pourra utiliser moins de processeurs, mais en revanche, on 
-	répartir moins bien la somme de travail, et atteint très vite une somme critique pour les processeurs utilisés.
+	C'est un cas d'utilisation du domaine \textit{Système} : garantir que les données seront traitées vite, dès qu'elles arrivent, 
+	sans attribuer une tâche pour le faire régulièrement.\newline
+	
+	Notre solution pour gérer cette situation avec \textbf{UEDF} est simplement de faire passer en priorité 
+	la tâche du domaine \textit{Système} s'il y en a une, sans la comptabiliser dans \textbf{UEDF}. 
+	Cela pourrait invalider potentiellement un système, puisqu'on peut en théorie 
+	exécuter une proportion de temps qui n'a pas été comptabilisée dans l'ordonnanceur. 
+	Nous conseillons dans ce cas d'adapter d'autant le WCET des tâches.

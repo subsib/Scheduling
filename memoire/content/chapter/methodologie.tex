@@ -1,7 +1,31 @@
+\section{Enjeux et attente}
+
+	Nous avons plusieurs attentes dans ce travail que vous souhaitons vérifier avec des tests.
+	
+	Nous voulons :
+	\begin{enumerate}
+		\item Vérifier qu'on a bien implémenté le bon algorithme
+		\item Vérifier qu'il se comporte bien comme il faut...
+		\item Regarder ses temps d'overheads sur des tests basiques
+		\begin{enumerate}
+			\item mesurer les WCET
+			\item mesurer les temps d'exécution et retirer tout ce qui n'est pas de l'exécution = overhead
+			\item voir si ça augmente bien avec le nombre de coeur, avec plus ou moins de tâches
+		\end{enumerate}
+		\item voir si avec des tâches de périodes harmoniques, on arrive à des trucs sympas
+		\item mesurer le temps d'occupation des procs
+		\item comparer pour tout ça avec Global-EDF
+		\item trouver des trucs faisables avec UEDF, pas faisables avec global, et inversement
+	\end{enumerate}
 	
 
-\section{La vérification de l'implémentation : tests unitaires simulés avec des sets créés}
+\section{Vérification de l'implémentation : tests unitaires}
 
+
+	L'implémentation d'un algorithme, quel qu'il soit, est souvent entouré de tests unitaires. 
+	Il n'y a pas spécialement d'intérêt scientifique à développer un paragraphe sur 
+	notre façon de tester \textbf{UEDF} si ce n'est pour faire une remarque.\newline
+		
 	Une des difficultés rencontrée lors de l'implémentation d'\textbf{UEDF} a été de s'assurer de la correction de l'algorithme. 
 	Aucune autre implémentation n'était accessible sur un autre \textbf{RTOS}, de fait, et donc il n'y avait pas de 
 	comparaison possible. En outre, nous trouvons bien un invariant dans la thèse de G. Nelissen, ce qui assure 
@@ -9,14 +33,62 @@
 	(ce qui doit être vrai pour tout système où $instant\_utilisation <= m$), mais ne garantit pas 
 	qu'il n'y a pas d'erreurs ensuite dans la répartition des sous-systèmes, etc. Pour cela, il faut encadrer 
 	l'exécution d'autres tests. \newline
+	
+	Nous avons programmé un simulateur en \textit{Python} afin de pouvoir comparer les résultats 
+	obtenus dans les deux cas. Évidemment, procéder de la sorte ne garantit pas que l'exécution soit correcte
+	puisqu'on ne confronte pas sa compréhension de l'algorithme. \newline
+	
+	Une solution à cela serait de proposer des exemples d'ordonnancements, présentant des situations intéressantes :
+	\begin{itemize}
+		\setlength\itemsep{0.1em}
+		\item Migrations
+		\item Enchevêtrements particuliers
+		\item Évolution des valeurs
+	\end{itemize}
+	Fournir des illustrations d'exécutions type ne nous paraît pas accessoire, car l'algorithme n'est pas facile à comprendre, 
+	et cela peut entraîner des erreurs d'implémentation. On peut considérer que c'est la tâche de la personne qui implémente, 
+	c'est probable, mais si l'objectif des papiers est de permettre la mise en œuvre des algorithmes proposés, 
+	il peut être intéressant d'aider. 
+	
+	\todo{ajouter en annexe quelques exemples ? C'peut être cool...}
 
-	Avant de nous lancer dans l'exécution réelle de l'algorithme, une grande partie du travail a consisté 
-	à simuler l'exécution du programme à l'aide de tests unitaires. Ceux-ci ont été pensés de sorte à avoir 
-	une couverture relativement élevée du code (50 \% environ) afin d'éviter les surprises lors du passage 
+\section{Machine utilisée}
+	HIPPEROS est développé pour pouvoir être installé sur un nombre limité de machines. 
+	L'une d'elle est une SabreLite dont voici la description :
+	
+	\subsubsection{SabreLite truc}
 	
 
-\section{Tests globaux}
 
+\section{Détermination des WCET des tâches}
+	\textbf{UEDF} est optimal, en \underline{théorie}. Revenons un instant sur ce point. 
+	Cela signifie qu'en omettant tous les surcoûts, l'on est capable de charger les processeurs 
+	à $100\%$ d'utilisation. 
+	
+	wcet = pas cet
+	surcout
+	system domain
+	machine
+
+		
+\subsubsection{WCET}
+Le \textbf{WCET}, dans UEDF, est une donnée centrale. Elle est utilisée dans beaucoup de calculs, et 
+son importance est grande pour le résultat. Or, cette donnée n'est pas évidente à produire. \newline
+
+Notre travail nous amène à nous pencher sur ce sujet, qui dépasse largement la portée de ce travail. 
+Néanmoins, voici ce que l'on peut retenir pour nos besoins :\\
+Ce sujet est documenté dans la littérature scientifique. Il n'est pas évident de déterminer le 
+\textbf{WCET} pour toutes les tâches. Mettons qu'une tâche doive faire des lectures/écritures, 
+ce temps-là devra être considéré. Il est possible de déterminer le nombre d'instructions, 
+et donc un temps théorique en fonction de la machine utilisée pour l'exécuter, mais cela dépend 
+parfois de l'exécution. En effet, certaines opérations, en fonction des données, ne vont pas prendre 
+le même temps, or, ce que l'on cherche à déterminer et le pire des cas.\newline
+
+Pour les besoins de ce travail, nous avons simplifié la question, considérant des tâches 
+non dépendantes les unes des autres, avons fait un calcul à la main pour évaluer le 
+nombre d'opérations, et avons vérifié le temps d'exécution des tâches en exécutant un grand nombre 
+de fois les tâches et pris le pire temps comme valeur de \textbf{WCET}. Cela ne garantit en fait 
+pas que le \textbf{WCET} soit réellement le pire des cas, mais cela est suffisant pour nos besoins ici.
 \subsection{Génération de tâches}
 
 \subsection{Surcoûts}

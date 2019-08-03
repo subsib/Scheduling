@@ -29,8 +29,9 @@
 	En effet, pour faire avancer la connaissance et permettre d'augmenter la confiance des utilisateurs 
 	potentiels, il est judicieux de choisir un algorithme dont on attend au moins ceci :
 	\begin{itemize}
+		\setlength\itemsep{0.1em}
 		\item Un algorithme global
-		\item Qui minimise le nombre de migrations
+		\item Qui minimise le nombre de migrations [\ref*{migration}]
 		\item L'ordonnanceur est en ligne, optimal pour la classe périodique
 		\item Il n'a pas bénéficié d'une implémentation sur un \textbf{RTOS}
 		\item Il promet des performances intéressantes
@@ -93,7 +94,7 @@
 	
 	%\todo{etat de l'art, parler de généralisation horizontale/verticale}
 	
-	\subsection{Définitions}
+	\subsection{Définitions spécifiques}
 	Dans un premier temps, nous posons quelques définitions qui sont nécessaires à la compréhension de l'algorithme. 
 	Par ailleurs, par souci de clarté, nous simplifions les calculs en supposant que les offsets [\ref*{offset}] des tâches 
 	sont nuls dans la partie qui suit, cela ne change pas l'algorithme mais rend les explications moins 
@@ -222,13 +223,13 @@
 	On peut voir en théorie l'ordonnancement de trois tâches en annexe, afin de mieux comprendre le déroulement d'une exécution.
 	À titre de remarque, le travail d'illustration d'une exécution nous semble 
 	important pour procéder à une implémentation, sinon le risque est d'omettre le développement 
-	d'outils indispensables au bon déroulement de l'exécution. L'algorithme n'est pas évident à mettre en œuvre.
+	d'outils indispensables au bon déroulement de l'exécution. L'algorithme n'est pas trivial à mettre en œuvre.
 	\todo{gantt chart avec exemple 30;60, 60; 80, 60;80}
 	\newline
 	
 	Nous pouvons déjà formuler ici une nuance par rapport à la théorie et les attentes que l'on peut en avoir 
 	en pratique : 
-	Nous savons dès le départ que l'algorithme \textbf{UEDF} est assez gourmand en calcul puisque chaque relâchement de 
+	nous savons dès le départ que l'algorithme \textbf{UEDF} est assez gourmand en calcul puisque chaque relâchement de 
 	tâche va provoquer l'exécution de l'algorithme $Compute Allot$, or, le calcul de cette valeur 
 	implique un parcours de toutes les tâches ordonnées, pour chaque processeur. 
 	Outre qu'il est nécessaire de gérer une structure de données efficace, nous pouvons 
@@ -341,7 +342,12 @@
 	global. Il a cependant un fonctionnement propre qui pourra rendre l'implémentation 
 	plus ou moins facile, et poser un certain nombre de problèmes. 
 	En résumé, une nouvelle implémentation sur un OS différent 
-	peut elle-aussi apporter à la connaissance générale des détails importants.
+	peut elle-aussi apporter à la connaissance générale des détails importants.\newline
+	
+	Notons qu'HIPPEROS est un RTOS privé, avec les conséquences logistiques que l'on peut 
+	imaginer : la documentation est privée également, et pour comprendre le kernel, la 
+	seule ressource est l'équipe de développeurs qui l'a créé. 
+	
 		
 \section{Attentes}
 
@@ -353,12 +359,17 @@
 		\item HIPPEROS
 	\end{enumerate}
 	nous pouvons déjà formuler certaines hypothèses que nous aimerions vérifier dans ce travail. \newline
-	Il est important de mesurer les surcoûts liés à l'algorithme \textbf{UEDF}, car il n'est pas 
-	évident en voyant l'algorithme qu'il soit possible de l'utiliser en pratique. \newline
-	Il serait intéressant de mesurer également si l'on observe bien en pratique que Global-EDF ne 
-	peut pas ordonnancer certains systèmes là où UEDF le pourrait. En raison des surcoûts, encore, il 
-	se pourrait qu'en moyenne, ce résultat soit modifié ou largement à nuancer en 
-	fonction de certains paramètres, comme le WCET, dont nous reparlerons.
-	Il serait intéressant également de comparer le nombre de migrations/préemptions 
-	obtenues pour le même système, ordonnancé par l'un ou par l'autre des algorithmes.
+	
+	\begin{itemize}
+		\item Vérifier que l'algorithme ne comporte rien qui empêche son implémentation dans 
+		HIPPEROS
+		\item Mesurer les surcoûts liés à l'algorithme \textbf{UEDF}, car il n'est pas 
+		évident qu'il soit possible de l'utiliser en pratique.
+		\item Vérifier également si l'on observe bien en pratique que \textbf{Global-EDF} ne 
+		peut pas ordonnancer certains systèmes là où \textbf{UEDF} le peut.
+		En effet, il est possible que ce résultat soit modifié ou largement à nuancer en 
+		fonction de certains paramètres, comme le WCET, dont nous reparlerons.
+		\item Comparer le nombre de migrations/préemptions obtenues pour un même système, ordonnancé 
+		par l'un ou l'autre des algorithmes, on peut s'attendre à ce qu'\textbf{UEDF} soit performant à ce niveau.
+	\end{itemize}
 
