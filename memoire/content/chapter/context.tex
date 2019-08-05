@@ -346,7 +346,12 @@
 	
 	\customhighlight{HIPPEROS} est un candidat idéal pour l'implémentation d'un ordonnanceur 
 	global. Il a cependant un fonctionnement propre qui pourra rendre l'implémentation 
-	plus ou moins facile, et poser un certain nombre de problèmes. 
+	plus ou moins facile. Par exemple, HIPPEROS, à l'inverse de \textit{Linux}, a un ordonnanceur 
+	asymétrique (un processeur est \textit{Master}, et les autres sont \textit{Slaves}).
+	En d'autres termes, l'ordonnancement est calculé uniquement sur l'un des processeurs, 
+	qui sera désigné au moment de la compilation. 
+	Cela simplifie l'implémentation, puisque l'on ne doit pas s'occuper de savoir quel processeur est 
+	actuellement en train d'effectuer l'algorithme d'ordonnancement.\newline
 	En résumé, une nouvelle implémentation sur un OS différent 
 	peut elle-aussi apporter à la connaissance générale des détails importants.\newline
 	

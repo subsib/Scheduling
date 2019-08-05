@@ -1,11 +1,15 @@
 
-	Une partie du travail consistait à évaluer si \textbf{UEDF} est implémentable. 
+	Une partie du travail consiste à évaluer si \textbf{UEDF} est implémentable. 
 	La réponse est oui, car nous avons une implémentation fonctionnelle et fidèle à la description 
 	théorique de l'algorithme. \newline
 	
 	Néanmoins, il nous semble utile d'exposer nos choix, afin de permettre à de nouveaux candidats 
 	à l'exercice de profiter de nos essais/erreurs. Également, cela permet de comprendre les 
-	résultats qui suivent, et de proposer des améliorations pour le futur.
+	résultats qui suivent, et de proposer des améliorations pour le futur.\newline
+	
+	Dans la partie qui suit, nous détaillons l'implémentation faite dans \textbf{HIPPEROS} pour ce travail, 
+	et pour ce faire, nous devons aborder des points de détails liés à l'algorithme, 
+	à l'implémentation, ou même à \textbf{HIPPEROS}.
 
 	\subsubsection{Données temporelles}
 	
@@ -38,13 +42,20 @@
 			\item En reprenant l'algorithme en section \ref{algouedf}, 
 			l'\textit{utilisation} sert à multiplier la différence entre deux échéances de travaux différents.
 			Cette valeur est libre, et on peut l'imaginer grande dans certains cas. 
-			Admettons qu'une tâche ait une échéant de $8.000.000 \mu s$, et une autre du double, comme cela 
+			Admettons qu'une tâche ait une échéance de $8.000.000 \mu s$, et une autre du double, comme cela 
 			peut tout à fait se croiser dans un cas pratique, on aura une différence de $8.000.000$ à multiplier
 			par cette proportion. 
 			La valeur limite d'un entier de $64$ bits étant $18.446.744.073.709.551.615$, nous pouvons estimer que la marge 
 			est grande et nous laisse libre de choisir un décalage grand.
 		\end{itemize}
-		Pour ces raisons, dans notre implémentation, nous avons estimé que décaler les valeurs de $1000$ était un bon compromis. 
+		Pour ces raisons, dans notre implémentation, nous avons estimé que décaler les valeurs de $1000$ était un bon compromis.
+		Par exemple, pour une tâche qui serait définie comme suit : $\tau_1 = \{w:1; d=p : 3\}$, 
+		l'\textit{utilisation} sera $\frac{1000}{5000} = 200$.
+		Une \textit{utilisation} de $1\%$ est stockée dans l'implémentation d'\textbf{UEDF} comme une utilisation de 
+		$10$, tandis qu'une de $100\%$ vaudra $1000$. Ce décalage sert dans tout l'\hyperref[algouedf]{algorithme décrit en section [\ref*{algouedf}]}.
+		Aussi, toutes les variables seront décalées d'autant, comme l'index du processeur, afin d'avoir un calcul cohérent. 
+		Toutefois, le nombre d'unités de temps $allot$ 
+		n'est lui-même pas décalé, afin de contenir le bon nombre d'unités de temps à exécuter pour la suite.		
 		
 	\subsection{Structures de données}
 		Dans ses nombreux calculs, \textbf{UEDF} fait appel à un certain nombre de données concernant les tâches ou les travaux.
@@ -56,17 +67,25 @@
 		\newline
 				
 		\paragraph{Allot}
-		La valeur $Allot$ est primordiale et doit être conservée durant l'exécution.
-		Elle permet de décider si une tâche doit être exécutée ou non.
-		Elle devra être actualisée à chaque événement.
+		Les valeurs du tableau multidimensionnel $Allot$ sont primordiales et doivent être conservées durant l'exécution.
+		Elles permettent de décider si une tâche doit être exécutée ou non.
+		Elles devront être actualisées à chaque événement.
 		Ainsi, on doit conserver un tableau à deux dimensions $Allot$, qui contient des données 
 		temporelles (entiers non signés de $64$ bits). 
 		Cette structure est de taille $m \times n$ en théorie. 
-		En pratique, dans HIPPEROS, $m$ et $n$ sont des valeurs prédéfinies 
+		En pratique, dans \textbf{HIPPEROS}, $m$ et $n$ sont des valeurs prédéfinies 
 		dans chaque version. Le nombre de tâches peut être à ce jour $32$, $128$ ou $1024$.
 		Il ne nous a pas semblé utile de changer cela. Nos tests ont tous pour configuration 
 		un nombre de tâche maximum de 32. 
 		\newline
+		
+		L'algorithme de calcul du tableau $Allot$ (\hyperref[algouedf]{$Compute Allot$[\ref*{algouedf}]}) attribue les travaux
+		aux processeurs par ordre ascendant d'index. Notre implémentation s'est adaptée à \textbf{HIPPEROS}, car c'est le 
+		cœur $0$ le \textit{Master}, qui exécute l'algorithme d'ordonnancement. Par conséquent, 
+		nous avons inversé l'ordre, pour que le cœur $0$ soit le dernier \og{}rempli\fg{} par l'algorithme -- 
+		ce -- dans le but d'éviter que les surcoûts rendent des ensembles non faisables. Ainsi, 
+		pour $4$ cœurs, une exécution jusqu'à $300\%$ d'\textit{utilisation} laissera le cœur $0$ 
+		uniquement occupé à gérer l'ordonnancement.
 		
 		\paragraph{Liste triée de tâches}
 		Il est nécessaire de maintenir à jour un ensemble trié de tâches, pour le 
@@ -105,15 +124,15 @@
 		même s'il est \textit{terminé}. Nous conservons donc un tableau d'états permettant 
 		d'accéder facilement à cette information.
 		De même, nous devons différencier l'état \textit{bloqué} d'un travail \textit{terminé}, ce qui n'est pas le cas 
-		dans les autres ordonnanceurs implémentés dans HIPPEROS. Par exemple, dans \textbf{Global-EDF}, si un travail 
-		attend une ressource, elle sera purement et simplement retirée de la liste de tâches actives, et lorsqu'elle 
-		sera réactivée, elle sera réintroduite dans cette liste. Ce comportement n'est pas possible dans \textbf{UEDF}, 
+		dans les autres ordonnanceurs implémentés dans \textbf{HIPPEROS}. Par exemple, dans \textbf{Global-EDF}, si un travail 
+		attend une ressource, la tâche correspondante au travail bloqué sera purement et simplement retiré de la liste de tâches actives, 
+		et lorsqu'elle sera réactivée, elle sera réintroduite dans cette liste. Ce comportement n'est pas possible dans \textbf{UEDF}, 
 		qui \og{}réserve\fg{} du temps, et \og{}prévoit\fg{} un ordonnancement. Si le travail sort, et est simplement 
 		réintroduit, cela provoquerait un nouveau calcul d'$Allot$, basé sur le $WCET$, et pas le temps restant d'exécution.
 		
 	\section{WCET, et Temps d'exécution}
 		
-		Les autres ordonnanceurs implémentés dans HIPPEROS n'utilisent pas les données concernant le temps 
+		Les autres ordonnanceurs implémentés dans \textbf{HIPPEROS} n'utilisent pas les données concernant le temps 
 		d'exécution de la tâche dans leur prise de décision. 
 		Pour \textbf{UEDF}, nous avons besoin d'un accès efficace et correctement mis à jour à ces données. 
 		Typiquement, le \textbf{Temps d'exécution restant}(\textbf{RET}) est utilisé pour le calcul et la mise à jour 
@@ -131,18 +150,19 @@
 
 	\section{Modèle VS réel}
 	
-		Dans une situation modélisée, l'exécution s'arrête, l'algorithme d'ordonnancement est effectué, 
+		Dans un modèle, l'exécution s'arrête, l'algorithme d'ordonnancement est effectué, 
 		puis les travaux sont dispatchés et l'exécution reprend.
-		Le temps est comme arrêté, le surcoût n'est pas comptabilisé, et surtout, les décisions se prennent 
-		immédiatement, en ayant des conséquences extrêmement rapides.
+		Le surcoût peut être totalement ignoré.
 		\newline
 		
-		L'ordonnanceur ne fait pas partie le l'ensemble des tâches du système. Cependant, il est exécuté 
+		L'ordonnanceur ne fait pas partie de l'ensemble des tâches du système. Cependant, il est exécuté 
 		sur un des processeurs, et occupe une charge non nulle de temps. Outre que cela fausse les calculs 
 		liés à la charge possible (concrètement, les 100\% d'utilisation libres sur le cœur qui exécute 
 		les actions de l'ordonnanceur ne sont plus 100\% mais sont amputés du surcoût), 
-		cela créé un décalage entre le temps calculé au moment $t$ et le moment réel de l'exécution.
-		Il faudra adapter les WCET des tâches en fonction de cela. \newline
+		cela créé un décalage entre les valeurs calculées au moment $t$ et le moment réel de l'exécution.
+		Il faudra adapter les WCET des tâches en fonction de cela, ce qui implique 
+		une partie du travail qui consiste à évaluer le surcoûts, ainsi que de proposer une 
+		façon de déterminer les WCET de tâches.\newline
 		
 	\section{Événements et calcul de l'ordonnancement}
 
@@ -150,10 +170,10 @@
 		\begin{itemize}
 			\setlength\itemsep{0.1em}
 			\item Des tâches sont activées
-			\item Le \textit{dispatcheur} demande à l'ordonnanceur de calculer l'ordonnancement
-			\item Le \textit{dispatcheur} prend les décisions de l'ordonnanceur et effectue les changements 
+			\item Le \textit{dispatcher} demande à l'ordonnanceur de calculer l'ordonnancement
+			\item Le \textit{dispatcher} prend les décisions de l'ordonnanceur et effectue les changements 
 			s'il y a lieu (dispatcher une tâche, en préempter une autre, etc.)
-			\item Des événements viennent réveiller le \textit{dispatcheur}, comme la fin, 
+			\item Des événements viennent réveiller le \textit{dispatcher}, comme la fin, 
 			la préemption, ou le relâchement d'un travail. Entre deux événements, l'exécution 
 			de chacun des travaux sur les processeurs a lieu sans interruption.
 		\end{itemize}
@@ -168,24 +188,27 @@
 		jour, avant de prendre dans les deux cas une décision.\newline
 	
 	\section{Domaine système}
-	\todo{explication à revoir}
 	Dans un système d'exploitation, l'ordonnanceur est chargé d'ordonnancer les tâches selon leurs priorités. 
-	La norme \textbf{POSIX} définit des niveaux de priorité pour les threads. 
-	\textbf{HIPPEROS} se base sur une approche similaire, et définit plusieurs niveaux également. 
-	Un domaine peut être du domaine
-	\textit{système}, ou pas. S'il est du domaine \textit{système}, il est de priorité supérieure, quoi que décide 
+	La norme \textbf{POSIX} définit des niveaux pour les threads : \textit{local}, et \textit{System}. 
+	Mais en pratique, \textbf{Linux} n'utilise pas cela, tous les \textit{Threads} sont 
+	de niveaux \textit{System}, et il ne gère pas de \textit{Process} comme ensemble de \textit{Threads}.\newline
+
+	Une variante importante ressort ici : \textbf{HIPPEROS} gère des \textit{Process}, 
+	qui sont des ensembles de \textit{Threads}. L'ordonnanceur gère des \textit{Process}, qui ont un ou plusieurs \textit{Threads}, 
+	et les priorités pour chacun d'eux sont locales.
+	C'est dans le but de gérer des exceptions et interruptions au niveau utilisateur qu'\textbf{HIPPEROS } a implémenté 
+	des niveaux différents de domaines. S'il est du domaine \textit{system}, un \textit{Process }est de priorité supérieure, quoi que décide 
 	l'ordonnanceur. Cela s'explique de cette manière :\newline
 
-	Dans son modèle, HIPPEROS autorise l'utilisateur à définir des interruptions. 	
 	Concrètement, on imagine une sonde qui envoie très rarement des données. On ne réserve 
 	pas de temps d'exécution régulier pour effectuer cette écoute, 
 	on vérifie simplement régulièrement qu'elle a des données à traiter, et si c'est le cas, on les traite.\newline
 	
-	C'est un cas d'utilisation du domaine \textit{Système} : garantir que les données seront traitées vite, dès qu'elles arrivent, 
+	C'est un cas d'utilisation du domaine \textit{System} : garantir que les données seront traitées vite, dès qu'elles arrivent, 
 	sans attribuer une tâche pour le faire régulièrement.\newline
 	
 	Notre solution pour gérer cette situation avec \textbf{UEDF} est simplement de faire passer en priorité 
-	la tâche du domaine \textit{Système} s'il y en a une, sans la comptabiliser dans \textbf{UEDF}. 
+	la tâche du domaine \textit{System} s'il y en a une, sans la comptabiliser dans \textbf{UEDF}. 
 	Cela pourrait invalider potentiellement un système, puisqu'on peut en théorie 
 	exécuter une proportion de temps qui n'a pas été comptabilisée dans l'ordonnanceur. 
 	Nous conseillons dans ce cas d'adapter d'autant le WCET des tâches.
