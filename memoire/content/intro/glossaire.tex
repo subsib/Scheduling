@@ -56,13 +56,13 @@
 		l'arrivée de nouveaux travaux. Les propriétés du travail ne sont connues que lorsqu'un travail est 
 		généré dans le système.
 		
-		\item \textbf{Domaine système} : \todo{une bonne def doit se trouver}
-		
 	\end{itemize}
 	
 	\subsection{Migration}\label{migration}
 	Une migration est le transfert d'une tâche ou d'un travail d’un processeur vers un autre. 
-	\todo{détailler beaucoup plus}
+	Habituellement, les modèles négligent les temps de surcoût liés aux migrations. 
+	Néanmoins, une migration entraîne un déplacement de contexte, ce qui occupe les 
+	ressources. 
 	
 	\subsection{Système de tâches}
 	Un système de tâches et un ensemble de tâches devant être exécutées conjointement. 
@@ -177,14 +177,14 @@
 	Contrairement aux ordonnanceurs partitionnés, les migrations [\ref{migration}] sont possibles. Le problème 
 	est donc de réduire leur nombre pour ne pas faire de mouvements inutilement.
 	
-	\subsection{Clairvoyance}
+	\subsection{Clairvoyance}\label{clairvoyance}
 	Un ordonnanceur est dit \og clairvoyant\fg{}  s'il peut prédire des éléments (le début d'un travail) des tâches du système qu'il ordonnance.
 	
-	\subsection{Préemption} 
+	\subsection{Préemption}\label{preemption}
 	Un système est dit préemptif s'il a la capacité 
 	de mettre l'exécution d'un travail en pause et d'exécuter un autre à la place. 
 	
-	\subsection{Utilisation}
+	\subsection{Utilisation}\label{utilisation}
 	Le facteur d'utilisation $U_i$ d'une tâche périodique $\tau_i$ est le rapport entre 
 	son temps d'exécution et sa période. Par exemple, pour une tâche $\tau_i$ tel que 
 	$WCET = 30 ms$ et $T = 50 ms$, le processeur doit allouer $\frac{30}{50}$ du temps 

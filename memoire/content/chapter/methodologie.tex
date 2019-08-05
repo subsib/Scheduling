@@ -18,40 +18,7 @@
 		\item trouver des trucs faisables avec UEDF, pas faisables avec global, et inversement
 	\end{enumerate}
 	
-
-\section{Vérification de l'implémentation : tests unitaires}
-
-
-	L'implémentation d'un algorithme, quel qu'il soit, est souvent entouré de tests unitaires. 
-	Il n'y a pas spécialement d'intérêt scientifique à développer un paragraphe sur 
-	notre façon de tester \textbf{UEDF} si ce n'est pour faire une remarque.\newline
-		
-	Une des difficultés rencontrée lors de l'implémentation d'\textbf{UEDF} a été de s'assurer de la correction de l'algorithme. 
-	Aucune autre implémentation n'était accessible sur un autre \textbf{RTOS}, de fait, et donc il n'y avait pas de 
-	comparaison possible. En outre, nous trouvons bien un invariant dans la thèse de G. Nelissen, ce qui assure 
-	que l'algorithme a bien réservé du temps pour toutes les tâches présentes dans l'ensemble 
-	(ce qui doit être vrai pour tout système où $instant\_utilisation <= m$), mais ne garantit pas 
-	qu'il n'y a pas d'erreurs ensuite dans la répartition des sous-systèmes, etc. Pour cela, il faut encadrer 
-	l'exécution d'autres tests. \newline
 	
-	Nous avons programmé un simulateur en \textit{Python} afin de pouvoir comparer les résultats 
-	obtenus dans les deux cas. Évidemment, procéder de la sorte ne garantit pas que l'exécution soit correcte
-	puisqu'on ne confronte pas sa compréhension de l'algorithme. \newline
-	
-	Une solution à cela serait de proposer des exemples d'ordonnancements, présentant des situations intéressantes :
-	\begin{itemize}
-		\setlength\itemsep{0.1em}
-		\item Migrations
-		\item Enchevêtrements particuliers
-		\item Évolution des valeurs
-	\end{itemize}
-	Fournir des illustrations d'exécutions type ne nous paraît pas accessoire, car l'algorithme n'est pas facile à comprendre, 
-	et cela peut entraîner des erreurs d'implémentation. On peut considérer que c'est la tâche de la personne qui implémente, 
-	c'est probable, mais si l'objectif des papiers est de permettre la mise en œuvre des algorithmes proposés, 
-	il peut être intéressant d'aider. 
-	
-	\todo{ajouter en annexe quelques exemples ? C'peut être cool...}
-
 \section{Machine utilisée}
 	HIPPEROS est développé pour pouvoir être installé sur un nombre limité de machines. 
 	L'une d'elle est une SabreLite dont voici la description :
@@ -59,6 +26,17 @@
 	\subsubsection{SabreLite truc}
 	
 
+\section{Génération d'ensembles de tâches}
+
+	Nous n'avons pas utilisé de générateur totalement aléatoire de WCET et périodes, 
+	car nous avons préféré tester pour des périodes harmoniques. Aussi 
+	avons-nous opté pour des valeurs \og{}rondes\fg{} donc le nombre de combinaison est infini 
+	mais pas infiniment intéressant.
+	
+	Nous avons testé des valeurs de plus en plus grandes sur des proportions comparables pour fournir 
+	une méthode afin de fournir les WCET etc. pour cet ordonnanceur.
+	
+	Cette partie-là était chronophage.
 
 \section{Détermination des WCET des tâches}
 	\textbf{UEDF} est optimal, en \underline{théorie}. Revenons un instant sur ce point. 
@@ -67,8 +45,25 @@
 	
 	wcet = pas cet
 	surcout
-	system domain
 	machine
+
+Pour déterminer les WCET, une série de tests a été effectués, sur des sets différents, 
+avec des WCET plus ou moins pessimistes. 
+On a mesuré les temps d'idle sur les processeurs, 
+vérifié la faisabilité pendant plusieurs heures, 
+dans le cas où le système passait, ou pas, nous avons conservé ces résultats.
+
+ajouter plus tard :
+Nous avons trouvé que le proc 1 gérait bcp d'overheads, et que par conséquent, il
+lui faut des tâches avec WCET très pessimistes.
+
+Nous avons testé avec 8 tâches également, et avons déterminé quelle 
+type de famille de tâches pouvait fonctionner. Pour ce faire, nous avons utilisé un 
+générateur de tâches.
+
+En gros, une tâche effectue une boucle de calculs jusqu'à avoir atteint un temps donné, puis elle se ferme. 
+Cela donne un ordre de grandeur de durée de tâche et permet d'éviter d'écrire sur la sortie, ce qui 
+génère des temps longs difficilement mesurables.
 
 		
 \subsubsection{WCET}
@@ -89,7 +84,10 @@ non dépendantes les unes des autres, avons fait un calcul à la main pour éval
 nombre d'opérations, et avons vérifié le temps d'exécution des tâches en exécutant un grand nombre 
 de fois les tâches et pris le pire temps comme valeur de \textbf{WCET}. Cela ne garantit en fait 
 pas que le \textbf{WCET} soit réellement le pire des cas, mais cela est suffisant pour nos besoins ici.
+
 \subsection{Génération de tâches}
+
+
 
 \subsection{Surcoûts}
 

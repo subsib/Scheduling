@@ -5,7 +5,7 @@
 	
 	L'état de l'art nous a montré un vaste choix d'algorithmes qui présentent 
 	des intérêts différents, et pour un certain nombre, 
-	n'ayant pas pas encore été implémentés. \newline
+	n'ayant pas encore été implémentés. \newline
 	
 	La première étape du travail consiste donc à départager ces algorithmes pour arrêter notre choix sur l'un d'entre eux. Ceci nécessite de clarifier nos attentes concernant le choix de l'ordonnanceur.\newline
 	
@@ -32,7 +32,7 @@
 		\setlength\itemsep{0.1em}
 		\item Un algorithme global
 		\item Qui minimise le nombre de migrations [\ref*{migration}]
-		\item L'ordonnanceur est en ligne, optimal pour la classe périodique
+		\item L'ordonnanceur est optimal pour la classe périodique
 		\item Il n'a pas bénéficié d'une implémentation sur un \textbf{RTOS}
 		\item Il promet des performances intéressantes
 	\end{itemize}
@@ -52,8 +52,9 @@
 	Toute mise en pratique nécessite de faire des arrondis, ceux-ci doivent être cohérents.\newline
 	
 	Nous pouvons aussi évoquer les moments où l'algorithme doit faire des calculs. 
-	Dans un simulateur, ou dans une vision idéalisée de l'ordonnanceur, l'on peut arrêter l'exécution 
-	quand on le veut, avec des temps de surcoût [\ref*{surcout}]négligeables. Dans la réalité, comme on le verra, cela 
+	Dans un modèle, on peut arrêter l'exécution quand on le veut, 
+	avec des temps de surcoût négligeables. 	
+	Dans la réalité, comme on le verra, cela 
 	n'est pas le cas. 
 	Les auteurs qui connaissent bien ce fonctionnement auront la possibilité de devancer certaines questions.
 	Néanmoins, dans le cas d'un papier très théorique qui s'emploie à faire des démonstrations mathématiques, 
@@ -75,7 +76,7 @@
 	et nous avons revu nos attentes quant à l'efficacité à la baisse. Cela n'a en rien 
 	modifié l'objet scientifique, à savoir le regard critique et la proposition d'améliorations 
 	afin de stimuler et faciliter des implémentations futures, mais cela a sans doute 
-	diminué les performances finales obtenues, tel que nous le verrons dans la partie Résultats.\newline
+	diminué les performances finales obtenues, tel que nous le verrons dans la partie \hyperref[resultats]{résultats} [\ref*{resultats}].\newline
 	
 	
 	\section{Présentation UEDF}
@@ -83,14 +84,6 @@
 	Nous avons déjà présenté précédemment \textbf{UEDF}, de façon globale et succincte. 
 	Dans cette partie, nous allons détailler l'algorithme afin d'en avoir une meilleure compréhension. Cela 
 	permettra de mesurer la différence entre les attentes théoriques et les résultats obtenus.\newline
-
-	Nous avons évoqué les intérêts de l'implémentation d'\textbf{UEDF} :\\
-	Tout d'abord, il est principalement \hyperref[inline]{en ligne}, ce qui n'est pas le cas de 
-	la plupart des ordonnanceurs utilisés dans l'industrie.
-	Ensuite, il est global. Or, la plupart des ordonnanceurs 
-	globaux connus et implémentés ne sont pas optimaux (pour la classe périodique), pour la
-	raison exposée au préalable dans ce travail : il est nécessaire d'avoir de la clairvoyance, 
-	c'est à dire une connaissance relative du futur.\newline
 	
 	%\todo{etat de l'art, parler de généralisation horizontale/verticale}
 	
@@ -98,7 +91,8 @@
 	Dans un premier temps, nous posons quelques définitions qui sont nécessaires à la compréhension de l'algorithme. 
 	Par ailleurs, par souci de clarté, nous simplifions les calculs en supposant que les offsets [\ref*{offset}] des tâches 
 	sont nuls dans la partie qui suit, cela ne change pas l'algorithme mais rend les explications moins 
-	complexes.\\
+	complexes.
+	
 	\subsubsection{Tâche active}\label{tacheactive}
 	Ce qui définit une tâche \og{}active\fg{} peut différer selon le contexte. Dans l'approche d'\textbf{UEDF}, une tâche est 
 	considérée comme active si un travail a été relâché et que ce travail n'a pas encore atteint son échéance. 
@@ -111,17 +105,22 @@
 	
 	
 	\subsubsection{Ensemble des tâches actives}\label{ensembledestachesactives}
+	L'ensemble des tâches actives est écrit $A(t)$ dans les formules qui suivent. Notons que dans un système 
+	périodique à échéances implicites \hyperref[echeancesurrequete]{[ \ref*{echeancesurrequete} ]}, cet ensemble 
+	sera toujours composé des mêmes tâches.\newline
+		
 	Dans \textbf{UEDF}, on effectue le parcours d'une liste des tâches actuellement actives dans le système, 
-	cette liste étant ordonnée par échéances. 
-	 L'ensemble des tâches actives est écrit $A(t)$ dans les formules qui suivent.\newline
+	cette liste étant ordonnée par échéances pour les besoins de l'algorithme. 
+	On notera $sorted\_ActiveList(t)$ la liste triée créée à partir de l'ensemble des tâches $A(t)$.\newline
 	
 	Pour décrire \textbf{UEDF}, nous allons le décomposer en étapes.
-	À chaque fois qu'un nouveau travail est relâché, cela va provoquer le calcul d'$Allot$.
-	\subsubsection{Allot}
-	Les tâches actives [\ref*{tacheactive}] sont ordonnées dans une liste. La priorité est définie selon l'échéance, 
-	la plus petite étant la plus prioritaire, comme dans \textbf{EDF} [\ref*{EDF}].
+	À chaque fois qu'un nouveau travail est relâché, cela va provoquer le calcul d'$Allot_{ij} \forall i \in A(t), \forall j \in \{1 ... m\}$.
+
+	\subsubsection{Allot}\label{allot}
+	Les tâches actives [\ref*{tacheactive}] sont donc ordonnées dans la liste $sorted\_ActiveList(t)$. 
+	La priorité est définie selon l'échéance, la plus petite étant la plus prioritaire, comme dans \hyperref[EDF]{EDF [\ref*{EDF}]}.
 	Dans cette phase, l'algorithme va \og{}réserver\fg{} des tranches de temps d'exécution des tâches sur les 
-	processeurs, cela en calculant une valeur : \\
+	processeurs, cela en calculant une valeur : \newline
 	$allot_{ij}$ pour $i \in \{0, nb\_de\_taches - 1\}$, pour $j \in \{0, nb\_processeurs - 1\}$
 	La valeur $allot_{ij}$ représente le nombre d'unités d'exécution de la tâche $i$ réservé sur le processeur $j$.\newline
 	Si cette valeur est positive, alors le temps $allot_{ij}$ du travail $i$ est réservé sur le 
@@ -139,16 +138,22 @@
 		\setlength\itemsep{0.1em}
 		\item $delay = d_i(t) - t$
 		\item $ret_i = wcet - $ le nombre d'unités de temps déjà exécutées
-		\item $m = $ le nombre de processeurs
 		\item L'opérateur $[x]_a^b \defeq \max\{a, \min\{b, x \}\}$
 	\end{itemize}
 
+	Dans l'algorithme qui suit, le but est d'\og{}allouer\fg{} le temps qui reste à exécuter pour chaque travail 
+	actif aux processeurs présents.
+	Pour ce faire, on calcule la valeur maximale $allot_{max}$ que l'on peut réserver sur un processeur, 
+	en faisant appel à la somme de l'\textit{utilisation} des travaux déjà traités ($W$).
+	Cela permet de calculer le minimum entre ce maximum et le nombre d'unités d'exécutions qui 
+	restent effectivement à allouer pour le travail $\tau_i$, et finalement, de l'allouer dans 
+	$allot_{ij}$.
 
 	\label{algouedf}
 	\begin{algorithm}[H]
 		\caption{Compute Allot}
 		\begin{algorithmic}
-			\REQUIRE $A(t)$ ordonné par échéances
+			\REQUIRE $sorted\_ActiveList(t)$
 			\STATE $W = 0$
 			
 			\FORALL{ $j \leftarrow \{1 ...m\} $}
@@ -156,11 +161,11 @@
 				\item $ALLOT_j \leftarrow 0$
 			\ENDFOR
 	
-			\FORALL{ $\tau_i \in A(t) $}
+			\FORALL{ $\tau_i \in sorted\_ActiveList(t) $}
 				\item $prev_i \leftarrow 0$
 				\FORALL{ $j \leftarrow \{1 ...m\} $}
-					\item $RES_j \leftarrow RES_j = \{[W]_{j-1}^{j} - (j - 1)\}\times (d_i(t) - d_{i-1}(t))$
-					\item $ALLOT_{max} \leftarrow delay - ALLOT_j - RES_j - prev_i$
+					\item $RES_j \leftarrow RES_j + \{[W]_{j-1}^{j} - (j - 1)\}\times (d_i(t) - d_{i-1}(t))$
+					\item $allot_{max} \leftarrow delay - ALLOT_j - RES_j - prev_i$
 					\item $allot_{ij} \leftarrow min\{allot_{max}, ret_i - prev_i\}$
 					\item $prev_i \leftarrow prev_i + allot_{ij}$
 					\item $ALLOT_j \leftarrow ALLOT_j + allot_{ij}$
@@ -205,19 +210,21 @@
 	Cet algorithme est très simple :
 	\begin{itemize}
 		\setlength\itemsep{0.1em}
-		\item Une tâche $\tau_i \in \epsilon_j$ est attribuée à un processeur si aucun autre processeur d'index plus bas n'est en train de l'exécuter
-		\item $\tau_i$ s'exécute sur le processeur tant qu'$allot_{ij} > 0$.
+		\item Une tâche $\tau_i \in \epsilon_j, j \in m$ est attribuée à un processeur $\pi_j$ si aucun autre processeur d'index plus bas n'est en train de l'exécuter
+		\item $\tau_i$ s'exécute sur le processeur $\pi_j$ tant qu'$allot_{ij} > 0$
 	\end{itemize}
 
 
 	\subsubsection{Déroulement}	
-	L'algorithme $Compute Allot$ est à effectuer à chaque relâchement de tâche. La valeur $Allot_{ij}$ 
+	L'algorithme \hyperref[algouedf]{$Compute Allot$ [\ref*{algouedf}]} est à effectuer à chaque relâchement de tâche. La valeur $Allot_{ij}$ 
 	doit être mise à jour à chaque prise de décision. Une décision est attendue pour chacun des événements suivants :
 	\begin{itemize}
 		\setlength\itemsep{0.1em}
-		\item Une instance de tâche (travail) a été relâchée
-		\item Un travail est terminé
-		\item $allot{ij} = 0$, pour $i$ un travail et $j$ un processeur 
+		\item Une instance de tâche (travail) a été relâchée\\
+		 $\sum_{i \in A(t)}\sum_{1}^{m}allot_{ij} = WCET$
+		\item Le temps alloué sur un processeur a été exécuté, dans ce cas\\ $\exists i \in A(t), \exists j \in m : allot_{ij} = 0$
+		\item Un travail est terminé complètement : \\
+		$\sum_{i \in A(t)}\sum_{1}^{m}allot_{ij} = 0$.
 	\end{itemize}
 	
 	On peut voir en théorie l'ordonnancement de trois tâches en annexe, afin de mieux comprendre le déroulement d'une exécution.
@@ -272,9 +279,8 @@
 	Ces deux algorithmes ont toutefois de grandes différences. \textbf{Global-EDF}
 	ne permet pas - même théoriquement  d'atteindre l'optimalité. Ceci s'explique par le fait que 
 	\textbf{Global-ED}F peut être considéré comme \og{}vertical\fg{} là où \textbf{UEDF} serait \og{}horizontal\fg{}. 
-	Mais une grande différence entre les deux algorithmes est que \textbf{Global-EDF} n'a pas de clairvoyance, 
-	et n'est par conséquent pas optimal, même en théorie, pour la classe périodique, 
-	contrairement à \textbf{UEDF}.
+	Mais une grande différence entre les deux algorithmes est que \textbf{Global-EDF} n'est optimal, 
+	en théorie, contrairement à \textbf{UEDF}.
 	
 	\subsubsection{Fonctionnement de Global EDF}
 	
@@ -282,14 +288,14 @@
 	ici son fonctionnement.\\
 	À un moment \textit{t}, l'ordonnanceur prend sa décision de cette façon :
 	si un processeur est libre, il se voit attribué le travail de priorité supérieure parmi 
-	tous les travaux actifs. Cela permet d'avoir un algorithme peu gourmand.
+	tous les travaux actifs et pas encore attribués. Cela permet d'avoir un algorithme peu gourmand.
 	
 	\begin{algorithm}
 	\caption{Global-EDF}
 	\begin{algorithmic}
-		\REQUIRE $JobSet(t)$ ordonné par échéances
+		\REQUIRE $JobList(t)$ ordonné par échéances
 		\FORALL{ $j \in m $}
-			\item $decision \leftarrow pop(JobSet(t))$
+			\item $decision \leftarrow pop(JobList(t))$
 		\ENDFOR
 	\end{algorithmic}
 \end{algorithm}	
@@ -297,7 +303,7 @@
 	L'algorithme permet de prendre une décision au moment \textit{t} en ne considérant 
 	que les travaux à exécuter par ordre de priorité et les processeurs disponibles.
 	
-	Si l'on reprend l'exemple illustré précédemment, la décision sera prise de cette façon :z
+	Si l'on reprend l'exemple illustré précédemment, la décision sera prise de cette façon :
 	
 	\begin{figure}[H]
 		\includegraphics[scale=0.5]{img/gedf/gedf}
