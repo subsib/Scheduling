@@ -1,12 +1,12 @@
-\section{Enjeux et attente}
+\section{Objectif des tests}
 
-	Nous avons plusieurs attentes dans ce travail que vous souhaitons vérifier avec des tests.
-	
+	Nous avons plusieurs attentes que vous souhaitons évaluer avec des tests.
+
 	Nous voulons :
 	\begin{enumerate}
-		\item Vérifier qu'on a bien implémenté le bon algorithme
-		\item Vérifier qu'il se comporte bien comme il faut...
-		\item Regarder ses temps d'overheads sur des tests basiques
+	\setlength\itemsep{0.1em}
+		\item Montrer qu'on a implémenté le bon algorithme
+		\item Regarder les temps d'overheads sur des tests basiques
 		\begin{enumerate}
 			\item mesurer les WCET
 			\item mesurer les temps d'exécution et retirer tout ce qui n'est pas de l'exécution = overhead
@@ -18,25 +18,67 @@
 		\item trouver des trucs faisables avec UEDF, pas faisables avec global, et inversement
 	\end{enumerate}
 	
-	
-\section{Machine utilisée}
-	HIPPEROS est développé pour pouvoir être installé sur un nombre limité de machines. 
-	L'une d'elle est une SabreLite dont voici la description :
-	
-	\subsubsection{SabreLite truc}
-	
 
-\section{Génération d'ensembles de tâches}
+\section{Matériel utilisé}
+	\textbf{HIPPEROS} est développé pour pouvoir être installé sur un nombre limité de machines. 
+	L'une d'elle est une \textbf{SABRE Lite} dont voici les spécifications :
+	
+	\subsubsection{SABRE Lite i.MX6}
+		\begin{enumerate}
+			\setlength\itemsep{0.1em}
+			\item Processeur i.MX6 cadencé à x GHz, $4$ cœurs
+			\item 
+		\end{enumerate}
+	C'est un kit de développement couramment utilisé dans l'industrie. Les spécifications qui 
+	ont vraiment de l'importance ici sont le nombre de cœurs et la mémoire cache (et son niveau), 
+	le reste étant assez secondaire dans les tests que nous réalisons.
 
-	Nous n'avons pas utilisé de générateur totalement aléatoire de WCET et périodes, 
-	car nous avons préféré tester pour des périodes harmoniques. Aussi 
-	avons-nous opté pour des valeurs \og{}rondes\fg{} donc le nombre de combinaison est infini 
-	mais pas infiniment intéressant.
+\section{Création de tâche}
+
+	\subsubsection{Description de tâche dans HIPPEROS}
+	Pour exécuter des tâches avec \textbf{HIPPEROS}, il faut définir des fichiers de configuration 
+	sous un format \textit{XML}, dans ce fichier doivent apparaître certaines propriétés des tâches. 
+	Dans notre cas :
+	\begin{itemize}
+		\setlength\itemsep{0.1em}
+		\item le nom
+		\item l'adresse de l'exécutable
+		\item Si elles sont en temps réel
+		\item Si elles ont une ou plusieurs occurrences \{\textit{OneShot; Periodic; Sporadic}\}
+		\item leur WCET
+		\item leur période
+		\item leur échéance
+	\end{itemize}
+	et ceci autant de fois que de tâches que l'on aura à décrire. \newline
 	
-	Nous avons testé des valeurs de plus en plus grandes sur des proportions comparables pour fournir 
-	une méthode afin de fournir les WCET etc. pour cet ordonnanceur.
+	Les tests que nous faisons passer doivent nous permettre de contrôler au mieux la durée réelle 
+	d'exécution de la tâche, afin de maîtriser l'écart entre cette valeur et le WCET attribué dans les 
+	fichiers de configuration. \newline
 	
-	Cette partie-là était chronophage.
+	Pour ce faire, nous créons un unique programme qui sera lancé autant de fois que de tâches déclarées 
+	dans le fichier de configuration. 
+	Nous définissons un fichier de \textit{header} contenant un tableau de valeurs. 
+	Ainsi, lors de chaque exécution, le programme va lire une valeur dans un tableau, qui représente la 
+	limite de temps qu'il devra atteindre avant de se terminer proprement.\newline
+	
+	Concrètement, un programme \textbf{Measure} possède un \textit{Process Id}, et exécute cette boucle :
+
+	\label{algomeasure}
+	\begin{algorithm}[H]
+		\caption{Measure\_main}
+		\begin{algorithmic}
+			\STATE $boundary \leftarrow BoundaryList[Process\_id]$
+			\REPEAT \item $t = getElapsedTicksFromStart()$
+			\UNTIL{ $t < boundary$ }
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\subsubsection{Générateur Python}
+	Afin de générer des ensembles de tâches facilement, nous avons créé un générateur en \textit{Python} qui 
+	lit une série de propriétés en entrée et produit les fichiers nécessaires en sortie. 
+	Couplé à un autre générateur de combinaisons de tâches, cela nous permet de réaliser des expériences 
+	automatiquement et facilement.
+	
 
 \section{Détermination des WCET des tâches}
 	\textbf{UEDF} est optimal, en \underline{théorie}. Revenons un instant sur ce point. 
@@ -85,10 +127,24 @@ nombre d'opérations, et avons vérifié le temps d'exécution des tâches en ex
 de fois les tâches et pris le pire temps comme valeur de \textbf{WCET}. Cela ne garantit en fait 
 pas que le \textbf{WCET} soit réellement le pire des cas, mais cela est suffisant pour nos besoins ici.
 
-\subsection{Génération de tâches}
 
-
-
-\subsection{Surcoûts}
+\subsection{Récolte des résultats}
+	Afin de pouvoir analyser les performances de notre implémentation, il nous faut être capable de déterminer 
+	quand débute l'exécution d'une tâche, et quand elle se termine. 
+	Idéalement, il est bon de pouvoir mesurer également les temps d'attente (\textit{idle}) d'un cœur. 
+	Cela nous permet d'avoir des statistiques sur la répartition de la charge de travail, et 
+	d'émettre une hypothèse quant à l'évaluation des surcoûts.\newline
+	
+	Cela est possible en produisant des sorties (\textit{logs}) que nous parsons à l'aide d'outils 
+	développés en \textit{Python}. Cela étant, il nous faut préciser que la production de sorties sur la 
+	sonde de la \textit{SABRE Lite} prend elle-même du temps. Par conséquent, 
+	les résultats avancés ne peuvent être qu'approximatifs, particulièrement les surcoûts.\newline
+	
+	Pour générer ces logs, nous avons utilisé les outils disponibles d'\textbf{HIPPEROS}, et avons ajouté des informations 
+	sur les temps d'exécution de $Compute\_Allot$ [\hyperref[algouedf]{\ref*{algouedf}}] (temps passé et nombre d'occurrences).
+	
 
 \section{Comparaison avec G-EDF}
+
+	Les expériences réalisées avec \textbf{UEDF }ont toutes été également réalisées avec \textbf{Global EDF}.
+	En effet, de cette façon, l'on peut vérifier chsaispasquoi merde.

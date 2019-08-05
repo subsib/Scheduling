@@ -120,8 +120,8 @@
 	Les tâches actives [\ref*{tacheactive}] sont donc ordonnées dans la liste $sorted\_ActiveList(t)$. 
 	La priorité est définie selon l'échéance, la plus petite étant la plus prioritaire, comme dans \hyperref[EDF]{EDF [\ref*{EDF}]}.
 	Dans cette phase, l'algorithme va \og{}réserver\fg{} des tranches de temps d'exécution des tâches sur les 
-	processeurs, cela en calculant une valeur : \newline
-	$allot_{ij}$ pour $i \in \{0, nb\_de\_taches - 1\}$, pour $j \in \{0, nb\_processeurs - 1\}$
+	processeurs, cela en calculant un tableau de valeur : \newline
+	$allot_{ij}$ pour $i \in \{0, nb\_de\_taches - 1\}$, pour $j \in \{0, nb\_processeurs - 1\}$.
 	La valeur $allot_{ij}$ représente le nombre d'unités d'exécution de la tâche $i$ réservé sur le processeur $j$.\newline
 	Si cette valeur est positive, alors le temps $allot_{ij}$ du travail $i$ est réservé sur le 
 	processeur $j$. Si cette valeur est égale à $0$, aucun temps n'est réservé 
@@ -189,7 +189,7 @@
 		\includegraphics[scale=1]{img/uedf/uedf34}
 		\caption{étapes 2 et 3}
 	\end{figure}
-	\paragraph{Eligible}
+	\subsubsection{Eligible}
 	À ce stade, aucune décision d'ordonnancement n'est encore prise, mais des ensembles de tâches (\textit{Eligible}, 
 	noté $\epsilon$ dans la suite) sont créés sous forme de listes. Chaque liste \textit{Eligible} définit 
 	les seules tâches que les processeurs associés peuvent exécuter (en cela, cette phase d'\textbf{UEDF} peut 
@@ -204,7 +204,7 @@
 	exécuté sur le processeur. Il faut garder à l'esprit qu'à chaque relâchement de travail, 
 	$Allot$ sera recalculé. 
 
-	\paragraph{Prise de décision}
+	\subsubsection{Prise de décision}
 	La phase de décision de l'ordonnancement se déroule lors de la phase suivante.
 	\textbf{UEDF} s'inspire pour finir de \textbf{EDF-Delay}. 
 	Cet algorithme est très simple :
@@ -369,7 +369,7 @@
 		\item Global-EDF
 		\item HIPPEROS
 	\end{enumerate}
-	nous pouvons déjà formuler certaines hypothèses que nous aimerions vérifier dans ce travail. \newline
+	Nous pouvons déjà formuler certaines hypothèses que nous aimerions vérifier dans ce travail. \newline
 	
 	\begin{itemize}
 		\item Vérifier que l'algorithme ne comporte rien qui empêche son implémentation dans 

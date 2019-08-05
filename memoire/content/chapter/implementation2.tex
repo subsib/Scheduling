@@ -23,10 +23,10 @@
 		Se pose alors la question du décalage à appliquer afin d'occuper une place raisonnable en ayant 
 		le moins de pertes possibles.  
 		La réponse à apporter diverge en fonction de plusieurs facteurs :
-		Appelons le décalage $SHIFT$.
+		appelons le décalage $SHIFT$.
 		\begin{itemize}
 			\setlength\itemsep{0.1em}
-			\item Pour rappel, l'\textit{Utilisation} est définie de la sorte : $U(i) \defeq \frac{C_i}{T_i}$. 
+			\item Pour rappel, l'\textit{utilisation} est définie de la sorte : $U(i) \defeq \frac{C_i}{T_i}$. 
 			%\todo{def mots, ajouter utilisation, deadline, signalétique}
 			En pratique, c'est le \textit{WCET} et la période de la tâche que l'on utilise pour calculer cette fraction : 
 			$\frac{WCET}{T_i}$.
@@ -45,7 +45,7 @@
 			Admettons qu'une tâche ait une échéance de $8.000.000 \mu s$, et une autre du double, comme cela 
 			peut tout à fait se croiser dans un cas pratique, on aura une différence de $8.000.000$ à multiplier
 			par cette proportion. 
-			La valeur limite d'un entier de $64$ bits étant $18.446.744.073.709.551.615$, nous pouvons estimer que la marge 
+			La valeur limite d'un entier de $64$ bits étant $2^{64} - 1$ ($18.446.744.073.709.551.615$), nous pouvons estimer que la marge 
 			est grande et nous laisse libre de choisir un décalage grand.
 		\end{itemize}
 		Pour ces raisons, dans notre implémentation, nous avons estimé que décaler les valeurs de $1000$ était un bon compromis.
