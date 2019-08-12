@@ -9,10 +9,10 @@ Ces propositions portent sur plusieurs domaines :
 \section{Poursuivre l'implémentation}
 
 	L'état actuel de notre implémentation n'est pas totalement satisfaisante sur bien des points et 
-	gagnerait fort à être améliorée.
+	gagnerait fort à être améliorée. 
 	
 	\subsection{Inverser les cœurs}
-		Dans \textbf{HIPPEROS}, c'est le cœur \textit{Master} qui exécute l'agorithme d'ordnnancement 
+		Dans \textbf{HIPPEROS}, c'est le cœur \textit{Master} qui exécute l'algorithme d'ordnnancement 
 		Il serait intéressant d'échanger les cœurs afin d'alléger la charge de ce premier cœur. 
 		Nous sommes toutefois réservé sur les résultats à attendre de cela, 
 		puisque comme l'ont montré les résultats, la charge \todo{blabla résultats}
@@ -28,18 +28,18 @@ Ces propositions portent sur plusieurs domaines :
 
 	\subsection{Ordonnanceur virtuel}
 	
-		Dans la thèse de G. Nellissen \cite{nelissen_geoffrey_efficient_2013}, une amélioration est proposée et serait très intéressante 
+		Dans la thèse de G. Nelissen \cite{nelissen_geoffrey_efficient_2013}, une amélioration est proposée et serait très intéressante 
 		à ajouter à notre implémentation. En effet, afin de limiter le nombre de migrations, l'auteur propose de conserver une 
 		copie des décisions \og{}virtuelles\fg{} et de vérifier au moment d'une migration si celle-ci peut être évitée, en 
-		échangeant la liste \textit{eligible} avec celle d'un autre cœur. Dans ce cas, le nombre de migrations devrait 
-		réduire drastiquement. 
+		échangeant la liste \textit{eligible} d'un cœur donné avec celle d'un autre cœur. Dans ce cas, le nombre de migrations devrait 
+		réduire drastiquement, ce qui pourrait aider à diminuer de beaucoup les surcoûts.
 		
 		\todo{voir explication et donner formule ?! }
 
 
 \section{Tests supplémentaires}
 
-	Nous avons limité nos recherches et expériences à des ensembles de tâches de périodes harmoniques (ou presque).\todo{add harmonique glossaire}
+	Nous avons limité nos recherches et expériences à des ensembles de tâches de périodes harmoniques \hyperref[harmonique]{[\ref{harmonique} ]}.
 	Ceci nous a permis de faire des expériences avec un résultat prédictible dans \todo{add} $\%$ des cas.
 	Or il serait également intéressant de réussir à produire un résultat similaire mais pour des ensembles de tâches 
 	de périodes non harmoniques. Cela semble plus difficile compte tenu des migrations que cela entraîne durant l'exécution, 
