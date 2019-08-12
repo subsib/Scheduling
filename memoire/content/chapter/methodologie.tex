@@ -101,8 +101,16 @@
 	exécuté plus longuement (1 à 2h) afin d'être analysé ultérieurement.\newline
 
 	Il est important de signaler ici qu'\textbf{HIPPEROS} permet de générer des \textit{logs}.
-	En branchant sur port USB une sonde \textbf{Olimex} \todo{add ref}, il est possible de récupérer 
-	un certain nombre d'informations sur port série. Toutefois, la production de \textit{logs}
+	En branchant sur port USB une sonde, il est possible de récupérer 
+	un certain nombre d'informations sur port série, comme ces événements :
+	\begin{itemize}
+		\item la tâche est (ré)activée
+		\item le travail démarre son exécution
+		\item le travail est préempté
+		\item 
+	\end{itemize}
+	
+	Toutefois, la production de \textit{logs}
 	fausse elle-même les données puisqu'elle prend un certain temps en provoquant des écritures 
 	sur le port série.
 	Par conséquent, les résultats présentés ici ne peuvent 
@@ -110,8 +118,8 @@
 
 \section{Détermination des WCET des tâches}
 	\textbf{UEDF} est optimal, en \underline{théorie}. Revenons un instant sur ce point. 
-	Cela signifie qu'en omettant tous les surcoûts, l'on est capable de charger les processeurs 
-	à $100\%$ d'utilisation. \newline
+	Cela signifie que si aucun ordonnancement pour un système donné existe, 
+	aucun autre ordonnanceur ne pourra l'ordonnancer.\newline
 
 	\todo{ajouter blabla sur scope du WCET et que c'est documenté + liens trouvés}	
 	En pratique, le WCET d'une tâche est une valeur difficile à donner, et qui va dépendre de 
@@ -131,23 +139,24 @@
 	Par ailleurs, certaines instructions prennent un temps plus ou moins variable. Par exemple, 
 	les entrées-sorties ont un temps qui peut fort varier. En outre, selon la disponibilité ou 
 	des ressources, des temps peuvent s'ajouter. 
-	ne suffisent pas.
 	
 	\subsection{La plateforme d'exécution}
 	Pour des raisons évidentes, une tâche ne mettra pas un temps équivalent sur une plateforme ou sur une autre, 
 	et le temps n'est donc pas une propriété théorique de la tâche elle-même mais dépend bien 
 	également de la plateforme. On peut bien avoir une idée en comptant le nombre d'instructions et en faisant 
-	des calculs par rapport à la fréquence du processeur, mais cela reste à évaluer en pratique.\newline
+	des calculs par rapport à la fréquence du processeur, mais cela reste approximatif. 
+	Cela peut néanmoins suffire dans le cas de systèmes non-critiques.\newline
 	
 	Dans un cas idéal où le WCET ne dépendrait que de la machine et du nombre d'instructions, 
 	on aurait pu imaginer faire un certain nombre d'exécutions de la même tâche et prendre une valeur 
 	statistiquement en dehors des valeurs possibles avec certitude de $n\%$. \todo{nommer ce test statistique}
-	Toutefois, cette proposition, qui a d'abord été faite, comme on peut le voir sur les figures \todo{add ref} 	
+	Toutefois, cette proposition, qui a d'abord été faite, comme on peut le voir sur les figures \todo{add ref}
+	n'est pas satisfaisante dans notre cas.
 
-	\subsection{L'algorithme}
+	\subsection{L'ordonnanceur}
 	
-	En fin de compte, l'algorithme va ici avoir un impact sur le WCET. 
-	Sur Global-EDF, le WCET ne fait partie des paramètres utilisés pour calculer 
+	En fin de compte, l'ordonnanceur va ici avoir un impact sur le WCET. 
+	Concernant Global-EDF, le WCET ne fait pas partie des paramètres utilisés pour calculer 
 	l'ordonnancement. La variable déterminante est l'échéance absolue ($d_i(t)$). 
 	Le WCET en revanche est déterminant dans le cas d'\textbf{UEDF}. Voyons 
 	l'impact de cette variable et les risques liés à l'évaluation de cette valeur.\newline
@@ -173,12 +182,7 @@
 	l'historique d'une exécution. \newline
 	
 	Cela est possible en produisant des sorties (\textit{logs}) que nous parsons à l'aide d'outils 
-	développés en \textit{Python}. Cela étant, il nous faut préciser que la production de sorties sur le 
-	port série de la \textit{SABRE Lite} prend elle-même du temps. Par conséquent, 
-	les résultats avancés ne peuvent être qu'approximatifs, particulièrement les surcoûts.\newline
-	
-	Pour générer ces logs, nous avons utilisé les outils disponibles d'\textbf{HIPPEROS}, et avons ajouté des informations 
-	sur les temps d'exécution de l'ordonnanceur lui-même (temps passé dans les fonctions et nombre d'occurrences).
+	développés en \textit{Python}. 
 	
 
 \section{Comparaison avec G-EDF}

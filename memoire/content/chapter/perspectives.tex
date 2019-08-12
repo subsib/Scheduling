@@ -1,33 +1,16 @@
-\section{Vérification de l'implémentation : tests unitaires}
-
-
-L'implémentation d'un algorithme, quel qu'il soit, est souvent entouré de tests unitaires. 
-Il n'y a pas spécialement d'intérêt scientifique à développer un paragraphe sur 
-notre façon de tester \textbf{UEDF} si ce n'est pour faire une remarque.\newline
-
-Une des difficultés rencontrée lors de l'implémentation d'\textbf{UEDF} a été de s'assurer de la correction de l'algorithme. 
-Aucune autre implémentation n'était accessible sur un autre \textbf{RTOS}, de fait, et donc il n'y avait pas de 
-comparaison possible. En outre, nous trouvons bien un invariant dans la thèse de G. Nelissen, ce qui assure 
-que l'algorithme a bien réservé du temps pour toutes les tâches présentes dans l'ensemble 
-(ce qui doit être vrai pour tout système où $instant\_utilisation <= m$), mais ne garantit pas 
-qu'il n'y a pas d'erreurs ensuite dans la répartition des sous-systèmes, etc. Pour cela, il faut encadrer 
-l'exécution d'autres tests. \newline
-
-Nous avons programmé un simulateur en \textit{Python} afin de pouvoir comparer les résultats 
-obtenus dans les deux cas. Évidemment, procéder de la sorte ne garantit pas que l'exécution soit correcte
-puisqu'on ne confronte pas sa compréhension de l'algorithme. \newline
-
-Une solution à cela serait de proposer des exemples d'ordonnancements, présentant des situations intéressantes :
+Dans cette partie, nous revenons sur le travail effectué et proposons des voies d'amélioration.
+Ces porpositions portent sur plusieurs domaines :
 \begin{itemize}
-	\setlength\itemsep{0.1em}
-	\item Migrations
-	\item Enchevêtrements particuliers
-	\item Évolution des valeurs
+	\item l'implémentation
+	\item d'autres tests
+	\item plus largement sur la littérature scientifique sur la quesiton
 \end{itemize}
-Fournir des illustrations d'exécutions type ne nous paraît pas forcément accessoire, car l'algorithme n'est pas facile à comprendre, 
-et cela peut entraîner des erreurs d'implémentation. On peut considérer que c'est la tâche de la personne qui implémente, 
-c'est probable, mais si l'objectif des papiers est de permettre la mise en œuvre des algorithmes proposés, 
-il peut être intéressant d'aider. 
+
+\section{Poursuivre l'implémentation}
+
+	L'état actuel de notre implémentation n'est pas encore satisfaisante sur bien des points et 
+	gagnerait fort à être améliorée. Il 
+	
 
 
 \section{Qu'est-ce qui rend un algorithme implémentable ?}
