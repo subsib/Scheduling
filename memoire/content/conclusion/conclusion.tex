@@ -1,21 +1,31 @@
-	Nous avons exploré une partie de la littérature scientifique au sujet des ordonnanceurs 
-	globaux ou semi-partitionnés afin d'en sélectionner un pour implémentation et tests. 
-	Il ressort de cette étude que plusieurs candidats présentent des intérêts, sont mieux 
-	connus dans la littérature que dans la pratique, et gagneraient à être mieux analysés. 
-	Notre choix sera influencé par ces paramètres : \medskip
-	\begin{itemize}
-		\item L'ordonnanceur est-il optimal ?
-		\item Quels systèmes de tâche peut-il ordonnancer ?
-		\item Des efforts ont-ils été fournis afin d'éviter les migrations ?
-		\item A-t-il déjà bénéficié d'implémentations ?
-	\end{itemize}
-	De ces paramètres, il ressort que l'algorithme \textit{U-EDF} est optimal pour la classe périodique, 
-	semi-partitionné, peut également ordonnancer les systèmes sporadiques à échéances arbitraires. 
-	
-	En outre, G. Nelissen est accessible par e-mail, intéressé par une implémentation réelle, 
-	et son travail montre une très bonne connaissance des ordonnanceurs et des systèmes d'exploitation. En 
-	effet, dans sa thèse, on trouve une progression qui mène à une implémentation qui soit faisable. 
-	\todo{developper : il fait gaffe à ce que ce soit faisable, et on voit, quand on le lit, qu'il 
-	comprend les enjeux, le fonctionnement d'un RTOS}
-	
-	C'est donc vers cet algorithme que notre choix se porte.
+L'objectif initial de ce travail était avant tout de choisir un ordonnanceur 
+issu de la littérature scientifique n'ayant bénéficié d'aucune implémentation dans un véritable RTOS. 
+Au terme d'une revue de l'état de l'art sur les ordonnanceurs actuels,
+nous avons choisi de développer une implémentation d'\textbf{UEDF}, un algorithme qui a été élaboré par une 
+équipe de chercheurs de l'\textbf{ULB}, pour ses propriétés mais également 
+car la communication autour de lui nous semblait accessible.\newline
+
+Au terme d'une première implémentation dans \textbf{HIPPEROS}, nous pouvons déjà affirmer 
+qu'aucun élément ne rend cet algorithme non implémentable dans cet RTOS.\newline
+
+Par ailleurs, au terme des tests que nous avons fait afin de mesurer ses comportements, nous pouvons dire :
+\begin{itemize}
+	\item sa répartition de charge dans le cas d'ensembles de $m \times 100$ \% n'est pas mauvaise, mais le dernier cœur 
+	n'a pas autant de charge que les autres. Ceci devrait être amélioré en apportant quelques modifications, et nous 
+	pensons que rien ne s'oppose à ce que ce résultat s'améliore grandement. 
+	\item Des optimisations telles que de maintenir un ordonnancement virtuel afin d'éviter de nombreuses migrations sont 
+	indispensables, sinon l'algorithme perd de son intérêt, et ce, même face à un algorithme décrit comme n'étant pas 
+	optimal dans la littérature. En d'autres termes, cela fait perdre l'optimalité d'\textbf{UEDF} de procéder 
+	à son implémentation \og{}naïve\fg{}. 
+	\item L'algorithme détermine ses décisions en se basant sur le WCET de la tâche, or, cette valeur dépend elle-même de 
+	l'algorithme d'ordonnancement. Cela comporte des avantages, néanmoins rend le calibrage des ensembles délicat. 
+\end{itemize}
+
+Au terme de ce travail, nous pensons plus largement à la littérature scientifique décrivant d'autres algorithmes. 
+Le travail d'implémentation s'est avéré complexe pour bien des raisons, et si une équipe souhaite que son algorithme 
+bénéficie d'une implémentation dans un véritable RTOS, il nous semble absolument indispensable 
+que les papiers dépassent le stade de la preuve mathématique. 
+Le monde de l'industrie comme des sciences bénéficierait de multiples travaux de ce genre 
+afin d'augmenter la confiance en des solutions théoriques non éprouvées.
+\newline
+\newpage

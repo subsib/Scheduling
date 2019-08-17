@@ -2,49 +2,70 @@
 Dans cette partie, nous revenons sur le travail effectué et proposons des voies d'amélioration.
 Ces propositions portent sur plusieurs domaines :
 \begin{itemize}
-	\item l'implémentation
-	\item d'autres tests
-	\item plus largement sur la littérature scientifique sur la question
+	\item Des améliorations concernant l'implémentation
+	\item De nouveaux tests pour compléter nos premières observations
+	\item plus largement sur la littérature scientifique, lorsqu'une équipe souhaite proposer un algorithme nouveau
 \end{itemize}
 
 \section{Poursuivre l'implémentation}
 
 	L'état actuel de notre implémentation n'est pas totalement satisfaisante sur bien des points et 
-	gagnerait fort à être améliorée. 
+	gagnerait fort à être continuée.
 	
 	\subsection{Inverser les cœurs}
-		Dans \textbf{HIPPEROS}, c'est le cœur \textit{Master} qui exécute l'algorithme d'ordnnancement 
-		Il serait intéressant d'échanger les cœurs afin d'alléger la charge de ce premier cœur. 
-		Nous sommes toutefois réservé sur les résultats à attendre de cela, 
-		puisque comme l'ont montré les résultats, la charge \todo{blabla résultats}
-	
+		Les résultats nous ont montré que le cœur \textit{Master} avait une charge de travail plus basse que les 
+		autres cœurs. Cette observation découle directement d'un artefact : nous avons volontairement augmenté les 
+		écarts entre le WCET et le temps moyen d'exécution de certaines tâches afin de rendre \textbf{UEDF} capable 
+		d'ordonnancer. En l'absence de cette manipulation, nous avons constaté de nombreux dépassements et n'arrivions pas 
+		à trouver d'ensembles satisfaisants à étudier.\newline
+		
+		Il est tout à fait possible d'éviter cette manipulation, et la modification n'est pas des plus compliquées : 
+		en effet, en inversant l'ordre des processeurs dans l'algorithme, il est possible de changer cette tendance. 
+		Dans ce cas, on peut tout à fait imaginer que le dernier cœur serait naturellement le moins chargé, et que par 
+		conséquent, aucune manipulation particulière ne soit nécessaire afin de rendre l'algorithme bien plus performant au 
+		niveau de la répartition des charges de travail.\newline
+		
+		Un premier essai a été fait, et a montré que le changement méritait de l'attention pour éviter d'incorporer des 
+		erreurs, néanmoins reste de complexité tout à fait abordable.
+		
+
 	\subsection{Structures de données}
 		L'implémentation et ses structures ont été exposées plus haut dans document. 
-		Il serait sans aucun doute efficace d'optimiser les diverses structures utilisées, par exemple 
-		la liste $Eligible$ ainsi que ses accès. \newline
+		Il serait sans aucun doute efficace d'optimiser les diverses structures utilisées. \newline
 		
 		Une amélioration viendrait d'un moyen efficace de conserver le \textit{Heap} et de le maintenir 
 		à jour durant l'exécution. En effet, actuellement, ce \textit{Heap} est reconstruit à chaque 
 		relâchement de tâche. Il gagnerait à n'ajouter que les nouvelles tâches et à retirer celles qui sont terminées.
+		Cette amélioration a été testée brièvement, et s'est révélée prometteuse.
 
 	\subsection{Ordonnanceur virtuel}
 	
 		Dans la thèse de G. Nelissen \cite{nelissen_geoffrey_efficient_2013}, une amélioration est proposée et serait très intéressante 
 		à ajouter à notre implémentation. En effet, afin de limiter le nombre de migrations, l'auteur propose de conserver une 
 		copie des décisions \og{}virtuelles\fg{} et de vérifier au moment d'une migration si celle-ci peut être évitée, en 
-		échangeant la liste \textit{eligible} d'un cœur donné avec celle d'un autre cœur. Dans ce cas, le nombre de migrations devrait 
+		échangeant la liste \textit{Eligible} d'un cœur donné avec celle d'un autre cœur. Dans ce cas, le nombre de migrations devrait 
 		réduire drastiquement, ce qui pourrait aider à diminuer de beaucoup les surcoûts.
-		
-		\todo{voir explication et donner formule ?! }
-
+		Le coût d'une telle opération en complexité est relativement élevé, toutefois, nous avons vu que le temps de calcul 
+		est moins coûteux que les migrations, aussi ce serait une dépense justifiée et très efficace.
 
 \section{Tests supplémentaires}
 
-	Nous avons limité nos recherches et expériences à des ensembles de tâches de périodes harmoniques \hyperref[harmonique]{[\ref{harmonique} ]}.
-	Ceci nous a permis de faire des expériences avec un résultat prédictible dans \todo{add} $\%$ des cas.
-	Or il serait également intéressant de réussir à produire un résultat similaire mais pour des ensembles de tâches 
-	de périodes non harmoniques. Cela semble plus difficile compte tenu des migrations que cela entraîne durant l'exécution, 
-	mais avec les améliorations que nous proposons plus haut, cela pourrait être étudié également.
+	Nous avons limité nos recherches et expériences à des ensembles de tâches de périodes harmoniques \hyperref[harmonique]{[\ref{harmonique}]}, 
+	ce qui est justifié par plusieurs arguments, développés dans la partie \hyperref[methodo]{Méthodologie [\ref*{methodo}]}.
+	Néanmoins, en apportant les quelques modifications exposées ici, nous pensons qu'il serait envisageable et intéressant 
+	de produire des résultats pour des ensembles de tâches 
+	de périodes non harmoniques, avec des rapports plus complexes entre elles. Nous attendrions de constater 
+	une meilleure répartition de la charge de travail, et beaucoup moins de migrations.
 
-\section{Que proposer dans un papier pour faciliter le passage à l'implémentation ?}
+\section{La littérature scientifique}
+
+	Dans le cas de \textbf{UEDF}, les documents disponibles montrent un effort de l'équipe afin de rendre compréhensible 
+	l'algorithme et permettre sa mise en œuvre. Comme cela a été dit précédemment, cet effort n'est pas lisible dans tous les 
+	documents que nous avons eu l'occasion de parcourir, ce qui rend l'implémentation compliquée. Le niveau de complexité 
+	de l'algorithme en lui-même n'est pas équivalent à la difficulté d'implémentation dans un environnement 
+	déjà écrit, partagé avec d'autres ordonnanceurs. Aussi, si cette complexité est déjà très grande, nous pensons que les 
+	chercheurs devraient tout mettre en œuvre afin de rendre le passage du papier à l'implémentation plus facile, en illustrant 
+	avec des exemples les calculs, en donnant des conditions, des invariants, et pourquoi pas proposer des cas particuliers 
+	auxquels il faut particulièrement être attentifs. 
+	
 

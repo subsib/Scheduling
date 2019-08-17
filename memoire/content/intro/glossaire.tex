@@ -12,7 +12,9 @@
 		la tâche est le pire temps. Cela permet d'envisager le pire scénario, et ainsi 
 		de s'assurer que si celui-ci est possible, alors dans de meilleures conditions, 
 		la faisabilité est conservée. La notation utilisée dans le reste de ce document 
-		est  \customhighlight{WCET} : \textbf{W}orst \textbf{C}ase \textbf{E}xecution \textbf{T}ime
+		est  \customhighlight{WCET} : \textbf{W}orst \textbf{C}ase \textbf{E}xecution \textbf{T}ime\newline
+		Le WCET diffère donc du temps d'exécution réel de la tâche. En pratique, il peut être plus ou moins éloigné 
+		du temps moyen d'exécution.
 		
 		\item \textbf{Tâches périodiques} :
 		Une tâche périodique est une tâche qui génère régulièrement des travaux.  
@@ -58,10 +60,6 @@
 		
 	\end{itemize}
 
-	\subsection{Périodes harmoniques}\label{harmonique}
-	\todo{blabla}
-
-	
 	\subsection{Migration}\label{migration}
 	Une migration est le transfert d'une tâche ou d'un travail d’un processeur vers un autre. 
 	Habituellement, les modèles négligent les temps de surcoût liés aux migrations. 
@@ -86,6 +84,12 @@
 	
 	Cette notion est souvent utilisée afin d'obtenir l'intervalle de temps 
 	minimal durant lequel tester l'ordonnançabilité d'un système par un ordonnanceur.
+
+	\subsection{Périodes harmoniques}\label{harmonique}
+	Nous définissons un ensemble comme étant composé de tâches de périodes harmoniques si pour deux tâches prises au hasard, 
+	la plus petite période des deux multipliée par un entier est égale à la plus grande. \newline
+	$\forall i \in TaskSet, \forall j \in TaskSet, d_i(t) < d_j(t),$ $\exists n \in \mathbb{N}$ $t.q.$ $d_i(t) \times n = d_j(t)$
+
 	
 	\subsection{Travail}
 	Un travail est une instance d'une tâche. 
@@ -153,7 +157,9 @@
 	
 	\subsection{Optimalité}\label{optimal}
 	Un ordonnanceur est dit optimal si pour un système de tâche pour lequel un ordonnancement 
-	existe, l'ordonnanceur permet de l'ordonnancer.
+	existe, l'ordonnanceur permet de l'ordonnancer. Autrement formulé, 
+	si un ordonnanceur optimal ne peut pas trouver d'ordonnancement pou un système, aucun autre 
+	ordonnanceur ne le peut.
 	
 	\subsection{Économe} 
 	Un ordonnanceur peut-être \og économe\fg{} , ou \og non-économe\fg{} . Dans le premier cas, si le processeur est libre, 
@@ -167,7 +173,10 @@
 	\begin{itemize}
 		\item Durant l'exécution, on parlera d'opérations en ligne
 		\item Avant l'exécution, on parlera d'opérations hors ligne
-	\end{itemize}	
+	\end{itemize}
+
+	En pratique, les ordonnanceurs hors ligne sont généralement plus simples et 
+	génèrent moins de surcoût durant l'exécution.
 	
 	\subsubsection{Ordonnanceur multi-processeur Partitionné}
 	Un ordonnanceur partitionné composé de $n$ tâches et de $m$ processeurs divise 
@@ -219,12 +228,6 @@
 	\label{instantcritique}
 	Un instant critique est le moment où le temps de réponse d'une tâche est le plus long.
 
-
-	\subsection{Heap}\label{heap}
-	Structure de données de la famille des arbres triée. Le Heap a comme particularité d'avoir à son sommet toujours l'élément le 
-	plus grand (ou le plus petit selon ordre) et de nécessiter un temps de $\log(n)$ à chaque ajout/retrait d'un 
-	élément. Cette structure de données peut être utilisée dans certaines implémentations afin de gagner du temps par rapport à une 
-	liste triée de complexité supérieure.
 	
 	
 	
