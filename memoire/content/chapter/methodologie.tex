@@ -10,7 +10,7 @@
 	à savoir : vérifier que les surcoûts augment avec le nombre de cœurs, de tâches, 
 	de périodes différentes. 
 	Nous chercherons à confronter des résultats théoriques avec une réalisation.
-	Nous pouvons également comparer la charge des processeurs avec Global-EDF pour des mêmes ensembles de tâches.
+	Nous pouvons également comparer la charge des processeurs avec \textbf{Global-EDF} pour des mêmes ensembles de tâches.
 
 %	Nous voulons :
 %	\begin{enumerate}
@@ -115,13 +115,35 @@
 	sur le port série.
 	Par conséquent, les résultats présentés ici ne peuvent 
 	être considérés autrement que comme des approximations.
+	
+	
+\section{Génération des ensembles}
+
+Nous ne disposons pas d'un générateur aléatoire de tâches, et ce pour les raisons que nous allons exposer maintenant.
+L'ordonnanceur \textbf{UEDF} est fort sensible aux valeurs des périodes et WCET, puisque 
+c'est avec l'\textit{utilisation} qu'il réserve du temps d'exécution sur chaque cœur. 
+Concrètement, on imagine bien qu'en générant de façon aléatoire des WCET, ces proportions sur les 
+périodes ne donneront pas forcément une valeur entière.\newline
+
+Imaginons un cas de figure où la somme des utilisations des $n$ tâches de priorités supérieures 
+n'atteint la somme de $101\%$, dans ce cas, une tâche va réserver $1\%$ de son WCET 
+sur un cœur avant de devoir être préemptée, puis migrée sur le cœur précédent. Ce comportement 
+serait trop contraignant et nous risquons de ne pas avoir de résultats intéressant à 
+proposer. De plus, l'industrie procède généralement à une génération de tâches de périodes harmoniques, 
+si bien que ce choix se défend également de ce point de vue.
+Néanmoins, cela pourrait faire partie d'un travail ultérieur.\newline
+
+Pour créer un ensemble de tâches, nous générons un nombre aléatoire de périodes différentes, 
+ainsi qu'un multiple de la première période. Nous ne sommes donc pas 
+avec une classe de tâches de périodes harmoniques uniquement, 
+mais proches de ce cas de figure. 	
 
 \section{Détermination des WCET des tâches}\label{methodo}
 	\textbf{UEDF} est optimal, en \underline{théorie}. Revenons un instant sur ce point. 
 	Cela signifie que si aucun ordonnancement pour un système donné existe, 
 	aucun autre ordonnanceur ne pourra l'ordonnancer.\newline
 
-	\todo{ajouter blabla sur scope du WCET et que c'est documenté + liens trouvés}	
+	%\todo{ajouter blabla sur scope du WCET et que c'est documenté + liens trouvés}	
 	En pratique, le WCET d'une tâche est une valeur difficile à donner, et qui va dépendre de 
 	beaucoup de facteurs.\newline
 	
@@ -149,14 +171,14 @@
 	
 	Dans un cas idéal où le WCET ne dépendrait que de la machine et du nombre d'instructions, 
 	on aurait pu imaginer faire un certain nombre d'exécutions de la même tâche et prendre une valeur 
-	statistiquement en dehors des valeurs possibles avec certitude de $n\%$. \todo{nommer ce test statistique}
+	statistiquement en dehors des valeurs possibles avec certitude de $n\%$. %\todo{nommer ce test statistique}
 	Toutefois, cette proposition, qui a d'abord été faite, comme on peut le voir sur les figures \todo{add ref}
 	n'est pas satisfaisante dans notre cas.
 
 	\subsection{L'ordonnanceur}
 	
 	En fin de compte, l'ordonnanceur va ici avoir un impact sur le WCET. 
-	Concernant Global-EDF, le WCET ne fait pas partie des paramètres utilisés pour calculer 
+	Concernant \textbf{Global-EDF}, le WCET ne fait pas partie des paramètres utilisés pour calculer 
 	l'ordonnancement. La variable déterminante est l'échéance absolue ($d_i(t)$). 
 	Le WCET en revanche est déterminant dans le cas d'\textbf{UEDF}. Voyons 
 	l'impact de cette variable et les risques liés à l'évaluation de cette valeur.\newline
@@ -176,6 +198,66 @@
 	durées d'exécutions demandées, pour proposer finalement une façon plus systématique 
 	de fixer ces valeurs.
 
+
+\section{Rapport WCET vs temps d'exécution moyen}
+
+La première difficulté rencontrée lors de la mise en place de tests a été de déterminer la façon 
+de configurer les ensembles afin que ceux-ci soit ordonnançables sans provoquer de 
+dépassement de WCET ou d'échéances tout en conservant une charge de travail la plus élevée possible. 
+La réponse n'a pas été simple à apporter, puisque ce nombre -- comme 
+évoqué dans \hyperref[methodo]{le chapitre précédent} [\ref{methodo}] -- dépend de plusieurs facteurs, dont 
+l'algorithme d'ordonnancement lui-même. \newline
+
+D'après nos tests, la façon de déterminer les WCET par rapport à la durée moyenne d'exécution de la tâche 
+dépend du type d'ensemble, 
+du nombre de tâches ainsi que du nombre de cœurs utilisés (donc de la somme des \textit{utilisations} de l'ensemble).\newline
+
+\subsection{Premiers tests de calibration, somme d'utilisation de 100 \%}
+
+Pour une somme des utilisations de $100\%$, \textbf{UEDF} va se comporter comme un ordonnanceur 
+monocore, même s'il dispose de plusieurs cœurs. Cela ne présente pas beaucoup d'intérêt d'étudier la 
+répartition de la charge, puisque ce résultat est totalement attendu.\newline
+
+En revanche, la configuration -- autrement dit : le calibrage -- diffère, puisque 
+\textbf{Global-EDF} n'utilise pas du tout le WCET pour prendre ses décisions, contrairement 
+à \textbf{UEDF}. Cette donnée doit donc être fixée avec une grande attention.\newline
+
+Ce premier graphique montre l'évolution de la charge du cœur $0$ dans une série d'ensembles dont la 
+somme des utilisations ($\sum_0^{n-1}U(i)$) est de $100\%$.
+Cela nous permet de tester plus facilement l'évolution de la charge possible d'un processeur en fonction du nombre de tâches.\newline
+
+Un ensemble est choisi s'il ne provoque pas de dépassement de WCET ou d'échéance durant une exécution 
+mais qu'en variant de quelques dizaines de millisecondes la durée moyenne d'exécution de la tâche, une de ces erreurs arrive. 
+Cela signifie que l'on s'approche par essai/erreur de la limite au delà de laquelle nous trouvons un dépassement.\newline
+
+Les premières courbes montrent l'évolution du rapport entre les temps d'exécution moyens et les WCET renseignés dans la 
+configuration de la tâche. 
+Dans ce premier test, nous avons exécuté et analysé l'exécution de $5$ ensembles de tâches composés respectivement de 
+$2$, $3$, $4$, $6$ et $8$ tâches.\newline 
+
+Par construction, la première courbe indique l'évolution pour des tâches de périodes toutes égales comme référence, 
+et la seconde indique l'évolution sur base de périodes de soit harmoniques, soit proches de l'harmonie.\newline
+
+
+\begin{figure}[H]
+	\label{evowcethomogene}
+	\caption{Évolution de la charge d'utilisation en fonction du nombre de tâches, somme d'utilisation de 100$\%$}
+	\includegraphics[scale=0.6]{img/wcet/load_100u}
+\end{figure}
+
+Cette illustration est ainsi développée dans ce travail afin de montrer l'effort de calibration, ainsi que 
+de démontrer une différence avec d'autres ordonnanceurs pour lesquels le calcul du WCET des tâches est 
+sans doute moins crucial. À l'issue de cette analyse, ainsi que d'autres essais non détaillés dans ce 
+document, nous constatons que le cœur $0$, qui se trouve être le cœur \textit{Master} dans le système d'exploitation \textbf{HIPPEROS}, 
+sera for sollicité à exécuter les décisions, migrations, etc. Une façon simple d'améliorer la répartition de la 
+charge sera exposée dans le chapitre \hyperref[perspectives]{Perspectives} [\ref{perspectives}]. 
+Sans cette amélioration dans le code, nous forcerons les ensembles ultérieurs 
+à avoir une charge bien moins élevée sur le cœur $0$ que sur les autres, ce qui rend les systèmes 
+plus facilement ordonnançables. En ayant conscience de la façon de procéder de cet ordonnanceur, 
+concrètement, nous seront plus pessimiste sur le temps moyen d'exécution des tâches 
+dont les périodes sont les plus petites dans nos tests. 
+
+
 		
 \subsection{Récolte des résultats}
 	Afin de pouvoir analyser les performances de l'implémentation d'\textbf{UEDF}, il nous faut être capable de reconstituer 
@@ -188,6 +270,4 @@
 \section{Comparaison avec G-EDF}
 
 	Les expériences réalisées avec \textbf{UEDF }ont toutes été également réalisées avec \textbf{Global EDF}.
-	Les mêmes ensembles de tâches ont été rejoués en changeant juste l'ordonnanceur. Pour certains exemples, comme
-	on le verra dans la partie suivante, les ensembles ont été un peu modifiés également afin de 
-	mettre en lumière des comportements intéressants et inattendus compte tenu de la littérature.
+	Les mêmes ensembles de tâches ont été rejoués en changeant juste l'ordonnanceur. 

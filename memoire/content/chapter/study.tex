@@ -7,133 +7,121 @@
 	Une des questions auxquelles nous devions répondre était la possibilité d'implémentation d'\textbf{UEDF}, qui 
 	n'avait bénéficié jusque là d'aucune implémentation sur un RTOS.
 	Le travail effectué a d'ores et déjà montré qu'il était possible de l'implémenter, ce qui est un premier résultat attendu.
-	Il est néanmoins important de préciser que cette implémentation est encore 
-	perfectible, et nous donnerons des pistes d'amélioration dans le chapitre suivant. \todo{ref}\newline
+	Il est néanmoins important de préciser que cette implémentation n'a pas atteint sa phase d'optimisation 
+	et que la volonté dans ce travail a été avant toute chose d'avoir une implémentation fonctionnelle qui mettrait
+	déjà en avant des caractéristiques intéressantes de cet ordonnanceur. 
+	Le lecteur est d'autant plus invité à prendre les résultats non pas pour une affirmation générale 
+	mais bien comme issue d'une première implémentation 
+	\og{}exploratoire\fg{} qu'elle est observée en vis--à--vis d'une implémentation de \textbf{Global-EDF} déjà optimisée. 
+	Nous donnerons des pistes d'amélioration dans le chapitre suivant. \newline
 	
-\section{Rapport WCET vs temps d'exécution moyen}
+	\subsection{À la lisière entre théorie et pratique}
+	
+	Nous avons montré au chapitre \hyperref[contexte]{Contexte} [\ref*{contexte}] 
+	que certains ensembles en théorie devraient être 
+	ordonnançables par \textbf{UEDF }mais pas par\textbf{ Global-EDF}, cela en considérant les WCET comme 
+	temps réels d'exécution. Dans la pratique --- comme on en a déjà parlé dans le chapitre \hyperref[methodo]{Méthodologie} [\ref*{methodo}] --- 
+	les WCET ne doivent jamais être des temps d'exécution, et cette limite peut être plus ou moins éloignée 
+	de la durée moyenne d'exécution d'une tâche. Nous avons également parlé du fait que l'ordonnanceur doit lui aussi
+	être pris en considération pour paramétrer cet écart entre moyenne des temps d'exécution et WCET.\newline
 
-	La première difficulté rencontrée lors de la mise en place de tests a été de déterminer la façon 
-	de configurer les ensembles afin que ceux-ci soit ordonnançables sans provoquer de 
-	dépassement de WCET ou d'échéances. La réponse n'a pas été simple à apporter, puisque ce nombre -- comme 
-	évoqué dans \hyperref[methodo]{le chapitre précédent} [\ref{methodo}] -- dépend de plusieurs facteurs, dont 
-	l'algorithme d'ordonnancement lui-même. \newline
-	
-	D'après nos tests, la façon de déterminer les WCET dépend également du type d'ensemble, du nombre de tâches 
-	ainsi que du nombre de cœurs utilisés (donc de l'\textit{utilisation} de l'ensemble).\newline
-	
-	
-	\subsection{Utilisation 100 \%}
-	
-	\subsubsection{Périodes harmoniques}
-	
-	Nous avons analysé plusieurs ensembles dont la somme des utilisations était de $100\%$, et avons fait varier 
-	le nombre de tâches. Un ensemble est choisi s'il ne provoque pas de dépassement de WCET ou d'échéance durant une exécution 
-	mais qu'en variant de quelques dizaines de millisecondes la durée moyenne d'exécution de la tâche, une de ces erreurs arrive.\newline
-	
-	Dans ce premier test, nous avons exécuté et analysé l'exécution de $4$ ensembles de tâches composés respectivement de 
-	$2$, $3$, $4$ et $6$ tâches. Tous les ensembles, pour être comparables, sont construits de la même façon. 
-	La première tâche est celle de période la plus petite, et celle-ci est doublée pour chaque nouvelle tâche ajoutée dans 
-	l'ensemble. De cette façon, on peut avoir une idée de l'augmentation des surcoûts, mais surtout, proposer 
-	une évaluation de la proportion à choisir entre les temps moyens d'exécution d'une tâche et le WCET à déterminer 
-	dans les propriétés des tâches, afin d'avoir un ensemble ordonnaçable. \newline
-	
-	D'après la théorie que l'on a exposée au sujet d'\textbf{UEDF}, on peut imaginer que l'\hyperref[hyperperiode]{hyper-période} augmente, 
-	mais que le nombre d'appels à l'ordonnanceur reste constant d'un ensemble à l'autre. En revanche, 
-	le nombre d'itérations dans les boucles sera plus important, ce qui pourrait avoir un impact sur l'évolution 
-	des surcoûts.
-	Par ailleurs, il y a également une donnée qui ne dépend pas d'UEDF et qui concerne le temps 
-	de changement de contexte, lorsqu'un travail est exécuté. Forcément, ce temps augmente en 
-	même temps que le nombre de tâches.\newline
-	
-	Lorsque nous avons eu analysé $4$ expériences, nous avons fourni une prédiction pour trouver comment paramétrer notre 
-	ensemble de tâche, qui s'est avérée juste, comme on peut le voir dans la \hyperref[wcetevo]{figure ci-dessous}. 
-	En revanche, cette prédiction était assez pessimiste, et augure de difficultés à trouver des ensembles 
-	ordonnaçables pour un nombre de tâches et de périodes élevés; nous en reparlons plus tard dans ce chapitre.
-	
-	\begin{center}
-		\label{wcetevo}
-		\begin{figure}[H]
-			\caption{Évolution des rapports tps. d'exc. moyen / WCETs}
-			\includegraphics[scale=0.6]{img/wcet/wcetstudy}
-		\end{figure}
-	\end{center}
-	
-	Les conclusions par rapport à ces premiers tests sont de plusieurs ordres. 
+	Nous avons souhaité tester deux ensembles afin d'illustrer notre propos ici. Ces ensembles sont
+	 constitués respectivement de $6$ et $7$ tâches de périodes 
+	non harmoniques, dont les hyper-périodes n'étaient pas excessivement grandes par rapport à la plus petite des périodes.
 	\begin{itemize}
-		\item Tout d'abord, on observe que pour un petit nombre de tâches, les WCET ne sont pas très pessimistes par rapport aux temps d'exécutions moyens, 
-		ce qui indique que l'algorithme donne de bonnes performances.
-		\item En faisant varier le nombre de tâches, on observe cependant vite que la courbe tend vers le bas, et que les WCET deviennent 
-		de plus en plus pessimistes.
-		\item Pour 8 tâches, avec 8 périodes harmoniques, la prédiction faite s'est révélée très proche de la réalité, 
-		ce qui nous a permis de construire un ensemble très rapidement.
+		\item Hyper-période = $6$ fois la plus petite période pour le premier ensemble
+		\item Hyper-période = $8$ fois la plus petite période pour le second
+	\end{itemize}
+	Ces ensembles, en théorie, ne devraient pas être ordonnancés par \textbf{Global-EDF}, si les WCET étaient peu éloignés du temps 
+	moyen d'exécution.\newline
+	
+	\subsubsection{Répartition de charge de travail}
+	Une première analyse de la répartition de charge de travail sur les $4$ cœurs, en fonction de l'ordonnanceur, 
+	ne montre pas de grande différence, comme on peut en juger sur \hyperref[3tasksmigrations]{la figure 6.1}.
+	
+	\begin{figure}[H]
+		\label{3tasksmigrations}
+		\caption{Comparaison charges de travail \textbf{UEDF}, \textbf{Global-EDF}}
+		\includegraphics[scale=0.6]{img/wcet/repartitiondecharges_migrations.png}
+	\end{figure}
+	
+	La charge totale du système est proche de $200\%$. La différence qui s'observe 
+	entre les deux totaux s'explique par les légères variations d'une exécution à une autre, or notre échantillon est 
+	petit pour cette expérience puisque nous n'avons que deux ensembles par ordonnanceur, le but n'étant pas de 
+	généraliser mais bien de montrer un type de comportement qui a de l'influence.\newline
+	
+	
+	\subsubsection{Nombre de migrations}
+	
+	En l'absence d'optimisations qui empêchent ce comportement, par défaut,\textbf{UEDF} va provoquer un nombre 
+	important de migrations, tandis que dans le même temps, \textbf{Global-EDF} n'en produit aucune.
+	Sur les deux ensembles, nous avons souhaité rendre compte du nombre de migrations en calculant 
+	ce nombre d'événements sur l'hyper-période, que nous nommons \og{}densité de migration\fg{}, qui est 
+	la somme des migrations durant l'hyper-période divisée par le nombre de tâches. 
+	Nous trouvons, pour \textbf{UEDF} : 
+	\begin{enumerate}
+		\item 10 migrations par hyper-période pour le premier ensemble de 6 tâches, soit une densité de $1,66$
+		\item 6 pour le second, de 7 tâches soit une densité de $0,85$
+		\item aucune pour \textbf{Global-EDF} dans aucun des deux systèmes
+	\end{enumerate}
+
+	Les migrations vont provoquer du surcoût. Ce surcoût doit être intégré dans le paramétrage du WCET. 
+	Ceci explique pourquoi en l'état actuel de l'implémentation, et avec ce type d'ensembles de tâches 
+	de périodes non harmoniques, \textbf{UEDF} ne montre pas sa 
+	supériorité par rapport à \textbf{Global-EDF}, on peut même dire l'inverse, car 
+	la répartition de charge est légèrement meilleure pour \textbf{Global-EDF}, qui déploie 
+	beaucoup moins d'efforts et de calculs qu'\textbf{UEDF} pendant le même temps.\newline
+	
+	
+\section{Ensembles variés dont la somme d'utilisation est de 400 \%}
+
+	\subsection{UEDF}
+	Dans les expériences suivantes, nous avons constitué un nombre variable d'ensembles de $6$, $8$,; $10$ et $12$ tâches, 
+	et avons procédé à l'analyse de la répartition de charge des processeurs.\newline
+	
+	Les expériences précédentes nous ont mené à produire des ensembles constitués de 
+	périodes harmoniques, ou \og{}presque\fg{}. Ainsi, pour éviter d'avoir des 
+	périodes extrêmement longues, certaines périodes ont des multiples communs 
+	avec les autres périodes mais ne sont pas directement multiples. Leur nombre est limité, aussi, nous pouvons 
+	caractériser ces ensembles de \og{}simples\fg{}.\newline
+
+	\begin{figure}[H]
+		\label{loadevolution}
+		\caption{Comparaison charges de travail \textbf{UEDF}}
+		\includegraphics[scale=0.5]{img/wcet/repartitiondecharges_uedf}
+	\end{figure}		
+	
+	La charge moyenne, dans ce cas, dépasse de peu les $200\%$, ce qui semble plutôt convenable. 
+	
+	\todo{densité de migrations}	
+	Un phénomène apparaît, cependant, qui est une charge moins importante pour le premier cœur que pour les autres, et également 
+	moins importante pour le dernier cœur. Cela s'explique facilement : 
+	\begin{itemize}
+		\item Nous avons volontairement été pessimiste avec les tâches de périodes les plus petites qui s'exécutent sur le 
+		premier cœur car c'est le \textit{Master}, aussi une grande partie des surcoûts pèsent sur sa charge totale.
+		\item D'après le fonctionnement d'\textbf{UEDF}, le dernier cœur est chargé d'exécuter les travaux d'échéances les plus 
+		éloignées, aussi, comme les écarts entre les temps moyens et les WCET sont de près du simple au double, 
+		le travail sera souvent terminé voire très avancé dans son exécution lorsqu'il sera déployé sur le dernier cœur.
 	\end{itemize}
 
-	Nous effectuons un dernier test avec une \textit{utilisation }de $100\%$ afin 
-	de vérifier une hypothèse : en faisant des ensembles de périodes égales.
+	\subsection{Global-EDF}
 	
-	\subsubsection{Périodes égales}
+	Nous avons rejoué les mêmes ensembles en utilisant cette fois \textbf{Global-EDF}. Nous pouvons constater que 
+	la charge totale est répartie différemment, puisqu'au contraire d'\textbf{UEDF}, nous ne voyons pas spécialement d'écart 
+	entre les cœurs : la répartition est équitable entre tous les cœurs. 
 	
-	\subsubsection{Évolution des temps dans l'ordonnanceur}
-	
-	Nous avons ajouté des \textit{logs} dans \textbf{HIPPEROS}, et ce faisant, nous procédons à une sorte de 
-	profilage du code. Les temps que nous exposons ici sont une somme délivrée toutes les $60$ secondes environ 
-	(cette fréquence est faible pour éviter de générer du surcoût supplémentaire avec des productions de sorties).
-	
-	
-	\subsection{Utilisation 200 \%}
-	
-	Nous avons montré au chapitre Contexte que certains ensembles en théorie devraient être 
-	ordonnançables par \textbf{UEDF }mais pas par\textbf{ Global-EDF}. Nous avons testé cet ensemble, sur les deux 
-	ordonnanceurs. Pour ce faire, nous avons d'abord testé cet ensemble avec \textbf{UEDF }afin de paramétrer les WCET 
-	de manière à ce que l'exécution ne génère pas de dépassements. Cet ensemble est en effet faisable, à condition 
-	d'être pessimiste sur les WCET, c'est à dire avoir des temps moyens d'exécution des tâches éloignés de plus de la 
-	moitié des WCET. \newline
-	Nous avons voulu vérifier qu'en faisant varier la période (en la multipliant par $2$ puis par $3$) des tâches, 
-	nous pouvions améliorer ce résultat, mais les tests ne nous ont pas montré cela, cette proportion semble 
-	assez constante, comme le montre le tableau suivant. \newline
-	
-	\todo{inclure graph}
-	
-	Le plus étonnant est qu'avec ce paramétrage, l'ensemble devient ordonnçable par \textbf{Global-EDF}. 
-	Pire encore, nous avons même le loisir d'augmenter la durée moyenne d'exécution des tâches et 
-	l'ensemble reste ordonnaçable, comme le montre ce graphique. \newline
-	
-	Ce résultat montre le fossé qu'il peut y avoir ici entre la théorie, et la pratique, ce qui 
-	s'explique facilement par le fait que certains paramètres sont considérés comme stables 
-	voire indépendants, alors qu'en pratique, ils ne le sont pas forcément. \newline
-	
-	Il n'est pas absolument certain que des bugs viennent également minimiser les résultats, malgré notre 
-	attention, il est possible que des erreurs subsistent. Cependant, en l'état, nous ne pouvons que constater le décalage 
-	entre notre implémentation et le résultat théorique attendu, pour cet ensemble, et sans doute pour d'autres, 
-	de périodes non harmoniques.\newline
-	
-	REMARQUE : la différence s'explique par le fait que lors d'un relâchement de tâches, 
-	le set est réordonné, et que ce faisant, on provoque une préemption là où ce n'est pas 
-	"nécessaire".
-	
-	Ceci peut expliquer l'augmentation importante du surcout.
-	
-	D'ailleurs, que nous disent les chiffres ??
-	
-	
-	\todo{citation sur théorie/pratique/optimalité}
-	
-	\todo{inclure graph}
-	
-	Les temps d'appel à l'algorithme devant être à peu près constants, nous pouvons émettre l'hypothèse que le nombre 
-	de migrations -- élevé pour cet ensemble -- est en partie responsable de ce résultat. Nous préciserons dans le chapitre suivant 
-	comment remédier à ce problème dans le futur.\newline
-	
-	Ces expériences ont aiguillé la suite des études vers des ensembles de tâches de périodes harmoniques uniquement.
+	\begin{figure}[H]
+	\label{loadevolutionGEDF}
+	\caption{Comparaison charges de travail \textbf{Global-EDF}}
+	\includegraphics[scale=0.5]{img/wcet/repartitiondecharges_gedf}
+	\end{figure}		
 
-\section{Résultats quant à la faisabilité dans l'industrie}
+	Pour cette expérience encore, la supériorité d'\textbf{UEDF} n'a pas été démontrée.
+	En revanche, comme nous en parlerons dans la partie \hyperref[contexte]{Perspectives} [\ref*{perspectives}], en procédant à quelques changements dans l'implémentation, 
+	nous pensons que ces résultats peuvent grandement s'améliorer, et en fin de compte, ces premiers indices peuvent être 
+	considérés comme prometteurs pour la suite.
 
-	
 
-\section{Résultats des tests unitaires et sur board}
 
-	
-
-\section{Comparaison avec G-EDF}
 
 	
