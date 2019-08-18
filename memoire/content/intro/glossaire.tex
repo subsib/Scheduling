@@ -99,36 +99,35 @@
 	\begin{itemize}
 		\item \textbf{Début, Fin} : Le moment où un travail commence à être exécuté, ou termine son exécution.
 		\item \textbf{Échéance, temps limite} : Correspond au temps limite au delà duquel le travail doit avoir été exécuté. Il existe deux types d'échéances : 
-		une absolue, et une relative. L'échéances relative est une valeur fixe qui 
-		est une propriété de la tâche, elle dépend donc du temps de réalisation.\medskip
+		une absolue, et une relative. L'échéance relative est une valeur fixe qui 
+		est une propriété de la tâche, elle dépend donc du temps de réalisation. 
 		L'échéance absolue quant à elle est calculée avant l'exécution, et correspond 
 		à un temps $t$ absolu, elle est donc une propriété du travail.
 	\end{itemize}
 	
 	\subsection{RTOS}
-	(Real-Time Operating System) Système d'Exploitation Temps Réel.\medskip
-	Un système d'exploitation Temps Réel un système d'exploitation implémenté pour les systèmes 
-	à temps réel, c'est-à-dire dont l'objectif est d'assurer le respect de certaines échéances. 
+	(\textbf{R}eal-\textbf{T}ime \textbf{O}perating \textbf{S}ystem) Système d'Exploitation Temps Réel.\\
+	Un système d'exploitation Temps Réel est un système d'exploitation implémenté pour les systèmes 
+	à temps réel, c'est--à--dire dont l'objectif est d'assurer le respect de certaines échéances. \newline
 	
-	Cela concerne pour beaucoup les systèmes dits \og critiques\fg{} , c'est-à-dire dont la fiabilité 
+	Cela concerne pour beaucoup les systèmes dits \og critiques\fg{} , c'est--à--dire dont la fiabilité 
 	est primordiale (avions, centrales nucléaires, pacemakers, etc.). Ce type de dispositifs 
-	est actuellement très répandu, notamment dans les voitures.
+	est actuellement très répandu, notamment dans les voitures.\newline
 	
 	
-	Les contraintes sont différentes de celles des systèmes d'exploitations des ordinateurs 
-	de bureau puisque l'on doit garantir le respect des échéances associées à chacune des tâches. 
-	
+	Les contraintes sont différentes de celles des systèmes d'exploitation des ordinateurs 
+	de bureau puisque l'on doit garantir le respect des échéances associées à chacune des tâches. \newline	
 	Cependant, si les systèmes d'exploitation temps réel ont des besoins de respect des échéances, 
 	cela ne signifie pas qu'ils aient forcément de grands besoins en efficacité ou en rapidité, ce qui 
 	est primordial est que les échéances soient respectées. 
 	En effet, dans un système dit \og critique\fg{} , une défaillance du système pourrait entraîner des dégâts 
-	très importants. 
+	très importants. \newline
 	Dans ce cadre, l'on a besoin de garanties que le système soit fiable, et c'est là une priorité absolue.
-	L'efficacité en elle-même n'est pas le besoin le plus fondamental de ce type de système.\medskip
+	L'efficacité en elle-même n'est pas le besoin le plus fondamental de ce type de système.
 	
 	\subsection{Contraintes strictes, contraintes relatives} 
 	Dans le cas strict, le système doit impérativement respecter tous les temps limites. Aucun dépassement n'est toléré. Dans le cas des contraintes relatives, ce respect 
-	est moins impératif, et on pourra dépasser les délais occasionnellement. \medskip
+	est moins impératif, et on pourra dépasser les délais occasionnellement. \newline
 	Dans la littérature scientifique, on parle de \customhighlight{hard real-time} dans le cas d'un ordonnanceur 
 	qui ne tolère aucun dépassement, et de \customhighlight{soft real-time} dans le cas contraire.
 	
@@ -153,16 +152,16 @@
 	Selon les cas, l'ordonnanceur peut avoir à gérer un seul processeur. Dans ce 
 	document, on parlera dans ce cas d'ordonnanceur mono-processeur. Toutefois, de plus en 
 	plus de systèmes possèdent plusieurs processeurs, et il existe deux grandes familles 
-	d'ordonnanceurs associés à ces systèmes : les partitionnés, ou les globaux. \medskip
+	d'ordonnanceurs associés à ces systèmes : les partitionnés, ou les globaux. 
 	
 	\subsection{Optimalité}\label{optimal}
-	Un ordonnanceur est dit optimal si pour un système de tâche pour lequel un ordonnancement 
+	Un ordonnanceur est dit optimal si pour un système de tâches pour lequel un ordonnancement 
 	existe, l'ordonnanceur permet de l'ordonnancer. Autrement formulé, 
-	si un ordonnanceur optimal ne peut pas trouver d'ordonnancement pou un système, aucun autre 
+	si un ordonnanceur optimal ne peut pas trouver d'ordonnancement pour un système, aucun autre 
 	ordonnanceur ne le peut.
 	
 	\subsection{Économe} 
-	Un ordonnanceur peut-être \og économe\fg{} , ou \og non-économe\fg{} . Dans le premier cas, si le processeur est libre, 
+	Un ordonnanceur peut être \og économe\fg{} , ou \og non-économe\fg{} . Dans le premier cas, si le processeur est libre, 
 	et qu'une tâche est prête à être exécutée, l'ordonnanceur donnera l'instance : cela signifie 
 	qu'on évite les temps d'inactivité du processeur. Dans le second cas, une tâche ne sera pas toujours ordonnancée.
 	Dans le reste de ce document, les ordonnanceurs présentés sont tous économes selon cette définition.

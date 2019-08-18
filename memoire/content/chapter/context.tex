@@ -31,13 +31,13 @@
 	\begin{itemize}
 		\setlength\itemsep{0.1em}
 		\item Un algorithme global
-		\item Qui minimise le nombre de migrations [\ref*{migration}]
+		\item Qui minimise le nombre de migrations
 		\item L'ordonnanceur est optimal pour la classe périodique
 		\item Il n'a pas bénéficié d'une implémentation sur un \textbf{RTOS}
 		\item Il promet des performances intéressantes
 	\end{itemize}
 	
-	Le premier choix a été \hyperref[RUN]{RUN}[\ref*{RUN}], puis finalement, son descendant, \hyperref[QPS]{QPS}[\ref*{QPS}]. Ces choix étant guidés 
+	Le premier choix a été \hyperref[RUN]{RUN} [\ref*{RUN}], puis finalement, son descendant, \hyperref[QPS]{QPS} [\ref*{QPS}]. Ces choix étant guidés 
 	sur leur intérêt d'ordonnanceurs en tant que tels.
 	Toutefois, l'aspect très théorique des papiers les présentant a rendu la première phase de travail difficile. 
 	En outre, nous n'avons pas trouvé d'implémentation ou de simulation malgré nos recherches.
@@ -59,24 +59,21 @@
 	Les auteurs qui connaissent bien ce fonctionnement auront la possibilité de devancer certaines questions.
 	Néanmoins, dans le cas d'un papier très théorique qui s'emploie à faire des démonstrations mathématiques, 
 	cela n'apparaîtra pas forcément. \newline
-	
-	\textbf{UEDF} bénéficie quant à lui d'une littérature qui développe mieux l'aspect pratique, et cela a orienté notre choix.\newline
-	
 	En d'autres termes, l'implémentation d'un ordonnanceur peut s'avérer une tâche bien compliquée selon le degré de 
 	description pratique et d'anticipation des problèmes que les auteurs auront pris la peine d'aborder 
 	dans les papiers publiés.
-	\newline
+	\textbf{UEDF} bénéficie quant à lui d'une littérature qui développe mieux l'aspect pratique.\newline
 	
-	
-	Finalement, c'est un argument quant à la communication (clarté, possibilité de poser des questions) 
+	Finalement, donc c'est un argument quant à la communication (clarté, possibilité de poser des questions) 
 	qui a fixé le choix. Par conséquent, c'est \textbf{UEDF} qui a été sélectionné, car 
 	non seulement il respectait 
 	les promesses énoncées auparavant, mais aussi, en plus d'être très bien documenté, 
-	nous pouvions poser nos questions directement à l'un de ses créateurs. Néanmoins, ses paramètres sont moins idéaux, 
-	et nous avons revu nos attentes quant à l'efficacité à la baisse. Cela n'a en rien 
+	nous pouvions poser nos questions directement à des personnes ayant participé à son élaboration, 
+	puisqu'il est le résultat de recherche d'équipes au sein de l'\textbf{ULB}. 
+	Néanmoins, ses paramètres sont moins idéaux, et nous avons revu nos attentes quant à l'efficacité à la baisse. Cela n'a en rien 
 	modifié l'objet scientifique, à savoir le regard critique et la proposition d'améliorations 
 	afin de stimuler et faciliter des implémentations futures, mais cela a sans doute 
-	diminué les performances finales obtenues, tel que nous le verrons dans la partie \hyperref[resultats]{résultats} [\ref*{resultats}].\newline
+	diminué les performances finales obtenues, tel que nous le verrons dans la partie \hyperref[resultats]{Résultats} [\ref*{resultats}].\newline
 	
 	
 	\section{Présentation UEDF}\label{contexte}
@@ -85,10 +82,21 @@
 	Dans cette partie, nous allons détailler l'algorithme afin d'en avoir une meilleure compréhension. Cela 
 	permettra de mesurer la différence entre les attentes théoriques et les résultats obtenus.\newline
 	
-	%\todo{etat de l'art, parler de généralisation horizontale/verticale}
+	Avant toute chose, \textbf{UEDF}, comme \textbf{Global-EDF}, sont des généralisations multicœur d'\textbf{EDF}. 
+	Pour \textbf{Global-EDF}, on parle d'une généralisation verticale, là où on parle d'une généralisation horizontale pour 
+	\textbf{UEDF}, et cette dénomination provient du fait que \textbf{Global-EDF} considère les processeurs \og{}verticalement\fg{} là où 
+	\textbf{UEDF} les considère à l'horizontale, comme on peut le voir dans ce schéma.
+	
+	\begin{figure}[H]
+		\caption{Généralisations d'EDF, verticalement, horizontalement}
+		\includegraphics[scale=0.5]{img/wcet/comparo_GEDF_UEDF}
+	\end{figure}
+
+	En d'autres termes, Global-EDF va décider d'attribuer une tâche par processeur libre à un instant $t$ alors 
+	qu'UEDF va \og{}remplir\fg{} l'utilisation de chaque processeur jusqu'à $100$\% avant de passer au suivant. 
 	
 	\subsection{Définitions spécifiques}
-	Dans un premier temps, nous posons quelques définitions qui sont nécessaires à la compréhension de l'algorithme. 
+	Nous posons quelques définitions qui sont nécessaires à la compréhension de l'algorithme. 
 	Par ailleurs, par souci de clarté, nous simplifions les calculs en supposant que les offsets [\ref*{offset}] des tâches 
 	sont nuls dans la partie qui suit, cela ne change pas l'algorithme mais rend les explications moins 
 	complexes.
@@ -182,12 +190,8 @@
 		\item $\tau_2 : \{o:0; w:60; d=p:80;\}$
 	\end{enumerate}
 	\begin{figure}[H]
-		\includegraphics[scale=1]{img/uedf/uedf12}
-		\caption{étapes 0 et 1}
-	\end{figure}
-	\begin{figure}[H]
-		\includegraphics[scale=1]{img/uedf/uedf34}
-		\caption{étapes 2 et 3}
+		\includegraphics[scale=0.6]{img/uedf/croquisfonctionntSchedul}
+		\caption{Étapes de calcul UEDF}
 	\end{figure}
 	\subsubsection{Eligible}
 	À ce stade, aucune décision d'ordonnancement n'est encore prise, mais des ensembles de tâches (\textit{Eligible}, 
@@ -227,12 +231,20 @@
 		$\sum_{i \in A(t)}\sum_{1}^{m}allot_{ij} = 0$.
 	\end{itemize}
 	
-	On peut voir en théorie l'ordonnancement de trois tâches en annexe, afin de mieux comprendre le déroulement d'une exécution.
+	On peut voir en théorie l'ordonnancement de trois tâches, afin de mieux comprendre le déroulement d'une exécution.
 	À titre de remarque, le travail d'illustration d'une exécution nous semble 
 	important pour procéder à une implémentation, sinon le risque est d'omettre le développement 
 	d'outils indispensables au bon déroulement de l'exécution. L'algorithme n'est pas trivial à mettre en œuvre.
-	\todo{gantt chart avec exemple 30;60, 60; 80, 60;80}
 	\newline
+
+	\begin{figure}[H]
+		\label{3tasksuedfoptimal}
+		\caption{Ordonnancement avec UEDF}
+		\includegraphics[scale=0.6]{img/uedf/croquisuedf3tasks.png}
+	\end{figure}
+
+	Les nombres écrits sur les cases représentant le temps exécuté par un travail sur un processeur sont les valeurs 
+	$Allot$, on peut constater qu'elles sont différentes du temps qui sera en réalité exécuté.\newline
 	
 	Nous pouvons déjà formuler ici une nuance par rapport à la théorie et les attentes que l'on peut en avoir 
 	en pratique : 
@@ -262,7 +274,7 @@
 
 	Nous pouvons attendre un surcoût important sur cette base. Une hypothèse étant que ce surcoût 
 	augmente avec le nombre de tâches, mais aussi avec le nombre de cœurs. Un même système pourrait avoir plus 
-	de surcoût avec plus de cœurs. Cela pourra être vérifié dans les expérimentations.
+	de surcoût avec plus de cœurs. 
 
 	
 	\subsection{Comparaison avec Global-EDF}
@@ -277,9 +289,9 @@
 	élément de comparaison.\newline
 	
 	Ces deux algorithmes ont toutefois de grandes différences. \textbf{Global-EDF}
-	ne permet pas - même théoriquement  d'atteindre l'optimalité. Ceci s'explique par le fait que 
+	ne permet pas --- même théoriquement --- d'atteindre l'optimalité. Ceci s'explique par le fait que 
 	\textbf{Global-ED}F peut être considéré comme \og{}vertical\fg{} là où \textbf{UEDF} serait \og{}horizontal\fg{}. 
-	Mais une grande différence entre les deux algorithmes est que \textbf{Global-EDF} n'est optimal, 
+	Mais une grande différence entre les deux algorithmes est que \textbf{Global-EDF} n'est pas optimal, 
 	en théorie, contrairement à \textbf{UEDF}.
 	
 	\subsubsection{Fonctionnement de Global EDF}
@@ -325,11 +337,15 @@
 		\item $\tau_3 : \{o:0; w:40; d=p:60;\}$
 	\end{enumerate}
 	
-	\todo{insérer schema ici}
+	\begin{figure}[H]
+		\label{3tasksgedfnonoptimal}
+		\caption{Ordonnancement avec Global-EDF}
+		\includegraphics[scale=0.7]{img/wcet/deadlineMiss}
+	\end{figure}	
 	
 	Malgré ce point, \textbf{Global-EDF} est \og{}efficace\fg{} en terme de calculs.
 	Le point le plus complexe concerne la structure de données qui conserve les 
-	tâches courantes. Une bonne idée est d'utiliser un Heap [\ref*{heap}] qui 
+	tâches courantes. Une bonne idée est d'utiliser un Heap de Heaps [Mok \cite{mok}] qui 
 	va permettre de fournir toujours en tête le travail de priorité supérieure.
 	Pour s'assurer de la faisabilité de l'ensemble de tâches, 
 	il faudra tester l'ordonnancement suffisamment longtemps (hyper-période).\newline
@@ -369,6 +385,8 @@
 		\item Global-EDF
 		\item HIPPEROS
 	\end{enumerate}
+
+	\label{hyp}
 	Nous pouvons déjà formuler certaines hypothèses que nous aimerions vérifier dans ce travail. \newline
 	
 	\begin{itemize}
@@ -381,6 +399,6 @@
 		En effet, il est possible que ce résultat soit modifié ou largement à nuancer en 
 		fonction de certains paramètres, comme le WCET, dont nous reparlerons.
 		\item Comparer le nombre de migrations/préemptions obtenues pour un même système, ordonnancé 
-		par l'un ou l'autre des algorithmes, on peut s'attendre à ce qu'\textbf{UEDF} soit performant à ce niveau.
+		par l'un ou l'autre des algorithmes.
 	\end{itemize}
 

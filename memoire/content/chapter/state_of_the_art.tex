@@ -74,19 +74,19 @@
 	qu'arbitraires (pas de contrainte sur l'échéance par rapport à la période). 
 	Il fixe les priorités sur les travaux. L'assignation de la priorité se fait sur base de 
 	la proximité de l'échéance absolue : Plus cette échéance est proche et plus la priorité est élevée. 
-	Une façon déterministe et arbitraire de régler les cas d'égalité doit être décidée.\medskip
+	Une façon déterministe et arbitraire de régler les cas d'égalité doit être décidée.\newline
 	
 	\textit{EDF} est optimal pour toutes les tâches synchrones et asynchrones, avec et sans 
 	contraintes sur les échéances. 
-	Cela signifie que si un système est ordonnançable, \textit{EDF} peut l'ordonnancer.\medskip
+	Cela signifie que si un système est ordonnançable, \textit{EDF} peut l'ordonnancer.\newline
 	Cette propriété est importante, car les classes de tâches ordonnancées par \textit{EDF} 
 	sont plus larges que \textit{RM} et \textit{DM}, par conséquent, \textit{EDF} peut ordonnancer également les 
-	mêmes classes qu'\textit{RM} et \textit{DM} en conservant son optimalité. \medskip
+	mêmes classes qu'\textit{RM} et \textit{DM} en conservant son optimalité. \newline
 	
 	Les tests de faisabilité avec \textit{EDF} dépendent de la classe de tâche considérée. 
 	Pour un système synchrone et à échéance sur requête, 
 	une condition nécessaire et suffisante de faisabilité est donc que l'utilisation soit inférieure 
-	à 100\%, c'est-à-dire : \medskip
+	à 100\%, c'est-à-dire : 
 	\begin{center}
 		$\forall \tau_i \in \Gamma_m, \sum_{i=1}^{m}\frac{C_i}{T_i} \leq 1 $
 	\end{center}
@@ -157,7 +157,7 @@
 	une stratégie globale multi-processeur \cite{ndoye_ordonnancement_2014}.
 	
 	Concrètement, cela revient à diviser un ensemble $\Gamma$ de tâches en $n$ sous-ensembles 
-	$\gamma \in \Gamma$ et d'attribuer à chacun des $m$ processeurs un de ces sous-ensembles $\gamma$.\medskip
+	$\gamma \in \Gamma$ et d'attribuer à chacun des $m$ processeurs un de ces sous-ensembles $\gamma$.\newline
 	
 	
 	Le problème du partitionnement consiste donc en premier lieu 
@@ -182,7 +182,7 @@
 			alors le facteur d'utilisation minimum réalisable est $m\times(2^{\frac{1}{m}} - 1)$\fg{} .}
 	\end{mytheorem}
 
-	Ils ajoutent :\medskip
+	Ils ajoutent :\newline
 	\textit{En déduction, si $m$ tend vers l'infini, alors l'utilisation minimale possible approche $ln(2)$.}
 	
 	Dans cet article, ils décrivent également :\medskip
@@ -324,16 +324,16 @@
 	utilisation totale de $1 + \epsilon$ et ce quel que soit le nombre de processeurs $m$.
 	La déduction suivante peut en être tirée : la limite de l'utilisation totale 
 	pour RM ou EDF est de $1 + \epsilon$, avec $\epsilon$ arbitrairement petit, ce 
-	quel que soit $m$. 
+	quel que soit $m$. \newline
 	
 	Cela est connu dans la littérature comme l'\og effet Dhall\fg{}  (Dhall's effect) et remet en 
 	question l'intérêt de baser les tests de ordonnançabilité sur l'utilisation totale, et 
 	montre que d'autres facteurs devraient être pris en considération. Dans un premier temps, cependant, 
 	cela a participé à montrer la supériorité des approches partitionnées, ce pourquoi elles ont 
-	largement été plus étudiées dans les années 80-90 \cite{davis_survey_2011}.\medskip
+	largement été plus étudiées dans les années 80-90 \cite{davis_survey_2011}.\newline
 	
-	De plus, dans le cas global, les \ref{instantcritique}{instants critiques} ne sont plus aussi faciles à prédire 
-	que dans le cas mono-processeur. \medskip
+	De plus, dans le cas global, les instants critiques ne sont plus aussi faciles à prédire 
+	que dans le cas mono-processeur. \newline
 	
 	\subsection{Anomalies}
 	Les anomalies sont décrites dans la littérature comme des changements qui intuitivement ne devraient 
@@ -360,15 +360,15 @@
 	dans sa version mono-processeur est son optimalité, qui n'est malheureusement pas conservée ici. 
 	Plusieurs versions globales reposant sur \textit{EDF} sont décrites dans la littérature. 
 	Il y a \textit{EDF} appliquant \textit{First Fit Decreasing Utilization}, décrit par 
-	Lopez et al. \cite{lopez_utilization_2004}, où l'on obtient ces conditions d'ordonnançabilité : \medskip
-	$U(\tau) \leq \frac{(m + 1)}{2}$ et $U_{max} \leq 1$. \medskip
+	Lopez et al. \cite{lopez_utilization_2004}, où l'on obtient ces conditions d'ordonnançabilité : \newline
+	$U(\tau) \leq \frac{(m + 1)}{2}$ et $U_{max} \leq 1$. \newline
 	Un autre exemple est EDF-US. 
 	Dans ce cas, la priorité des tâches est assignée légèrement différemment :\medskip
 	\begin{itemize}
 		\item si $U_i > \frac{m}{2m-1}$, la tâche $\tau_i$ se voit assigner la plus haute priorité
 		\item sinon on applique les mêmes règles que pour \textit{EDF} mono-processeur
 	\end{itemize}
-	Une condition suffisante est alors :\medskip
+	Une condition suffisante est alors :\newline
 	$U = \sum_{i=1}^{n}\frac{C_i}{T_i} \leq \frac{m^2}{3m-2}$
 	alors le système de tâches est ordonnançable sur $m$ processeurs
 	\cite{andersson_static-priority_2001}. \medskip
@@ -423,19 +423,19 @@
 	
 	PFair est associé dans la littérature à l'idée de \textit{P-Fairness}, qui est une notion 
 	idéale permettant de prouver des propriétés importantes pour le domaine. 
-	L'une d'elle est que chaque ordonnanceur P-Fair est périodique. \medskip
+	L'une d'elle est que chaque ordonnanceur P-Fair est périodique. \newline
 	
 	Il s'applique aux tâches périodiques synchrones à échéances implicites, 
 	et l'on connaît le temps de réalisation des tâches, 
 	ce qui prévient des résultats négatifs précédents contre 
-	l'existence d'un ordonnanceur optimal.\medskip
+	l'existence d'un ordonnanceur optimal.\newline
 	
 	L'idée principale de cet algorithme est basée sur le taux d'utilisation de chaque tâche. 
 	L'algorithme divise chaque travail en sous-travaux qui devra s'exécuter dans une fenêtre de temps, 
 	considérée comme sous-échéance. Dès lors, à chaque sous-échéance, 
 	chaque travail aura reçu la proportion de temps nécessaire. 
 	Cet algorithme présente des intérêts mais aussi un inconvénient : dans certains cas, 
-	l'ordonnancement provoque de nombreuses préemptions, ce qui est coûteux en terme de ressources.\medskip
+	l'ordonnancement provoque de nombreuses préemptions, ce qui est coûteux en terme de ressources.\newline
 	
 	Toutefois, \textit{PFair} est optimal pour les tâches synchrones à échéances implicites, selon 
 	la condition suivante :\medskip
@@ -492,21 +492,21 @@
 	(Un algorithme d'ordonnancement est considéré comme axé sur les priorités si et seulement si il 
 	satisfait la condition suivante que pour chaque paire $J_i$ et $J_j$, si $J_i$ a une plus 
 	grande priorité que $J_j$ à un instant, $J_i$ a alors toujours une plus grande priorité 
-	que $J_j$.)\medskip
-	Suivant cette idée, \textit{EDF} est axé sur les priorités, là où \textit{PF} ne l'est pas.\medskip
+	que $J_j$.)\newline
+	Suivant cette idée, \textit{EDF} est axé sur les priorités, là où \textit{PF} ne l'est pas.\newline
 	
 	Reprenant l'idée précédente de \textit{EDF-US} dont certaines tâches étaient de priorité 
 	supérieures, et d'autres de priorité simplement assignées par \textit{EDF} \og classique\fg{} , 
 	le nombre $k$ représente le nombre stable de tâches ($-1$) concernées par ces priorités 
 	supérieures. En d'autres termes, \textit{EDF-k} donne la priorité la plus élevée à 
-	$k - 1$ tâches, tandis que les autres sont ordonnancées suivant \textit{EDF}.\medskip
+	$k - 1$ tâches, tandis que les autres sont ordonnancées suivant \textit{EDF}.\newline
 	
 	L'article propose une équation dont on dérive la valeur optimale de $k$, et où l'on peut 
-	atteindre $m$ le plus petit, cette valeur étant améliorée par rapport à \textit{EDF-US}.\medskip
+	atteindre $m$ le plus petit, cette valeur étant améliorée par rapport à \textit{EDF-US}.\newline
 	
 	Une autre approche consiste à considérer la laxité pour modifier \textit{EDF}. 
 	Ainsi, l'idée d'\textit{EDZL} (Earliest Deadline until Zero Laxity) \cite{cirinei_edzl_2007} ou encore d'EDCL \cite{kato_real-time_2007}
-	(Earliest Deadline Critical Laxity). \medskip
+	(Earliest Deadline Critical Laxity). \newline
 	
 	Des travaux récents continuent d'implémenter des versions d'\textit{EDF} avec stratégie 
 	globale, par exemple \textit{GEDF} \cite{li_global_2015} \cite{nelissen_geoffrey_efficient_2013}, donnant lieu à \textit{PGEDF}. Cette 
@@ -515,13 +515,13 @@
 	\subsection{Global-EDF}\label{GlobalEDF}
 	Cet algorithme est une généralisation d'EDF [\ref*{EDF}] en version multicœur. Dans Global-EDF, on 
 	considère un ensemble de tâches ordonné par échéances, 
-	où la priorité $p$ de la tâche $\tau_i$ est plus élevée si son échéance est plus proche.
-	Pour $tau_{1} : d(t) = a$ et $tau_{2} : d(t) = b$, si $a < b$, alors $p(\tau_1) > p(\tau_2)$.\newline
+	où la priorité $p$ de la tâche $\tau_{i}$ est plus élevée si son échéance est plus proche.
+	Pour $\tau_{1} : d(t) = a$ et $\tau_{2} : d(t) = b$, si $a < b$, alors $p(\tau_1) > p(\tau_2)$.\newline
 	
 	La décision d'ordonnancement est prise à l'instant $t$ de cette façon :
 	
 	Si un cœur est disponible, il effectue la tâche de priorité supérieure qui reste à effectuer.
-	L'algorithme ne permet pas de prévoir, aussi il n'est pas optimal, et dans le cas périodique, 
+	L'algorithme n'est pas optimal, et dans le cas de systèmes périodiques, 
 	il faudra s'assurer de la faisabilité du système sur un temps au moins aussi long que 
 	l'hyper-période [\ref*{hyperperiode}]
 	
@@ -561,7 +561,7 @@
 	Les auteurs insistent sur les avantages théoriques de \textit{RUN}, qui devraient motiver une implémentation 
 	pratique afin de tester ses avantages. Cette implémentation a été faite 
 	\cite{compagnin_putting_2014} sur $LITMUS^{RT}$, et dont les résultats demandent à 
-	être confirmés mais montrent les bonnes performances sur ce système.\medskip
+	être confirmés mais montrent les bonnes performances sur ce système.\newline
 	
 	\textit{RUN} -- malgré son apparition récente -- a déjà des successeurs. \textit{QPS}
 	(Quasi Partitioned Scheduling) est un algorithme 

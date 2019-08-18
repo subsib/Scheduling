@@ -188,7 +188,11 @@
 		jour, avant de prendre dans les deux cas une décision.\newline
 	
 	\section{Domaine système}
-	Dans un système d'exploitation, l'ordonnanceur est chargé d'ordonnancer les tâches selon leurs priorités. 
+	Dans le monde des systèmes embarqués, la norme \textbf{P}ortable \textbf{O}perating \textbf{S}ystem \textbf{I}nterface (\hyperref{http://www-sop.inria.fr/chir/personnel/arias/NArgimoge/Document/node19.html}{POSIX}{POSIX}{POSIX})	
+	est une spécification des fonctions de base d'un système d'exploitation. Afin de permettre la portabilité des programmes, 
+	cette norme garantit des propriétés quant à l'implémentation de certaines fonctions. \newline	
+	
+	L'ordonnanceur est chargé d'ordonnancer les tâches selon leurs priorités. 
 	La norme \textbf{POSIX} définit des niveaux pour les threads : \textit{local}, et \textit{System}. 
 	Mais en pratique, \textbf{Linux} n'utilise pas cela, tous les \textit{Threads} sont 
 	de niveaux \textit{System}, et il ne gère pas de \textit{Process} comme ensemble de \textit{Threads}.\newline

@@ -35,9 +35,10 @@
 	Ces ensembles, en théorie, ne devraient pas être ordonnancés par \textbf{Global-EDF}, si les WCET étaient peu éloignés du temps 
 	moyen d'exécution.\newline
 	
+	
 	\subsubsection{Répartition de charge de travail}
 	Une première analyse de la répartition de charge de travail sur les $4$ cœurs, en fonction de l'ordonnanceur, 
-	ne montre pas de grande différence, comme on peut en juger sur \hyperref[3tasksmigrations]{la figure 6.1}.
+	ne montre pas de grande différence, comme on peut en juger sur \hyperref[3tasksmigrations]{la figure 6.2}.
 	
 	\begin{figure}[H]
 		\label{3tasksmigrations}
@@ -73,6 +74,25 @@
 	beaucoup moins d'efforts et de calculs qu'\textbf{UEDF} pendant le même temps.\newline
 	
 	
+	\section{Temps passé dans l'algorithme}
+	
+	Nous avons voulu vérifier l'évolution du temps passé dans la fonction $ComputeSchedule$, qui nous semblait critique 
+	au début de ce travail. Nous présentons ici un schéma qui montre 
+	l'évolution du temps passé pour $1$ unité d'exécution dans cette fonction. C'est donc la 
+	proportion de temps passée dans cette fonction par rapport au nombre de tâches. \newline
+	Cette expérience n'a été réalisée qu'avec des ensembles de $100$\% d'utilisation.
+
+	\begin{figure}[H]
+	\label{timeevolution}
+		\caption{Évolution du temps passé dans ComputeSchedule, \textbf{UEDF}}
+		\includegraphics[scale=0.5]{img/wcet/elapsedInCompueSchedule}
+	\end{figure}		
+
+	On voit bien que ce temps évolue, néanmoins, il reste à des valeurs qui nous semblent totalement acceptables.
+	Nous pensons donc qu'il est plus important de viser de diminuer les préemptions et autres migrations que 
+	d'optimiser --- du moins en premier lieu --- cette partie du code.
+	
+	
 \section{Ensembles variés dont la somme d'utilisation est de 400 \%}
 
 	\subsection{UEDF}
@@ -91,9 +111,8 @@
 		\includegraphics[scale=0.5]{img/wcet/repartitiondecharges_uedf}
 	\end{figure}		
 	
-	La charge moyenne, dans ce cas, dépasse de peu les $200\%$, ce qui semble plutôt convenable. 
+	La charge moyenne, dans ce cas, dépasse de peu les $200\%$, ce qui semble plutôt convenable. \newline
 	
-	\todo{densité de migrations}	
 	Un phénomène apparaît, cependant, qui est une charge moins importante pour le premier cœur que pour les autres, et également 
 	moins importante pour le dernier cœur. Cela s'explique facilement : 
 	\begin{itemize}
@@ -121,7 +140,7 @@
 	nous pensons que ces résultats peuvent grandement s'améliorer, et en fin de compte, ces premiers indices peuvent être 
 	considérés comme prometteurs pour la suite.
 
-
-
+		
+		
 
 	
