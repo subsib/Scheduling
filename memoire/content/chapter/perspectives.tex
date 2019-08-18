@@ -50,22 +50,32 @@ Ces propositions portent sur plusieurs domaines :
 
 \section{Tests supplémentaires}
 
+	\subsection{Compléter les résultats actuels}
+	
+	En premier lieu, beaucoup de résultats mériteraient d'être plus détaillés. Il y aurait encore d'autres résultats à produire, 
+	comme l'analyse du temps d'exécution de $ComputeSchedule$, mais sur plus d'échantillons, comme un détail plus 
+	fin de l'écart type (nous savons que le temps passé dans cette fonction dépend beaucoup du fait qu'il y a eu un relâchement 
+	de tâche auparavant ou pas, mais n'avons pas en l'occasion de présenter ces résultats). En bref, il resterait d'autres résultats à 
+	montrer et détailler depuis les expériences que nous avons menées. 
+
+	\subsection{De nouveaux résultats dans de nouvelles recherches}
+	
 	Nous avons limité nos recherches et expériences à des ensembles de tâches de périodes harmoniques \hyperref[harmonique]{[\ref{harmonique}]}, 
 	ce qui est justifié par plusieurs arguments, développés dans la partie \hyperref[methodo]{Méthodologie [\ref*{methodo}]}.
 	Néanmoins, en apportant les quelques modifications exposées ici, nous pensons qu'il serait envisageable et intéressant 
 	de produire des résultats pour des ensembles de tâches 
 	de périodes non harmoniques, avec des rapports plus complexes entre elles. Nous attendrions de constater 
-	une meilleure répartition de la charge de travail, et beaucoup moins de migrations.
+	une meilleure répartition de la charge de travail, et beaucoup moins de migrations, et ce résultat doit encore 
+	être démontré par des expérimentations.
 
 \section{La littérature scientifique}
 
 	Dans le cas de \textbf{UEDF}, les documents disponibles montrent un effort de l'équipe afin de rendre compréhensible 
 	l'algorithme et permettre sa mise en œuvre. Comme cela a été dit précédemment, cet effort n'est pas lisible dans tous les 
 	documents que nous avons eu l'occasion de parcourir, ce qui rend l'implémentation compliquée. Le niveau de complexité 
-	de l'algorithme en lui-même n'est pas équivalent à la difficulté d'implémentation dans un environnement 
+	d'un algorithme en lui-même n'est pas forcément équivalent à la difficulté d'implémentation dans un environnement 
 	déjà écrit, partagé avec d'autres ordonnanceurs. Aussi, si cette complexité est déjà très grande, nous pensons que les 
 	chercheurs devraient tout mettre en œuvre afin de rendre le passage du papier à l'implémentation plus facile, en illustrant 
 	avec des exemples les calculs, en donnant des conditions, des invariants, et pourquoi pas proposer des cas particuliers 
-	auxquels il faut particulièrement être attentifs. 
+	auxquels il faut particulièrement être attentifs. \newline
 	
-
